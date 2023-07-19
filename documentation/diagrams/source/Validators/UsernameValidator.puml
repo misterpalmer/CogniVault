@@ -1,0 +1,6 @@
+@startuml
+class UsernameValidator {
+    + Validate(username:string) : bool
+}
+IUsernameValidator <|-- UsernameValidator
+@enduml

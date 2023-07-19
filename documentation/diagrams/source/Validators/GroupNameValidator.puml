@@ -1,0 +1,6 @@
+@startuml
+class GroupNameValidator {
+    + Validate(groupName:string) : bool
+}
+IGroupNameValidator <|-- GroupNameValidator
+@enduml

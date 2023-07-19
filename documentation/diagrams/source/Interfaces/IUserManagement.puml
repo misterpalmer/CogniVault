@@ -1,0 +1,7 @@
+@startuml
+interface IUserManagement {
+    IsSuperUser : bool <<get>>
+    Quota : long <<get>>
+    ChangeQuota(newQuota:long) : void
+}
+@enduml

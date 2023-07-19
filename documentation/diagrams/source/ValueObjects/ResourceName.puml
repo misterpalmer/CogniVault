@@ -1,0 +1,13 @@
+@startuml
+class ResourceName {
+    + Value : string <<get>>
+    + ResourceName(value:string)
+    + Equals(other:ResourceName) : bool
+    + <<override>> Equals(obj:object) : bool
+    + <<override>> GetHashCode() : int
+    + <<override>> ToString() : string
+}
+class "IEquatable`1"<T> {
+}
+"IEquatable`1" "<ResourceName>" <|-- ResourceName
+@enduml

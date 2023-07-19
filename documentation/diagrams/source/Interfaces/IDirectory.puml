@@ -1,0 +1,20 @@
+@startuml
+interface IDirectory {
+    Name : string <<get>>
+    AddSubdirectory(directory:IDirectory) : void
+    RemoveSubdirectory(directory:IDirectory) : void
+    AddFile(file:IFile) : void
+    RemoveFile(file:IFile) : void
+    AddPermission(permission:IPermission) : void
+    RemovePermission(permission:IPermission) : void
+    HasPermission(permission:IPermission) : bool
+}
+class "IEnumerable`1"<T> {
+}
+IDirectory --> "ParentDirectory" IDirectory
+IDirectory --> "Subdirectories<IDirectory>" "IEnumerable`1"
+IDirectory --> "Files<IFile>" "IEnumerable`1"
+IDirectory --> "Permissions<IPermission>" "IEnumerable`1"
+IDirectory --> "CreatedAt" DateTime
+IDirectory --> "UpdatedAt" DateTime
+@enduml

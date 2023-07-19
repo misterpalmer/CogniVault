@@ -1,0 +1,8 @@
+@startuml
+class SuperUser {
+    + SuperUser(timeProvider:ITimeProvider, username:Username, password:Password, timeZoneInfo:TimeZoneInfo, quota:long)
+    + PerformSuperUserAction() : void
+}
+BaseUser <|-- SuperUser
+ISuperUser <|-- SuperUser
+@enduml

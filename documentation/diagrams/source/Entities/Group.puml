@@ -1,0 +1,14 @@
+@startuml
+class Group {
+    + Group(name:GroupName)
+    + AddUser(user:IUser) : void
+    + RemoveUser(user:IUser) : void
+    + Rename(newName:GroupName) : void
+}
+class "ICollection`1"<T> {
+}
+IGroup <|-- Group
+Group --> "Id" Guid
+Group --> "Name" GroupName
+Group --> "Users<IUser>" "ICollection`1"
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+class TimeProvider {
+}
+ITimeProvider <|-- TimeProvider
+TimeProvider --> "Now" DateTime
+TimeProvider --> "UtcNow" DateTime
+@enduml

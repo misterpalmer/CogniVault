@@ -1,0 +1,31 @@
+@startuml
+abstract class BaseUser {
+    + IsSuperUser : bool <<get>> <<protected set>>
+    + Email : Email? <<get>>
+    + Quota : long <<get>>
+    + BaseUser(timeProvider:ITimeProvider, username:Username, password:Password, timeZoneInfo:TimeZoneInfo, quota:long)
+    + ModifyLastLoginAt(lastLoginAt:DateTime) : void
+    + ModifyUpdatedAt(updatedAt:DateTime) : void
+    + ChangeUsername(newUsername:Username) : void
+    + ChangePassword(newPassword:Password) : void
+    + ChangeEmail(newEmail:Email) : void
+    + ChangeQuota(newQuota:long) : void
+    + ChangeTimeZone(newTimeZone:TimeZoneInfo) : void
+}
+IUser <|-- BaseUser
+IUserAuthentication <|-- BaseUser
+IUserManagement <|-- BaseUser
+IUserTimeZone <|-- BaseUser
+IUserActivity <|-- BaseUser
+BaseUser --> "Id" Guid
+BaseUser --> "Username" Username
+BaseUser --> "Password" Password
+BaseUser --> "TimeZone" TimeZoneInfo
+BaseUser --> "_lastLoginAt" DateTime
+BaseUser --> "_updatedAt" DateTime
+BaseUser --> "_createdAt" DateTime
+BaseUser --> "LastLoginAt" DateTime
+BaseUser --> "UpdatedAt" DateTime
+BaseUser --> "CreatedAt" DateTime
+BaseUser --> "_timeProvider" ITimeProvider
+@enduml

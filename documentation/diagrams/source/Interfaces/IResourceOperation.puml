@@ -1,0 +1,8 @@
+@startuml
+interface IResourceOperation {
+    Create(resourceName:ResourceName, user:IUser) : void
+    Get(resourceName:ResourceName) : IResource
+    Delete(resourceName:ResourceName) : void
+    Update(resourceName:ResourceName, newEntity:IResource) : void
+}
+@enduml

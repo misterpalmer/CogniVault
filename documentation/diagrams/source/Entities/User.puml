@@ -1,0 +1,6 @@
+@startuml
+class User {
+    + User(timeProvider:ITimeProvider, username:Username, password:Password, timeZoneInfo:TimeZoneInfo, quota:long)
+}
+BaseUser <|-- User
+@enduml

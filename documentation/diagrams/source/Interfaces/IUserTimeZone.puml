@@ -1,0 +1,6 @@
+@startuml
+interface IUserTimeZone {
+    ChangeTimeZone(newTimeZone:TimeZoneInfo) : void
+}
+IUserTimeZone --> "TimeZone" TimeZoneInfo
+@enduml

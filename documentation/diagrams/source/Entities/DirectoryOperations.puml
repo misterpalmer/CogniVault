@@ -1,0 +1,9 @@
+@startuml
+class DirectoryOperations {
+    + Create(name:ResourceName, user:IUser) : void
+    + Delete(name:ResourceName) : void
+    + Get(name:ResourceName) : IResource
+    + Update(name:ResourceName, newEntity:IResource) : void
+}
+IResourceOperation <|-- DirectoryOperations
+@enduml
