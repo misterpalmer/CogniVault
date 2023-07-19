@@ -1,0 +1,9 @@
+@startuml
+interface IUser {
+    Email : Email? <<get>>
+    ChangeUsername(newUsername:Username) : void
+    ChangeEmail(newEmail:Email) : void
+}
+IUser --> "Id" Guid
+IUser --> "Username" Username
+@enduml

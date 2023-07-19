@@ -1,0 +1,6 @@
+@startuml
+interface IUsernameEncryptor {
+    Encrypt(username:string) : string
+    Verify(username:string, encryptedUsername:string) : bool
+}
+@enduml

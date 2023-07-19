@@ -1,0 +1,6 @@
+@startuml
+interface IUserAuthentication {
+    ChangePassword(newPassword:Password) : void
+}
+IUserAuthentication --> "Password" Password
+@enduml

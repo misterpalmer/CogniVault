@@ -1,0 +1,300 @@
+@startuml
+enum PermissionType {
+    Read,
+    Write,
+    Execute,
+}
+class PasswordEncryptor {
+    - <<const>> SaltSize : int = 32
+    + Encrypt(password:string) : string
+    + Verify(combinedSaltAndPassword:string, passwordToVerify:string) : bool
+    - GenerateSalt(size:int) : byte[]
+    - HashPassword(password:byte[], salt:byte[]) : byte[]
+}
+IPasswordEncryptor <|-- PasswordEncryptor
+class UsernameEncryptor {
+    - <<const>> SaltSize : int = 32
+    + Encrypt(password:string) : string
+    + Verify(combinedSaltAndPassword:string, passwordToVerify:string) : bool
+    - GenerateSalt(size:int) : byte[]
+    - HashPassword(password:byte[], salt:byte[]) : byte[]
+}
+IUsernameEncryptor <|-- UsernameEncryptor
+abstract class BaseUser {
+    + IsSuperUser : bool <<get>> <<protected set>>
+    + Email : Email? <<get>>
+    + Quota : long <<get>>
+    + BaseUser(timeProvider:ITimeProvider, username:Username, password:Password, timeZoneInfo:TimeZoneInfo, quota:long)
+    + ModifyLastLoginAt(lastLoginAt:DateTime) : void
+    + ModifyUpdatedAt(updatedAt:DateTime) : void
+    + ChangeUsername(newUsername:Username) : void
+    + ChangePassword(newPassword:Password) : void
+    + ChangeEmail(newEmail:Email) : void
+    + ChangeQuota(newQuota:long) : void
+    + ChangeTimeZone(newTimeZone:TimeZoneInfo) : void
+}
+IUser <|-- BaseUser
+IUserAuthentication <|-- BaseUser
+IUserManagement <|-- BaseUser
+IUserTimeZone <|-- BaseUser
+IUserActivity <|-- BaseUser
+BaseUser --> "Id" Guid
+BaseUser --> "Username" Username
+BaseUser --> "Password" Password
+BaseUser --> "TimeZone" TimeZoneInfo
+BaseUser --> "_lastLoginAt" DateTime
+BaseUser --> "_updatedAt" DateTime
+BaseUser --> "_createdAt" DateTime
+BaseUser --> "LastLoginAt" DateTime
+BaseUser --> "UpdatedAt" DateTime
+BaseUser --> "CreatedAt" DateTime
+BaseUser --> "_timeProvider" ITimeProvider
+class DirectoryOperations {
+    + Create(name:ResourceName, user:IUser) : void
+    + Delete(name:ResourceName) : void
+    + Get(name:ResourceName) : IResource
+    + Update(name:ResourceName, newEntity:IResource) : void
+}
+IResourceOperation <|-- DirectoryOperations
+class FileOperations {
+    + Create(name:ResourceName, user:IUser) : void
+    + Delete(name:ResourceName) : void
+    + Get(name:ResourceName) : IResource
+    + Update(name:ResourceName, newEntity:IResource) : void
+}
+IResourceOperation <|-- FileOperations
+class Group {
+    + Group(name:GroupName)
+    + AddUser(user:IUser) : void
+    + RemoveUser(user:IUser) : void
+    + Rename(newName:GroupName) : void
+}
+class "ICollection`1"<T> {
+}
+IGroup <|-- Group
+Group --> "Id" Guid
+Group --> "Name" GroupName
+Group --> "Users<IUser>" "ICollection`1"
+class GroupPermission {
+    + GrantedUser : IUser? <<get>>
+    + GroupPermission(type:PermissionType, grantedGroup:IGroup)
+}
+IPermission <|-- GroupPermission
+GroupPermission --> "Type" PermissionType
+GroupPermission --> "GrantedGroup" IGroup
+class SuperUser {
+    + SuperUser(timeProvider:ITimeProvider, username:Username, password:Password, timeZoneInfo:TimeZoneInfo, quota:long)
+    + PerformSuperUserAction() : void
+}
+BaseUser <|-- SuperUser
+ISuperUser <|-- SuperUser
+class TimeProvider {
+}
+ITimeProvider <|-- TimeProvider
+TimeProvider --> "Now" DateTime
+TimeProvider --> "UtcNow" DateTime
+class User {
+    + User(timeProvider:ITimeProvider, username:Username, password:Password, timeZoneInfo:TimeZoneInfo, quota:long)
+}
+BaseUser <|-- User
+class UserPermission {
+    + GrantedGroup : IGroup? <<get>>
+    + UserPermission(type:PermissionType, grantedUser:IUser)
+}
+IPermission <|-- UserPermission
+UserPermission --> "Type" PermissionType
+UserPermission --> "GrantedUser" IUser
+class DateTimeExtensions <<static>> {
+    + {static} ConvertToUserTime(dateTime:DateTime, timeZone:TimeZoneInfo) : DateTime
+    + {static} ConvertToUtc(dateTime:DateTime, timeZone:TimeZoneInfo) : DateTime
+}
+interface IDirectory {
+    Name : string <<get>>
+    AddSubdirectory(directory:IDirectory) : void
+    RemoveSubdirectory(directory:IDirectory) : void
+    AddFile(file:IFile) : void
+    RemoveFile(file:IFile) : void
+    AddPermission(permission:IPermission) : void
+    RemovePermission(permission:IPermission) : void
+    HasPermission(permission:IPermission) : bool
+}
+class "IEnumerable`1"<T> {
+}
+IDirectory --> "ParentDirectory" IDirectory
+IDirectory --> "Subdirectories<IDirectory>" "IEnumerable`1"
+IDirectory --> "Files<IFile>" "IEnumerable`1"
+IDirectory --> "Permissions<IPermission>" "IEnumerable`1"
+IDirectory --> "CreatedAt" DateTime
+IDirectory --> "UpdatedAt" DateTime
+interface IFile {
+    SizeInBytes : long <<get>> <<set>>
+    Move(newPath:string) : void
+    Rename(newName:string) : void
+    Resize(newSize:long) : void
+    SetOwner(newOwner:IUser) : void
+}
+class "IEnumerable`1"<T> {
+}
+IFile --> "Id" Guid
+IFile --> "Name" ResourceName
+IFile --> "Path<ResourceName>" "IEnumerable`1"
+IFile --> "CreatedAt" DateTime
+IFile --> "LastModifiedAt" DateTime
+IFile --> "Owner" IUser
+interface IGroup {
+    AddUser(user:IUser) : void
+    RemoveUser(user:IUser) : void
+    Rename(newName:GroupName) : void
+}
+class "ICollection`1"<T> {
+}
+IGroup --> "Id" Guid
+IGroup --> "Name" GroupName
+IGroup --> "Users<IUser>" "ICollection`1"
+interface IGroupNameValidator {
+    Validate(groupName:string) : bool
+}
+interface IPasswordEncryptor {
+    Encrypt(password:string) : string
+    Verify(password:string, hashedPassword:string) : bool
+}
+interface IPasswordValidator {
+    Validate(password:string) : bool
+}
+interface IPermission {
+}
+IPermission --> "Type" PermissionType
+IPermission --> "GrantedUser" IUser
+IPermission --> "GrantedGroup" IGroup
+interface IResource {
+}
+IResource --> "Name" ResourceName
+IResource --> "Permissions" IPermission
+interface IResourceManager {
+    SetPermissions(resource:IResource, permission:IPermission) : void
+    GetPermissions(resource:IResource) : IPermission
+}
+IResourceManager --> "Root" IDirectory
+IResourceManager --> "DirectoryOperations" IResourceOperation
+IResourceManager --> "FileOperations" IResourceOperation
+interface IResourceOperation {
+    Create(resourceName:ResourceName, user:IUser) : void
+    Get(resourceName:ResourceName) : IResource
+    Delete(resourceName:ResourceName) : void
+    Update(resourceName:ResourceName, newEntity:IResource) : void
+}
+interface ISuperUser {
+    PerformSuperUserAction() : void
+}
+interface ITimeProvider {
+}
+ITimeProvider --> "Now" DateTime
+ITimeProvider --> "UtcNow" DateTime
+interface IUser {
+    Email : Email? <<get>>
+    ChangeUsername(newUsername:Username) : void
+    ChangeEmail(newEmail:Email) : void
+}
+IUser --> "Id" Guid
+IUser --> "Username" Username
+interface IUserActivity {
+    ModifyLastLoginAt(lastLoginAt:DateTime) : void
+    ModifyUpdatedAt(updatedAt:DateTime) : void
+}
+IUserActivity --> "LastLoginAt" DateTime
+IUserActivity --> "CreatedAt" DateTime
+IUserActivity --> "UpdatedAt" DateTime
+interface IUserAuthentication {
+    ChangePassword(newPassword:Password) : void
+}
+IUserAuthentication --> "Password" Password
+interface IUserManagement {
+    IsSuperUser : bool <<get>>
+    Quota : long <<get>>
+    ChangeQuota(newQuota:long) : void
+}
+interface IUsernameEncryptor {
+    Encrypt(username:string) : string
+    Verify(username:string, encryptedUsername:string) : bool
+}
+interface IUsernameValidator {
+    Validate(username:string) : bool
+}
+interface IUserTimeZone {
+    ChangeTimeZone(newTimeZone:TimeZoneInfo) : void
+}
+IUserTimeZone --> "TimeZone" TimeZoneInfo
+class GroupNameValidator {
+    + Validate(groupName:string) : bool
+}
+IGroupNameValidator <|-- GroupNameValidator
+class PasswordValidator {
+    + Validate(password:string) : bool
+    - IsSpecialCharacter(c:char) : bool
+}
+IPasswordValidator <|-- PasswordValidator
+class UsernameValidator {
+    + Validate(username:string) : bool
+}
+IUsernameValidator <|-- UsernameValidator
+class Email {
+    + Value : string <<get>>
+    + Email(value:string)
+    - {static} IsValid(value:string) : bool
+    + Equals(other:Email) : bool
+    + <<override>> Equals(obj:object) : bool
+    + <<override>> GetHashCode() : int
+    + <<override>> ToString() : string
+}
+class "IEquatable`1"<T> {
+}
+"IEquatable`1" "<Email>" <|-- Email
+Email o-> "emailValidator" EmailAddressAttribute
+class GroupName {
+    + Value : string <<get>>
+    + GroupName(value:string, validator:IGroupNameValidator)
+    + <<override>> Equals(obj:object) : bool
+    + Equals(other:GroupName) : bool
+    + <<override>> GetHashCode() : int
+}
+class "IEquatable`1"<T> {
+}
+"IEquatable`1" "<GroupName>" <|-- GroupName
+class Password {
+    + Value : string <<get>>
+    + Password(value:string, validator:IPasswordValidator, encryptor:IPasswordEncryptor)
+    + Verify(passwordToVerify:string) : bool
+    + Equals(other:Password) : bool
+    + <<override>> Equals(obj:object) : bool
+    + <<override>> GetHashCode() : int
+    + <<override>> ToString() : string
+}
+class "IEquatable`1"<T> {
+}
+"IEquatable`1" "<Password>" <|-- Password
+Password --> "validator" IPasswordValidator
+Password --> "encryptor" IPasswordEncryptor
+class ResourceName {
+    + Value : string <<get>>
+    + ResourceName(value:string)
+    + Equals(other:ResourceName) : bool
+    + <<override>> Equals(obj:object) : bool
+    + <<override>> GetHashCode() : int
+    + <<override>> ToString() : string
+}
+class "IEquatable`1"<T> {
+}
+"IEquatable`1" "<ResourceName>" <|-- ResourceName
+class Username {
+    + Value : string <<get>>
+    + Username(value:string, validator:IUsernameValidator)
+    + Equals(other:Username) : bool
+    + <<override>> Equals(obj:object) : bool
+    + <<override>> GetHashCode() : int
+    + <<override>> ToString() : string
+}
+class "IEquatable`1"<T> {
+}
+"IEquatable`1" "<Username>" <|-- Username
+Username --> "validator" IUsernameValidator
+@enduml

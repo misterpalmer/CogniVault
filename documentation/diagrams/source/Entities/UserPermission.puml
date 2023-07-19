@@ -1,0 +1,9 @@
+@startuml
+class UserPermission {
+    + GrantedGroup : IGroup? <<get>>
+    + UserPermission(type:PermissionType, grantedUser:IUser)
+}
+IPermission <|-- UserPermission
+UserPermission --> "Type" PermissionType
+UserPermission --> "GrantedUser" IUser
+@enduml

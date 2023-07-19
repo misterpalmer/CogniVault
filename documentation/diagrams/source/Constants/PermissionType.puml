@@ -1,0 +1,7 @@
+@startuml
+enum PermissionType {
+    Read,
+    Write,
+    Execute,
+}
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+interface IFile {
+    SizeInBytes : long <<get>> <<set>>
+    Move(newPath:string) : void
+    Rename(newName:string) : void
+    Resize(newSize:long) : void
+    SetOwner(newOwner:IUser) : void
+}
+class "IEnumerable`1"<T> {
+}
+IFile --> "Id" Guid
+IFile --> "Name" ResourceName
+IFile --> "Path<ResourceName>" "IEnumerable`1"
+IFile --> "CreatedAt" DateTime
+IFile --> "LastModifiedAt" DateTime
+IFile --> "Owner" IUser
+@enduml

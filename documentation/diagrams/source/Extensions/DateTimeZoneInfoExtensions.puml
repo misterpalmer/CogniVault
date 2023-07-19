@@ -1,0 +1,6 @@
+@startuml
+class DateTimeExtensions <<static>> {
+    + {static} ConvertToUserTime(dateTime:DateTime, timeZone:TimeZoneInfo) : DateTime
+    + {static} ConvertToUtc(dateTime:DateTime, timeZone:TimeZoneInfo) : DateTime
+}
+@enduml

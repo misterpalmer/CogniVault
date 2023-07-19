@@ -1,0 +1,15 @@
+@startuml
+class Email {
+    + Value : string <<get>>
+    + Email(value:string)
+    - {static} IsValid(value:string) : bool
+    + Equals(other:Email) : bool
+    + <<override>> Equals(obj:object) : bool
+    + <<override>> GetHashCode() : int
+    + <<override>> ToString() : string
+}
+class "IEquatable`1"<T> {
+}
+"IEquatable`1" "<Email>" <|-- Email
+Email o-> "emailValidator" EmailAddressAttribute
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+class Username {
+    + Value : string <<get>>
+    + Username(value:string, validator:IUsernameValidator)
+    + Equals(other:Username) : bool
+    + <<override>> Equals(obj:object) : bool
+    + <<override>> GetHashCode() : int
+    + <<override>> ToString() : string
+}
+class "IEquatable`1"<T> {
+}
+"IEquatable`1" "<Username>" <|-- Username
+Username --> "validator" IUsernameValidator
+@enduml

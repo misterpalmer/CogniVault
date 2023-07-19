@@ -1,0 +1,9 @@
+@startuml
+interface IUserActivity {
+    ModifyLastLoginAt(lastLoginAt:DateTime) : void
+    ModifyUpdatedAt(updatedAt:DateTime) : void
+}
+IUserActivity --> "LastLoginAt" DateTime
+IUserActivity --> "CreatedAt" DateTime
+IUserActivity --> "UpdatedAt" DateTime
+@enduml

@@ -1,5 +1,13 @@
 {
     "dotnet-test-explorer.testProjectPath": "**/tests/**/*.@(csproj|vbproj|fsproj)",
+    "plantuml.diagramsRoot": "/documentation/diagrams/source",
+    "plantuml.render": "Local",
+    "plantuml.server": "http://localhost:8080",
+    "plantuml.exportOutDir": "/documentation/diagrams/output",
+    "plantuml.exportFormat": "png",
+    "csharp2plantuml.inputPath": "${workspaceFolder}/source",
+    "csharp2plantuml.outputPath": "${workspaceFolder}/documentation/diagrams/source",
+    "csharp2plantuml.allInOne": true,
     "files.exclude": {
         "**/.git": false,
         "**/.svn": false,

@@ -1,0 +1,9 @@
+@startuml
+interface IResourceManager {
+    SetPermissions(resource:IResource, permission:IPermission) : void
+    GetPermissions(resource:IResource) : IPermission
+}
+IResourceManager --> "Root" IDirectory
+IResourceManager --> "DirectoryOperations" IResourceOperation
+IResourceManager --> "FileOperations" IResourceOperation
+@enduml

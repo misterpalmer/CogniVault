@@ -1,0 +1,7 @@
+@startuml
+interface IPermission {
+}
+IPermission --> "Type" PermissionType
+IPermission --> "GrantedUser" IUser
+IPermission --> "GrantedGroup" IGroup
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+class GroupName {
+    + Value : string <<get>>
+    + GroupName(value:string, validator:IGroupNameValidator)
+    + <<override>> Equals(obj:object) : bool
+    + Equals(other:GroupName) : bool
+    + <<override>> GetHashCode() : int
+}
+class "IEquatable`1"<T> {
+}
+"IEquatable`1" "<GroupName>" <|-- GroupName
+@enduml

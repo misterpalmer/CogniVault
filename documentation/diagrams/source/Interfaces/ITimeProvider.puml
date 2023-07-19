@@ -1,0 +1,6 @@
+@startuml
+interface ITimeProvider {
+}
+ITimeProvider --> "Now" DateTime
+ITimeProvider --> "UtcNow" DateTime
+@enduml

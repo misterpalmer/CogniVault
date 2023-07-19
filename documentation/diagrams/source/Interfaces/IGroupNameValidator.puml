@@ -1,0 +1,5 @@
+@startuml
+interface IGroupNameValidator {
+    Validate(groupName:string) : bool
+}
+@enduml

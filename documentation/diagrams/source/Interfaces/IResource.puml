@@ -1,0 +1,6 @@
+@startuml
+interface IResource {
+}
+IResource --> "Name" ResourceName
+IResource --> "Permissions" IPermission
+@enduml
