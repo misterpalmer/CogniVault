@@ -4,7 +4,7 @@ namespace CogniVault.Application.Validators.UnitTests;
 
 public class PasswordValidatorTests
 {
-    private IPasswordValidator validator;
+    private IValidator<string> validator;
 
     public PasswordValidatorTests()
     {
@@ -22,7 +22,7 @@ public class PasswordValidatorTests
     public void Validate_Returns_ExpectedResults(string password, bool expectedIsValid)
     {
         // Act
-        var isValid = validator.Validate(password);
+        var isValid = validator.IsValid(password);
 
         // Assert
         isValid.Should().Be(expectedIsValid);

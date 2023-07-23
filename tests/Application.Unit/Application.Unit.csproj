@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\source\Application\Application.csproj" />
+    <ProjectReference Include="..\..\source\CogniVault.Application\CogniVault.Application.csproj" />
   </ItemGroup>
 
 </Project>

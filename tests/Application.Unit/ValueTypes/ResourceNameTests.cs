@@ -1,3 +1,5 @@
+using CogniVault.Application.Validators;
+
 namespace CogniVault.Application.ValueObjects.UnitTests;
 
  public class ResourceNameTests
@@ -8,8 +10,8 @@ namespace CogniVault.Application.ValueObjects.UnitTests;
     public void Equals_ReturnsExpectedResult(string value1, string value2, bool expectedResult)
     {
         // Arrange
-        var name1 = new ResourceName(value1);
-        var name2 = new ResourceName(value2);
+        var name1 = new ResourceName(value1, new FileNameValidator());
+        var name2 = new ResourceName(value2, new FileNameValidator());
          // Act
         var result = name1.Equals(name2);
          // Assert
@@ -21,8 +23,8 @@ namespace CogniVault.Application.ValueObjects.UnitTests;
     public void OperatorEquals_ReturnsExpectedResult(string value1, string value2, bool expectedResult)
     {
         // Arrange
-        var name1 = new ResourceName(value1);
-        var name2 = new ResourceName(value2);
+        var name1 = new ResourceName(value1, new FileNameValidator());
+        var name2 = new ResourceName(value2, new FileNameValidator());
          // Act
         var result = name1 == name2;
          // Assert
@@ -34,8 +36,8 @@ namespace CogniVault.Application.ValueObjects.UnitTests;
     public void OperatorNotEquals_ReturnsExpectedResult(string value1, string value2, bool expectedResult)
     {
         // Arrange
-        var name1 = new ResourceName(value1);
-        var name2 = new ResourceName(value2);
+        var name1 = new ResourceName(value1, new FileNameValidator());
+        var name2 = new ResourceName(value2, new FileNameValidator());
          // Act
         var result = name1 != name2;
          // Assert
@@ -45,8 +47,8 @@ namespace CogniVault.Application.ValueObjects.UnitTests;
     public void GetHashCode_ReturnsSameValue_WhenValuesAreEqual()
     {
         // Arrange
-        var name1 = new ResourceName("Test");
-        var name2 = new ResourceName("test");
+        var name1 = new ResourceName("Test", new FileNameValidator());
+        var name2 = new ResourceName("test", new FileNameValidator());
          // Act
         var hashCode1 = name1.GetHashCode();
         var hashCode2 = name2.GetHashCode();
@@ -57,8 +59,8 @@ namespace CogniVault.Application.ValueObjects.UnitTests;
     public void GetHashCode_ReturnsDifferentValue_WhenValuesAreNotEqual()
     {
         // Arrange
-        var name1 = new ResourceName("Test1");
-        var name2 = new ResourceName("Test2");
+        var name1 = new ResourceName("Test1", new FileNameValidator());
+        var name2 = new ResourceName("Test2", new FileNameValidator());
          // Act
         var hashCode1 = name1.GetHashCode();
         var hashCode2 = name2.GetHashCode();
@@ -70,7 +72,7 @@ namespace CogniVault.Application.ValueObjects.UnitTests;
     {
         // Arrange
         var value = "Test";
-        var name = new ResourceName(value);
+        var name = new ResourceName(value, new FileNameValidator());
          // Act
         var result = name.ToString();
          // Assert

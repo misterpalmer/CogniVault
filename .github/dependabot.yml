@@ -1,0 +1,15 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "/src/OrchardCore.Modules/OrchardCore.AdminDashboard"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
