@@ -1,5 +1,5 @@
 using CogniVault.Application.Interfaces;
-
+using CogniVault.Application.Validators;
 
 namespace CogniVault.Application.ValueObjects.UnitTests;
 
@@ -10,7 +10,7 @@ public class PasswordTests
     {
         // Arrange
         IPasswordEncryptor encryptor = null;
-        var validatorMock = new Mock<IPasswordValidator>();
+        var validatorMock = new Mock<PasswordValidator>();
         var value = "password";
         // Act
         var action = () => new Password(value, validatorMock.Object, encryptor);
@@ -23,7 +23,7 @@ public class PasswordTests
     {
         // Arrange
         var encryptorMock = new Mock<IPasswordEncryptor>();
-        IPasswordValidator validator = null;
+        PasswordValidator validator = null;
         var value = "password";
         // Act
         var action = () => new Password(value, validator, encryptorMock.Object);
@@ -39,7 +39,7 @@ public class PasswordTests
     {
         // Arrange
         var encryptorMock = new Mock<IPasswordEncryptor>();
-        var validatorMock = new Mock<IPasswordValidator>();
+        var validatorMock = new Mock<PasswordValidator>();
         // Act
         var action = () => new Password(value, validatorMock.Object, encryptorMock.Object);
         // Assert
@@ -52,7 +52,7 @@ public class PasswordTests
     {
         // Arrange
         var encryptorMock = new Mock<IPasswordEncryptor>();
-        var validatorMock = new Mock<IPasswordValidator>();
+        var validatorMock = new Mock<PasswordValidator>();
         validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(false);
         var value = "password";
         // Act
@@ -67,7 +67,7 @@ public class PasswordTests
     {
         // Arrange
         var encryptorMock = new Mock<IPasswordEncryptor>();
-        var validatorMock = new Mock<IPasswordValidator>();
+        var validatorMock = new Mock<PasswordValidator>();
         validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
         var value = "password";
         var encryptedValue = "encryptedPassword";
@@ -85,7 +85,7 @@ public class PasswordTests
     {
         // Arrange
         var encryptorMock = new Mock<IPasswordEncryptor>();
-        var validatorMock = new Mock<IPasswordValidator>();
+        var validatorMock = new Mock<PasswordValidator>();
 
         validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
 
@@ -109,7 +109,7 @@ public class PasswordTests
     {
         // Arrange
         var encryptorMock = new Mock<IPasswordEncryptor>();
-        var validatorMock = new Mock<IPasswordValidator>();
+        var validatorMock = new Mock<PasswordValidator>();
         validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
         var value = "password";
         var password1 = new Password(value, validatorMock.Object, encryptorMock.Object);
@@ -124,7 +124,7 @@ public class PasswordTests
     {
         // Arrange
         var encryptorMock = new Mock<IPasswordEncryptor>();
-        var validatorMock = new Mock<IPasswordValidator>();
+        var validatorMock = new Mock<PasswordValidator>();
         validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
         var value = "password";
         var password = new Password(value, validatorMock.Object, encryptorMock.Object);
@@ -141,7 +141,7 @@ public class PasswordTests
         encryptorMock.Setup(e => e.Encrypt("password1")).Returns("encryptedPassword1");
         encryptorMock.Setup(e => e.Encrypt("password2")).Returns("encryptedPassword2");
 
-        var validatorMock = new Mock<IPasswordValidator>();
+        var validatorMock = new Mock<PasswordValidator>();
         validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
 
         var value1 = "password1";

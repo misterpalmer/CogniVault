@@ -8,7 +8,7 @@ public class GroupTests
 {
     private readonly Mock<IGroupNameValidator> _groupNameValidatorMock;
     private readonly  Mock<IUsernameValidator> _usernameValidatorMock;
-    private readonly  Mock<IPasswordValidator> _passwordValidatorMock;
+    private readonly  Mock<PasswordValidator> _passwordValidatorMock;
     private readonly  Mock<IPasswordEncryptor> _passwordEncryptorMock;
     private readonly  Mock<ITimeProvider> _timeProviderMock;
 
@@ -16,7 +16,7 @@ public class GroupTests
     {
         _groupNameValidatorMock = new Mock<IGroupNameValidator>();
         _usernameValidatorMock = new Mock<IUsernameValidator>();
-        _passwordValidatorMock = new Mock<IPasswordValidator>();
+        _passwordValidatorMock = new Mock<PasswordValidator>();
         _passwordEncryptorMock = new Mock<IPasswordEncryptor>();
         _timeProviderMock = new Mock<ITimeProvider>();
 

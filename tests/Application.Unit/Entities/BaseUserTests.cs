@@ -1,4 +1,5 @@
 using CogniVault.Application.Interfaces;
+using CogniVault.Application.Validators;
 using CogniVault.Application.ValueObjects;
 
 namespace CogniVault.Application.Entities.UnitTests;
@@ -6,7 +7,7 @@ namespace CogniVault.Application.Entities.UnitTests;
 public class BaseUserTests
 {
     private readonly Mock<IUsernameValidator> _usernameValidatorMock;
-    private readonly Mock<IPasswordValidator> _passwordValidatorMock;
+    private readonly Mock<PasswordValidator> _passwordValidatorMock;
     private readonly Mock<IPasswordEncryptor> _passwordEncryptorMock;
     private readonly Mock<ITimeProvider> _timeProviderMock;
     private readonly Username _username;
@@ -17,7 +18,7 @@ public class BaseUserTests
     public BaseUserTests()
     {
         _usernameValidatorMock = new Mock<IUsernameValidator>();
-        _passwordValidatorMock = new Mock<IPasswordValidator>();
+        _passwordValidatorMock = new Mock<PasswordValidator>();
         _passwordEncryptorMock = new Mock<IPasswordEncryptor>();
         _timeProviderMock = new Mock<ITimeProvider>();
 
