@@ -30,11 +30,10 @@ All pertininent code is in the `source` directory.
 https://github.com/misterpalmer/CogniVault/tree/b144ea5b7c92e376c465ef0929cf01873997feed/source
 
 
-```cmd
 ### Feedback
 #### I have refactored the code submitted in the previous assignment incorporating the feedback.
 
-[-] I do not see relationships during file operations between user's permissions and files.
+[X] I do not see relationships during file operations between user's permissions and files.
 Permissions are set and retrieved from the resource manager. The resource manager is responsible for managing:
 - the permissions of the resources,
 - operations that can be performed on the resources,
@@ -54,9 +53,10 @@ public interface IResourceOperations : IResourceAccess, IResourceMoveOperation, 
 {
 }
 ```
+
 [-] I do not see permissions in Users or Files/Directories to connect them together.
 
-Permissions are set on the resource (group and user level). The permissions are set on the resource by the resource manager.
+Permissions are set on the resource (group and user level). The permissions are set on the resource by the resource manager. In addition, each resource has a special user--owner of the resource. This user has rights to all permissions and operations. The owner of a resource can be changed by calling the `SetOwner` method on the resource.
 
 ```csharp
 public interface IPermission
@@ -67,10 +67,7 @@ public interface IPermission
     // This method checks whether the permission allows the specified operation.
     bool Allows(FileSystemSecuredOperation operation);
 }
-```
-In addition, each resource has a special user--owner of the resource. This user has rights to all permissions and operations. The owner of a resource can be changed by calling the `SetOwner` method on the resource.
 
-```csharp
 public interface IResource : INamedResource, IResourceAddress, IResourceProperties, IResourceActivity
 {
     IUser Owner { get; set; }
@@ -85,18 +82,6 @@ public interface IResource : INamedResource, IResourceAddress, IResourceProperti
 `PermissionType` represents the different types of permissions that a user or a group can have on a resource. This includes permissions to read, write, and delete a resource, but it also include more specific or more complex permissions. For example, a `PermissionType` could represent the permission to append data to a resource, the permission to execute a resource, or the permission to change the permissions of a resource.
 
 `FileSystemSecuredOperation` represent different types of operations that can be performed on a file system resource, such as reading, writing, deleting, moving, copying, and renaming a resource. This enumeration is used to specify the operation that a method is trying to perform, or to specify the operation that a permission needs to allow.
-
-In some cases, the values of `PermissionType` and `FileSystemSecuredOperation` might correspond one-to-one. For example,:
-- a Read operation might require a Read permission,
-- a Write operation might require a Write permission,
-
-and so on. But in other cases,
-- an operation might require multiple permissions,
-- or, a permission might allow multiple operations.
-
-For example, a Move operation might require both Read and Delete permissions, and a FullControl permission might allow all operations.
-
-So, while `FileSystemSecuredOperation` and `PermissionType` have similar values, they represent different concepts with different purposes.
 
 ```csharp
 public enum PermissionType
@@ -118,9 +103,21 @@ public enum FileSystemSecuredOperation
 }
 ```
 
+In some cases, the values of `PermissionType` and `FileSystemSecuredOperation` might correspond one-to-one. For example,:
+- a Read operation might require a Read permission,
+- a Write operation might require a Write permission,
+
+and so on. But in other cases,
+- an operation might require multiple permissions,
+- or, a permission might allow multiple operations.
+
+For example, a Move operation might require both Read and Delete permissions, and a FullControl permission might allow all operations.
+
+So, while `FileSystemSecuredOperation` and `PermissionType` have similar values, they represent different concepts with different purposes.
+
 2. I have used Encapsulation, Inheritance, and Polymorphism in my design.
 
-Encapsulation is the bundling of data and the methods that operate on that data into a single unit, a class. In your design, encapsulation is used in the `MemoryFileSystemProvider` class. The class encapsulates the data `_fileSystems` and the methods that operate on this data like `GetFileSystemAsync` and `CreateFileSystemAsync`. This way, the internal state of the `_fileSystems` is hidden from the outside world, and can only be accessed and modified through the provided methods
+Encapsulation is the bundling of data and the methods that operate on that data into a single unit, a class. Eencapsulation is used in the `MemoryFileSystemProvider` class. The class encapsulates the data `_fileSystems` and the methods that operate on this data like `GetFileSystemAsync` and `CreateFileSystemAsync`. This way, the internal state of the `_fileSystems` is hidden from the outside world, and can only be accessed and modified through the provided methods
 
 ```csharp
 public class MemoryFileSystemProvider : IFileSystemProvider
@@ -141,7 +138,7 @@ public class MemoryFileSystemProvider : IFileSystemProvider
 }
 ```
 
-Inheritance is a mechanism where you can derive a class from another class for a hierarchy of classes that share a set of attributes and methods. In your design, `AbstractNodeProvider` and `MemoryFileSystemProvider` both implement the `IFileSystemProvider` interface. This means that they both inherit the interface's contract and must provide implementations for its methods. This allows you to use an instance of any of these classes wherever an IFileSystemProvider is expected.
+Inheritance is a mechanism where a class is a derivitave from another class for a hierarchy of classes that share a set of attributes and methods. `AbstractNodeProvider` and `MemoryFileSystemProvider` both implement the `IFileSystemProvider` interface. This means that they both inherit the interface's contract and must provide implementations for its methods. Inheritance permits use of an instance from any of these classes wherever an IFileSystemProvider is expected.
 
 ```csharp
 public class AbstractNodeProvider : IFileSystemProvider
@@ -157,7 +154,7 @@ public class MemoryFileSystemProvider : IFileSystemProvider
 }
 ```
 
-Polymorphism is the ability of an object to take on many forms. The most common use of polymorphism in OOP occurs when a parent class reference is used to refer to a child class object. In your design, polymorphism is used with the `IFileSystemProvider` interface. You can create an instance of `MemoryFileSystemProvider` and use it as an `IFileSystemProvider`. This allows you to change the actual implementation of the file system provider without changing the code that uses the `IFileSystemProvider`.
+Polymorphism is the ability of an object to take on many forms. The most common use of polymorphism in OOP occurs when a parent class reference is used to refer to a child class object. Polymorphism is used with the `IFileSystemProvider` interface. An instance of `MemoryFileSystemProvider` is created to use as an `IFileSystemProvider`. This allows the actual implementation of the file system provider to change without changing the code that uses the `IFileSystemProvider`.
 
 ```csharp
 IFileSystemProvider provider = new MemoryFileSystemProvider();
