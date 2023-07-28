@@ -1,12 +1,13 @@
+using CogniVault.Application.Entities;
 using CogniVault.Application.Interfaces;
 using CogniVault.Application.Validators;
 using CogniVault.Application.ValueObjects;
 
-namespace CogniVault.Application.Entities.UnitTests;
+namespace CogniVault.Application.Tests.Entities;
 
 public class GroupTests
 {
-    private readonly Mock<IGroupNameValidator> _groupNameValidatorMock;
+    private readonly Mock<GroupNameValidator> _groupNameValidatorMock;
     private readonly  Mock<IUsernameValidator> _usernameValidatorMock;
     private readonly  Mock<PasswordValidator> _passwordValidatorMock;
     private readonly  Mock<IPasswordEncryptor> _passwordEncryptorMock;
@@ -14,7 +15,7 @@ public class GroupTests
 
     public GroupTests()
     {
-        _groupNameValidatorMock = new Mock<IGroupNameValidator>();
+        _groupNameValidatorMock = new Mock<GroupNameValidator>();
         _usernameValidatorMock = new Mock<IUsernameValidator>();
         _passwordValidatorMock = new Mock<PasswordValidator>();
         _passwordEncryptorMock = new Mock<IPasswordEncryptor>();

@@ -1,6 +1,6 @@
 using CogniVault.Application.Interfaces;
 
-namespace CogniVault.Application.Validators.UnitTests;
+namespace CogniVault.Application.Tests.Validators;
 
 
 public class UsernameValidatorTests

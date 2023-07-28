@@ -1,4 +1,4 @@
-namespace CogniVault.Application.ValueObjects.UnitTests;
+namespace CogniVault.Application.Tests.ValueTypes;
 
 public class EmailTests
 {

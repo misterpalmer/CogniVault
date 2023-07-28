@@ -2,7 +2,7 @@ using CogniVault.Application.Interfaces;
 using CogniVault.Application.Validators;
 using CogniVault.Application.ValueObjects;
 
-namespace CogniVault.Application.Entities.UnitTests;
+namespace CogniVault.Application.Tests.Entities;
 
 public class BaseUserTests
 {

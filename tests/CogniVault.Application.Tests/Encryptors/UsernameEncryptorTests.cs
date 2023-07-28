@@ -1,4 +1,4 @@
-namespace CogniVault.Application.Encryptors.UnitTests;
+namespace CogniVault.Application.Tests.Encryptors;
 
 public class UsernameEncryptorTests
 {

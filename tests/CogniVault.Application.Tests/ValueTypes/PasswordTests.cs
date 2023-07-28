@@ -1,7 +1,7 @@
 using CogniVault.Application.Interfaces;
 using CogniVault.Application.Validators;
 
-namespace CogniVault.Application.ValueObjects.UnitTests;
+namespace CogniVault.Application.Tests.ValueTypes;
 
 public class PasswordTests
 {

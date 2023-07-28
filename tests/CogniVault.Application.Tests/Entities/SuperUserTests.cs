@@ -2,9 +2,11 @@ using CogniVault.Application.Interfaces;
 using CogniVault.Application.Validators;
 using CogniVault.Application.ValueObjects;
 
-namespace CogniVault.Application.Entities.UnitTests;
 
-public class UserTests : IDisposable
+namespace CogniVault.Application.Tests.Entities;
+
+
+public class SuperUserTests : IDisposable
 {
     private readonly Mock<IUsernameValidator> _usernameValidatorMock;
     private readonly Mock<PasswordValidator> _passwordValidatorMock;
@@ -14,9 +16,9 @@ public class UserTests : IDisposable
     private readonly Password _password;
     private readonly TimeZoneInfo _timeZoneInfo;
     private readonly int _quota;
-    private User _user;
+    private SuperUser _superUser;
 
-    public UserTests()
+    public SuperUserTests()
     {
         _usernameValidatorMock = new Mock<IUsernameValidator>();
         _passwordValidatorMock = new Mock<PasswordValidator>();
@@ -34,32 +36,48 @@ public class UserTests : IDisposable
         _quota = 10;
 
         // Setting up the User object for all tests to use.
-        _user = new User(_timeProviderMock.Object, _username, _password, TimeZoneInfo.Utc);
+        _superUser = new SuperUser(_timeProviderMock.Object, _username, _password, _timeZoneInfo, _quota);
     }
 
     public void Dispose()
     {
-        _user = null; // Clear the reference to user when we are done
+        _superUser = null; // Clear the reference to superUser when we are done
     }
 
     [Fact]
-    public void User_Should_Not_Be_SuperUser()
+    public void SuperUser_Constructor_ShouldSetPropertiesCorrectly()
     {
         // Assert
-        _user.IsSuperUser.Should().BeFalse();
+        using (var scope = new AssertionScope());
+        _superUser.Username.Value.Should().Be("testuser");
+        _superUser.Password.Value.Should().Be("password");
+        _superUser.TimeZone.Should().Be(_timeZoneInfo);
+        _superUser.IsSuperUser.Should().BeTrue();
+        _superUser.Quota.Should().Be(_quota);
+        _superUser.Id.Should().NotBeEmpty();
+        _superUser.LastLoginAt.Should().BeCloseTo(_superUser.CreatedAt, precision: TimeSpan.FromMilliseconds(1000));
+        _superUser.LastLoginAt.Should().BeCloseTo(_superUser.UpdatedAt, precision: TimeSpan.FromMilliseconds(1000));
     }
 
     [Fact]
-    public void User_Should_Update_Username()
+    public void Should_Be_SuperUser()
     {
-        var newUsername = new Username("newusername", _usernameValidatorMock.Object);
-        _timeProviderMock.Setup(m => m.Now).Returns(DateTime.UtcNow); // Update the return value for the mock
+        // Assert
+        _superUser.IsSuperUser.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Should_Perform_SuperUser_Action()
+    {
+        // You would need to implement and check specific actions in PerformSuperUserAction method
+        // Here we're simply checking that we can call the method without it throwing an exception
 
         // Act
-        _user.ChangeUsername(newUsername);
+        Action act = () => _superUser.PerformSuperUserAction();
 
         // Assert
-        _user.Username.Should().Be(newUsername);
+        act.Should().NotThrow();
     }
 }
+
 

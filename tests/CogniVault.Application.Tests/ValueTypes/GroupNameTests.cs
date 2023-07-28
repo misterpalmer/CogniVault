@@ -1,16 +1,16 @@
 using CogniVault.Application.Interfaces;
+using CogniVault.Application.Validators;
 
-
-namespace CogniVault.Application.ValueObjects.UnitTests;
+namespace CogniVault.Application.Tests.ValueTypes;
 
 
 public class GroupNameTests
 {
-    private Mock<IGroupNameValidator> validatorMock;
+    private Mock<GroupNameValidator> validatorMock;
 
     public GroupNameTests()
     {
-        validatorMock = new Mock<IGroupNameValidator>();
+        validatorMock = new Mock<GroupNameValidator>();
     }
 
     [Theory]

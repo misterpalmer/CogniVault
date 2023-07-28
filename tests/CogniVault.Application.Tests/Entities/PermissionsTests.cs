@@ -1,4 +1,4 @@
-// namespace CogniVault.Application.Entities.UnitTests;
+namespace CogniVault.Application.Tests.Entities;
 
 // public class PermissionTests
 // {
