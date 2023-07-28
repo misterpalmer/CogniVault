@@ -1,3 +1,5 @@
+using CogniVault.Application.ValueObjects;
+
 namespace CogniVault.Application.Tests.ValueTypes;
 
 public class EmailTests

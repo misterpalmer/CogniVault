@@ -9,6 +9,7 @@ public class FileSystem : IFileSystem
 {
     // Static instance of the class, instantiated once
     private static readonly FileSystem instance = new FileSystem();
+    public static FileSystem Instance => instance;
 
     // Private constructor to prevent instantiation
     private FileSystem()

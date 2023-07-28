@@ -4,8 +4,13 @@ using CogniVault.Application.Interfaces;
 
 namespace CogniVault.Application.Validators;
 
-public class UsernameValidator : IUsernameValidator
+public class UsernameValidator : IValidator<string>
 {
+    public bool IsValid(string value)
+    {
+        return Validate(value);
+    }
+
     public bool Validate(string username)
     {
         if (string.IsNullOrWhiteSpace(username))

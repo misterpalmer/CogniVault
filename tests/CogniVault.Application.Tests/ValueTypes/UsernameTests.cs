@@ -1,23 +1,24 @@
 using CogniVault.Application.Interfaces;
-
+using CogniVault.Application.Validators;
+using CogniVault.Application.ValueObjects;
 
 namespace CogniVault.Application.Tests.ValueTypes;
 
 
 public class UsernameTests
 {
-    private readonly Mock<IUsernameValidator> _usernameValidatorMock;
+    private readonly Mock<UsernameValidator> _usernameValidatorMock;
 
     public UsernameTests()
     {
-        _usernameValidatorMock = new Mock<IUsernameValidator>();
+        _usernameValidatorMock = new Mock<UsernameValidator>();
     }
 
     [Fact]
     public void UsernameConstructor_NullValidator_ThrowsArgumentNullException()
     {
         // Arrange
-        IUsernameValidator validator = null;
+        UsernameValidator validator = null;
 
         // Act
         Action act = () => new Username("valid_username", validator);

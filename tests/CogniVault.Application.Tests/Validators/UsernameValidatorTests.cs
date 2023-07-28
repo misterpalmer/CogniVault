@@ -1,16 +1,13 @@
-using CogniVault.Application.Interfaces;
+using CogniVault.Application.Validators;
 
 namespace CogniVault.Application.Tests.Validators;
 
 
 public class UsernameValidatorTests
 {
-    private IUsernameValidator validator;
+    private IValidator<string> validator;
 
-    public UsernameValidatorTests()
-    {
-        validator = new UsernameValidator();
-    }
+    public UsernameValidatorTests() => validator = new UsernameValidator();
 
     [Theory]
     [InlineData("user", true)]
@@ -25,7 +22,7 @@ public class UsernameValidatorTests
     public void Validate_Returns_ExpectedResults(string username, bool expectedIsValid)
     {
         // Act
-        var isValid = validator.Validate(username);
+        var isValid = validator.IsValid(username);
 
         // Assert
         isValid.Should().Be(expectedIsValid);

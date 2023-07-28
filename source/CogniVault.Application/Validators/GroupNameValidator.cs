@@ -1,9 +1,12 @@
-using CogniVault.Application.Interfaces;
-
 namespace CogniVault.Application.Validators;
 
-public class GroupNameValidator : IGroupNameValidator
+public class GroupNameValidator : IValidator<string>
 {
+    public bool IsValid(string value)
+    {
+        return Validate(value);
+    }
+
     public bool Validate(string groupName)
     {
         if (string.IsNullOrWhiteSpace(groupName))

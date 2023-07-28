@@ -1,4 +1,4 @@
-using CogniVault.Application.Interfaces;
+using CogniVault.Application.Validators;
 
 namespace CogniVault.Application.Tests.Validators;
 

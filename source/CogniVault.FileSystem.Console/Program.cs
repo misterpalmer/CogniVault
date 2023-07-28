@@ -1,4 +1,7 @@
-﻿// Accessing the singleton instance
+﻿using CogniVault.Application.Entities;
+
+
+// Accessing the singleton instance
 var fileSystem = FileSystem.Instance;
 
 // Define a path

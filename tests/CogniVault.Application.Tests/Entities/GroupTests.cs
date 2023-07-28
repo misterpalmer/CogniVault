@@ -8,7 +8,7 @@ namespace CogniVault.Application.Tests.Entities;
 public class GroupTests
 {
     private readonly Mock<GroupNameValidator> _groupNameValidatorMock;
-    private readonly  Mock<IUsernameValidator> _usernameValidatorMock;
+    private readonly  Mock<UsernameValidator> _usernameValidatorMock;
     private readonly  Mock<PasswordValidator> _passwordValidatorMock;
     private readonly  Mock<IPasswordEncryptor> _passwordEncryptorMock;
     private readonly  Mock<ITimeProvider> _timeProviderMock;
@@ -16,7 +16,7 @@ public class GroupTests
     public GroupTests()
     {
         _groupNameValidatorMock = new Mock<GroupNameValidator>();
-        _usernameValidatorMock = new Mock<IUsernameValidator>();
+        _usernameValidatorMock = new Mock<UsernameValidator>();
         _passwordValidatorMock = new Mock<PasswordValidator>();
         _passwordEncryptorMock = new Mock<IPasswordEncryptor>();
         _timeProviderMock = new Mock<ITimeProvider>();

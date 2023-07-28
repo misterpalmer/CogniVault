@@ -1,17 +1,18 @@
 using CogniVault.Application.Interfaces;
+using CogniVault.Application.Validators;
 
 namespace CogniVault.Application.ValueObjects;
 
 public class Username : IEquatable<Username>
 {
-    private readonly IUsernameValidator validator;
+    private readonly IValidator<string> validator;
     public string Value { get; }
 
-    public Username(string value, IUsernameValidator validator)
+    public Username(string value, IValidator<string> validator)
     {
         this.validator = validator ?? throw new ArgumentNullException(nameof(validator));
 
-        if (string.IsNullOrWhiteSpace(value) || !this.validator.Validate(value))
+        if (string.IsNullOrWhiteSpace(value) || !this.validator.IsValid(value))
         {
             throw new ArgumentException("Invalid username", nameof(value));
         }

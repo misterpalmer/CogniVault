@@ -1,5 +1,6 @@
 using CogniVault.Application.Interfaces;
 using CogniVault.Application.Validators;
+using CogniVault.Application.ValueObjects;
 
 namespace CogniVault.Application.Tests.ValueTypes;
 

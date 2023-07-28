@@ -7,9 +7,9 @@ public class GroupName : IEquatable<GroupName>
 {
     public string Value { get; }
 
-    public GroupName(string value, IGroupNameValidator validator)
+    public GroupName(string value, IValidator<string> validator)
     {
-        if (!validator.Validate(value))
+        if (!validator.IsValid(value))
         {
             throw new ArgumentException("Invalid group name");
         }
