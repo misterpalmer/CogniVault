@@ -4,6 +4,6 @@ namespace CogniVault.Application.Entities;
 
 public class TimeProvider : ITimeProvider
 {
-    public DateTime Now => DateTime.Now;
-    public DateTime UtcNow => DateTime.UtcNow;
+    public DateTimeOffset Now => DateTimeOffset.Now;
+    public DateTimeOffset UtcNow => DateTimeOffset.UtcNow;
 }

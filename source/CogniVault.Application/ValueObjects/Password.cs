@@ -1,3 +1,4 @@
+using CogniVault.Application.Abstractions.Resources.AccessControl.Users;
 using CogniVault.Application.Interfaces;
 using CogniVault.Application.Validators;
 

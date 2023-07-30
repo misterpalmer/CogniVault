@@ -1,7 +1,5 @@
-using CogniVault.Application.Interfaces;
-
+using CogniVault.Application.Abstractions.Resources.AccessControl.Users;
 using Sodium;
-
 using System.Security.Cryptography;
 using System.Text;
 

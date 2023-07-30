@@ -1,58 +1,60 @@
 ﻿using CogniVault.Application.Abstractions;
-using CogniVault.Application.Constants;
-using CogniVault.Application.Entities;
-using CogniVault.Application.Interfaces;
-using CogniVault.Application.Options;
+using CogniVault.Application.Abstractions.Providers;
+using CogniVault.Application.Abstractions.Resources;
+using CogniVault.Application.Abstractions.Resources.AccessControl.Users;
 
 namespace CogniVault.FileSystem.Provider.Memory;
 public class MemoryFileSystem : IFileSystem
 {
-    public bool IsDisposed => throw new NotImplementedException();
+    public IFileSystemNode Root => throw new NotImplementedException();
 
-    public IDirectory RootDirectory => throw new NotImplementedException();
+    public IFileSystemSecurityProvider FileSystemSecurityProvider => throw new NotImplementedException();
 
-    public FileSystemOptions Options => throw new NotImplementedException();
+    public IAccessControlSecurityProvider AccessControlSecurityProvider => throw new NotImplementedException();
 
-    public IResourceManager SecurityManager => throw new NotImplementedException();
+    public IFileSystemNodeFactory FileSystemNodeFactory => throw new NotImplementedException();
 
-    public event EventHandler Closed;
-
-    public void CheckAccess(IResource node, FileSystemSecuredOperation operation)
+    public Task DeleteNodeAsync(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public void Close()
+    public Task<IEnumerable<IFileSystemNode>> FindByResourceNameAsync(string resourceName)
     {
         throw new NotImplementedException();
     }
 
-    public void Dispose()
+    public Task<IEnumerable<IFileSystemNode>> FindByUserAsync(IFileSystemUser user)
     {
         throw new NotImplementedException();
     }
 
-    public ResourceType GetResourceType(string path)
+    public Task<IFileSystemNode> GetNodeAsync(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public IService GetService(IResource node)
+    public Task LockResourceAsync(IResource resource)
     {
         throw new NotImplementedException();
     }
 
-    public bool HasAccess(IResource node, FileSystemSecuredOperation operation)
+    public Task MoveNodeAsync(Guid id, IFileSystemNode newParent)
     {
         throw new NotImplementedException();
     }
 
-    public IResource Resolve(IResourceAddress address, ResourceType nodeType)
+    public Task<T> ReadAsync<T>(IResource resource)
     {
         throw new NotImplementedException();
     }
 
-    public bool ResourceExists(string path, ResourceType nodeType)
+    public Task UnlockResourceAsync(IResource resource)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task WriteAsync<T>(IResource resource, T data)
     {
         throw new NotImplementedException();
     }

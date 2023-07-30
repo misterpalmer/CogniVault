@@ -10,7 +10,7 @@ public class PasswordTests
     public void Constructor_ThrowsArgumentNullException_WhenEncryptorIsNull()
     {
         // Arrange
-        IPasswordEncryptor encryptor = null;
+        PasswordEncryptor encryptor = null;
         var validatorMock = new Mock<PasswordValidator>();
         var value = "password";
         // Act
@@ -23,7 +23,7 @@ public class PasswordTests
     public void Constructor_ThrowsArgumentNullException_WhenValidatorIsNull()
     {
         // Arrange
-        var encryptorMock = new Mock<IPasswordEncryptor>();
+        var encryptorMock = new Mock<PasswordEncryptor>();
         PasswordValidator validator = null;
         var value = "password";
         // Act
@@ -39,7 +39,7 @@ public class PasswordTests
     public void Constructor_ThrowsArgumentException_WhenValueIsNullOrWhitespace(string value)
     {
         // Arrange
-        var encryptorMock = new Mock<IPasswordEncryptor>();
+        var encryptorMock = new Mock<PasswordEncryptor>();
         var validatorMock = new Mock<PasswordValidator>();
         // Act
         var action = () => new Password(value, validatorMock.Object, encryptorMock.Object);
@@ -52,7 +52,7 @@ public class PasswordTests
     public void Constructor_ThrowsArgumentException_WhenValueFailsValidation()
     {
         // Arrange
-        var encryptorMock = new Mock<IPasswordEncryptor>();
+        var encryptorMock = new Mock<PasswordEncryptor>();
         var validatorMock = new Mock<PasswordValidator>();
         validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(false);
         var value = "password";
@@ -67,7 +67,7 @@ public class PasswordTests
     public void Constructor_EncryptsValue_UsingEncryptor()
     {
         // Arrange
-        var encryptorMock = new Mock<IPasswordEncryptor>();
+        var encryptorMock = new Mock<PasswordEncryptor>();
         var validatorMock = new Mock<PasswordValidator>();
         validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
         var value = "password";
@@ -85,7 +85,7 @@ public class PasswordTests
     public void Verify_ReturnsExpectedResult(string passwordToVerify, bool expectedResult)
     {
         // Arrange
-        var encryptorMock = new Mock<IPasswordEncryptor>();
+        var encryptorMock = new Mock<PasswordEncryptor>();
         var validatorMock = new Mock<PasswordValidator>();
 
         validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
@@ -109,7 +109,7 @@ public class PasswordTests
     public void Equals_ReturnsTrue_WhenPasswordsAreEqual()
     {
         // Arrange
-        var encryptorMock = new Mock<IPasswordEncryptor>();
+        var encryptorMock = new Mock<PasswordEncryptor>();
         var validatorMock = new Mock<PasswordValidator>();
         validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
         var value = "password";
@@ -124,7 +124,7 @@ public class PasswordTests
     public void Equals_ReturnsFalse_WhenOtherIsNull()
     {
         // Arrange
-        var encryptorMock = new Mock<IPasswordEncryptor>();
+        var encryptorMock = new Mock<PasswordEncryptor>();
         var validatorMock = new Mock<PasswordValidator>();
         validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
         var value = "password";
@@ -138,7 +138,7 @@ public class PasswordTests
     public void Equals_ReturnsFalse_WhenPasswordsAreDifferent()
     {
         // Arrange
-        var encryptorMock = new Mock<IPasswordEncryptor>();
+        var encryptorMock = new Mock<PasswordEncryptor>();
         encryptorMock.Setup(e => e.Encrypt("password1")).Returns("encryptedPassword1");
         encryptorMock.Setup(e => e.Encrypt("password2")).Returns("encryptedPassword2");
 

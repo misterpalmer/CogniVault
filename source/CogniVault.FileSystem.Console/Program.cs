@@ -1,19 +1,22 @@
-﻿using CogniVault.Application.Entities;
+﻿using Microsoft.Extensions.DependencyInjection;
+using CogniVault.Application.Abstractions;
+using CogniVault.Application.Entities;
+using CogniVault.Application;
+
+// Create a new service collection
+var services = new ServiceCollection();
 
 
-// Accessing the singleton instance
-var fileSystem = FileSystem.Instance;
+services.AddScoped<IFileSystem, FileSystem>(); // replace FileSystemImplementation with your class implementing IFileSystem
+services.AddScoped<IFileManager, FileManager>();
 
-// Define a path
-string path = "/path/to/resource";
 
-// Get the resource type
-var resourceType = fileSystem.GetResourceType(path);
-Console.WriteLine($"Resource type of {path}: {resourceType}");
-
-// Check if the resource exists
-bool exists = fileSystem.ResourceExists(path, resourceType);
-Console.WriteLine($"Does the resource exist? {exists}");
-
-// Dispose the file system when done
-fileSystem.Dispose();
+// Create a new service provider
+using (var serviceProvider = services.BuildServiceProvider())
+{
+    // Resolve the services from the service provider
+    var fileManager = serviceProvider.GetRequiredService<IFileManager>();
+    
+    // Use your service
+    // ...
+}

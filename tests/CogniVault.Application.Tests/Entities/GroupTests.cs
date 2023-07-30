@@ -1,4 +1,5 @@
 using CogniVault.Application.Entities;
+using CogniVault.Application.Entities.AccessControl;
 using CogniVault.Application.Interfaces;
 using CogniVault.Application.Validators;
 using CogniVault.Application.ValueObjects;
@@ -10,7 +11,7 @@ public class GroupTests
     private readonly Mock<GroupNameValidator> _groupNameValidatorMock;
     private readonly  Mock<UsernameValidator> _usernameValidatorMock;
     private readonly  Mock<PasswordValidator> _passwordValidatorMock;
-    private readonly  Mock<IPasswordEncryptor> _passwordEncryptorMock;
+    private readonly  Mock<PasswordEncryptor> _passwordEncryptorMock;
     private readonly  Mock<ITimeProvider> _timeProviderMock;
 
     public GroupTests()
@@ -18,7 +19,7 @@ public class GroupTests
         _groupNameValidatorMock = new Mock<GroupNameValidator>();
         _usernameValidatorMock = new Mock<UsernameValidator>();
         _passwordValidatorMock = new Mock<PasswordValidator>();
-        _passwordEncryptorMock = new Mock<IPasswordEncryptor>();
+        _passwordEncryptorMock = new Mock<PasswordEncryptor>();
         _timeProviderMock = new Mock<ITimeProvider>();
 
         _groupNameValidatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
@@ -35,7 +36,7 @@ public class GroupTests
     public void Group_Should_Have_Correct_Name(string groupName)
     {
         // Arrange
-        var group = new Group(new GroupName(groupName, _groupNameValidatorMock.Object));
+        var group = new FileSystemGroup(new GroupName(groupName, _groupNameValidatorMock.Object));
 
         // Assert
         group.Name.Value.Should().Be(groupName);
@@ -48,14 +49,15 @@ public class GroupTests
     public void Group_Should_Contain_Users(string groupName, string userName, string password)
     {
         // Arrange
-        var user = new User(_timeProviderMock.Object,
+        var user = new FileSystemUser(_timeProviderMock.Object,
             new Username(userName, _usernameValidatorMock.Object),
             new Password(password, _passwordValidatorMock.Object, _passwordEncryptorMock.Object),
-            TimeZoneInfo.Utc
+            TimeZoneInfo.Utc,
+            new Quota(1000)
         );
 
         // Act
-        var group = new Group(new GroupName(groupName, _groupNameValidatorMock.Object));
+        var group = new FileSystemGroup(new GroupName(groupName, _groupNameValidatorMock.Object));
         group.AddUser(user);
 
         // Assert
@@ -68,20 +70,22 @@ public class GroupTests
     public void Group_Should_Allow_User_Removal(string groupName, string userName1, string password1, string userName2, string password2)
     {
         // Arrange
-        var user1 = new User(_timeProviderMock.Object,
+        var user1 = new FileSystemUser(_timeProviderMock.Object,
             new Username(userName1, _usernameValidatorMock.Object),
             new Password(password1, _passwordValidatorMock.Object, _passwordEncryptorMock.Object),
-            TimeZoneInfo.Utc
+            TimeZoneInfo.Utc,
+            new Quota(1000)
         );
 
-        var user2 = new User(_timeProviderMock.Object,
+        var user2 = new FileSystemUser(_timeProviderMock.Object,
             new Username(userName2, _usernameValidatorMock.Object),
             new Password(password2, _passwordValidatorMock.Object, _passwordEncryptorMock.Object),
-            TimeZoneInfo.Utc
+            TimeZoneInfo.Utc,
+            new Quota(1000)
         );
 
         // Act
-        var group = new Group(new GroupName(groupName, _groupNameValidatorMock.Object));
+        var group = new FileSystemGroup(new GroupName(groupName, _groupNameValidatorMock.Object));
         group.AddUser(user1);
         group.AddUser(user2);
         group.RemoveUser(user1);
