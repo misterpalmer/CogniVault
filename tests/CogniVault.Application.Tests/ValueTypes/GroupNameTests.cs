@@ -2,79 +2,89 @@ using CogniVault.Application.Interfaces;
 using CogniVault.Application.Validators;
 using CogniVault.Application.ValueObjects;
 
+using FluentValidation;
+
 namespace CogniVault.Application.Tests.ValueTypes;
 
 
 public class GroupNameTests
 {
-    private Mock<GroupNameValidator> validatorMock;
+    private GroupNameValidator _validator;
 
     public GroupNameTests()
     {
-        validatorMock = new Mock<GroupNameValidator>();
+        _validator = new GroupNameValidator();
     }
 
     [Theory]
-    [InlineData("Admins", true)]
-    [InlineData("InvalidName", false)]
-    public void GroupName_Constructor_Should_Use_Validator(string groupName, bool isValid)
+    [InlineData("ValidGroupName")]
+    [InlineData("AnotherValidGroupName")]
+    public void GroupName_WithValidValue_ShouldSetCorrectValue(string value)
     {
         // Arrange
-        validatorMock.Setup(v => v.Validate(groupName)).Returns(isValid);
-
-        if (isValid)
-        {
-            // Act
-            var group = new GroupName(groupName, validatorMock.Object);
-
-            // Assert
-            group.Value.Should().Be(groupName);
-        }
-        else
-        {
-            // Act & Assert
-            Assert.Throws<ArgumentException>(() => new GroupName(groupName, validatorMock.Object));
-        }
-
-        validatorMock.Verify(v => v.Validate(groupName), Times.Once);
-    }
-
-    [Theory]
-    [InlineData("Admins", "Admins", true)]
-    [InlineData("Admins", "admins", true)] // Case doesn't matters
-    [InlineData("Admins", "Users", false)]
-    public void GroupName_Equals_Should_Compare_Value_Correctly(string name1, string name2, bool expected)
-    {
-        // Arrange
-        validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
-        var groupName1 = new GroupName(name1, validatorMock.Object);
-        var groupName2 = new GroupName(name2, validatorMock.Object);
 
         // Act
-        var result = groupName1.Equals(groupName2);
+        var groupName = new GroupName(value);
 
         // Assert
-        result.Should().Be(expected);
+        groupName.Value.Should().Be(value);
     }
 
     [Theory]
-    [InlineData("Admins", "Admins", true)]
-    [InlineData("Admins", "admins", true)] // Case doesn't matters
-    [InlineData("Admins", "Users", false)]
-    public void GroupName_HashCode_Should_Match_If_Values_Are_Equal(string name1, string name2, bool expected)
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void GroupName_WithInvalidValue_ShouldThrowValidationException(string value)
     {
         // Arrange
-        validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
-        var groupName1 = new GroupName(name1, validatorMock.Object);
-        var groupName2 = new GroupName(name2, validatorMock.Object);
 
         // Act
-        var hash1 = groupName1.GetHashCode();
-        var hash2 = groupName2.GetHashCode();
+        Action act = () => new GroupName(value);
 
         // Assert
-        var areHashCodesEqual = hash1 == hash2;
-        areHashCodesEqual.Should().Be(expected);
+        act.Should().Throw<ValidationException>();
+    }
+
+    [Fact]
+    public void GroupName_Equals_ShouldReturnTrueForEqualGroupNames()
+    {
+        // Arrange
+        var groupName1 = new GroupName("ValidGroupName");
+        var groupName2 = new GroupName("ValidGroupName");
+
+        // Act
+        bool result = groupName1.Equals(groupName2);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void GroupName_Equals_ShouldReturnFalseForDifferentGroupNames()
+    {
+        // Arrange
+        var groupName1 = new GroupName("ValidGroupName");
+        var groupName2 = new GroupName("AnotherValidGroupName");
+
+        // Act
+        bool result = groupName1.Equals(groupName2);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void GroupName_ToString_ShouldReturnCorrectValue()
+    {
+        // Arrange
+        var groupName = new GroupName("ValidGroupName");
+
+        // Act
+        string result = groupName.ToString();
+
+        // Assert
+        result.Should().Be("ValidGroupName");
     }
 }
+
 

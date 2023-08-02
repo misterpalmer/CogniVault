@@ -1,10 +1,11 @@
 using CogniVault.Application.Validators;
+using CogniVault.Application.ValueObjects;
 
 namespace CogniVault.Application.Tests.Validators;
 
 public class GroupNameValidatorTests
 {
-    private IValidator<string> validator;
+    private GroupNameValidator validator;
 
     public GroupNameValidatorTests()
     {
@@ -22,7 +23,7 @@ public class GroupNameValidatorTests
     public void IsValid_Returns_Expected_Results(string groupName, bool isValid)
     {
         // Act
-        var result = validator.IsValid(groupName);
+        var result = validator.IsValid(new GroupName(groupName));
 
         // Assert
         result.Should().Be(isValid);

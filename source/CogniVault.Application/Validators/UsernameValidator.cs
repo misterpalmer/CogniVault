@@ -1,35 +1,26 @@
-using System.Text.RegularExpressions;
+using CogniVault.Application.ValueObjects;
 
-using CogniVault.Application.Interfaces;
+using FluentValidation;
 
 namespace CogniVault.Application.Validators;
 
-public class UsernameValidator : IValidator<string>
+public class UsernameValidator : AbstractValidator<Username>
 {
-    public bool IsValid(string value)
+    public UsernameValidator()
     {
-        return Validate(value);
+        RuleFor(x => x.Value)
+            .NotEmpty().WithMessage("Username cannot be empty.")
+            .Length(3, 20).WithMessage("Username must be between 3 and 20 characters.")
+            .Matches(@"^[a-zA-Z0-9_]+$").WithMessage("Username can only contain alphanumeric characters and underscores.");
     }
 
-    public bool Validate(string username)
+    public bool IsValid(Username value)
     {
-        if (string.IsNullOrWhiteSpace(username))
-        {
-            return false;
-        }
+        return Validate(value).IsValid;
+    }
 
-        // Add additional validation rules as per your requirements
-        if (username.Length < 3 || username.Length > 20)
-        {
-            return false;
-        }
-
-        // Ensure the username contains only alphanumeric characters and underscores
-        if (!Regex.IsMatch(username, @"^[a-zA-Z0-9_]+$"))
-        {
-            return false;
-        }
-
-        return true;
+    public bool IsNotValid(Username value)
+    {
+        return !IsValid(value);
     }
 }

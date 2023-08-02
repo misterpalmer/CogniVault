@@ -2,66 +2,96 @@ using CogniVault.Application.Abstractions;
 using CogniVault.Application.Abstractions.Providers;
 using CogniVault.Application.Abstractions.Resources;
 using CogniVault.Application.Abstractions.Resources.AccessControl.Users;
-using CogniVault.Application.Abstractions.Resources.FileSystem.Directories;
-using CogniVault.Application.Options;
 
 namespace CogniVault.Application;
 
 public class FileSystem : IFileSystem
 {
-    public IFileSystemNode Root => throw new NotImplementedException();
+    private readonly IFileSystemNode _root;
+    private readonly IFileSystemSecurityProvider _fileSystemSecurityProvider;
+    private readonly IAccessControlSecurityProvider _accessControlSecurityProvider;
+    private readonly IFileSystemNodeFactory _fileSystemNodeFactory;
+    private readonly IDictionary<Guid, IFileSystemNode> _fileSystemNodes; 
 
-    public IFileSystemSecurityProvider FileSystemSecurityProvider => throw new NotImplementedException();
+    public FileSystem(IFileSystemNode root,
+        IFileSystemSecurityProvider fileSystemSecurityProvider,
+        IAccessControlSecurityProvider accessControlSecurityProvider,
+        IFileSystemNodeFactory fileSystemNodeFactory)
+    {
+        _root = root;
+        _fileSystemSecurityProvider = fileSystemSecurityProvider;
+        _accessControlSecurityProvider = accessControlSecurityProvider;
+        _fileSystemNodeFactory = fileSystemNodeFactory;
+        _fileSystemNodes = new Dictionary<Guid, IFileSystemNode>();
+    }
 
-    public IAccessControlSecurityProvider AccessControlSecurityProvider => throw new NotImplementedException();
-
-    public IFileSystemNodeFactory FileSystemNodeFactory => throw new NotImplementedException();
+    public IFileSystemNode Root => _root;
+    public IFileSystemSecurityProvider FileSystemSecurityProvider => _fileSystemSecurityProvider;
+    public IAccessControlSecurityProvider AccessControlSecurityProvider => _accessControlSecurityProvider;
+    public IFileSystemNodeFactory FileSystemNodeFactory => _fileSystemNodeFactory;
 
     public Task DeleteNodeAsync(Guid id)
     {
-        throw new NotImplementedException();
+        _fileSystemNodes.Remove(id);
+        return Task.CompletedTask;
     }
 
     public Task<IEnumerable<IFileSystemNode>> FindByResourceNameAsync(string resourceName)
     {
-        throw new NotImplementedException();
+        var result = _fileSystemNodes.Values.Where(node => node.ResourceName == resourceName);
+        return Task.FromResult(result);
     }
 
     public Task<IEnumerable<IFileSystemNode>> FindByUserAsync(IFileSystemUser user)
     {
-        throw new NotImplementedException();
+        var result = _fileSystemNodes.Values.Where(node => node.User == user);
+        return Task.FromResult(result);
     }
 
     public Task<IFileSystemNode> GetNodeAsync(Guid id)
     {
-        throw new NotImplementedException();
+        _fileSystemNodes.TryGetValue(id, out var node);
+        return Task.FromResult(node);
     }
 
     public Task LockResourceAsync(IResource resource)
     {
-        throw new NotImplementedException();
+        // For the sake of this example, we'll assume this operation always succeeds.
+        // In a real-world scenario, you might have more complex logic here.
+        return Task.CompletedTask;
     }
 
     public Task MoveNodeAsync(Guid id, IFileSystemNode newParent)
     {
-        throw new NotImplementedException();
+        if (_fileSystemNodes.TryGetValue(id, out var node))
+        {
+            node.Parent = newParent;
+        }
+
+        return Task.CompletedTask;
     }
 
     public Task<T> ReadAsync<T>(IResource resource)
     {
+        // This implementation would heavily depend on the structure of IResource
+        // and what it means to "read" a resource.
         throw new NotImplementedException();
     }
 
     public Task UnlockResourceAsync(IResource resource)
     {
-        throw new NotImplementedException();
+        // Similarly, this would depend on the nature of IResource and your application's rules for locking and unlocking.
+        return Task.CompletedTask;
     }
 
     public Task WriteAsync<T>(IResource resource, T data)
     {
+        // This implementation would heavily depend on the structure of IResource
+        // and what it means to "write" data to a resource.
         throw new NotImplementedException();
     }
 }
+
 
 // public class FileSystem : IFileSystem
 // {

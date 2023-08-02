@@ -1,53 +1,34 @@
-using CogniVault.Application.Interfaces;
+using CogniVault.Application.ValueObjects;
+
+using FluentValidation;
 
 namespace CogniVault.Application.Validators;
 
-public class PasswordValidator : IValidator<string>
+public class PasswordValidator : AbstractValidator<Password>
 {
-    public bool IsValid(string value)
+    public PasswordValidator()
     {
-        return Validate(value);
+        RuleFor(x => x.Value)
+            .NotEmpty()
+            .MinimumLength(8)
+            .WithMessage("Password must be at least 8 characters.")
+            .Matches("[A-Z]")
+            .WithMessage("Password must contain at least one uppercase letter.")
+            .Matches("[a-z]")
+            .WithMessage("Password must contain at least one lowercase letter.")
+            .Matches("[0-9]")
+            .WithMessage("Password must contain at least one digit.")
+            .Matches("[!@#$%^&*()_+{}|\\:;'<>?,./\"]")
+            .WithMessage("Password must contain at least one special character.");
     }
 
-    public bool Validate(string password)
+    public bool IsValid(Password value)
     {
-        // Check if the password meets the required criteria
-        if (password.Length < 8)
-        {
-            return false;
-        }
-
-        // Check for at least one uppercase letter
-        if (!password.Any(char.IsUpper))
-        {
-            return false;
-        }
-
-        // Check for at least one lowercase letter
-        if (!password.Any(char.IsLower))
-        {
-            return false;
-        }
-
-        // Check for at least one digit
-        if (!password.Any(char.IsDigit))
-        {
-            return false;
-        }
-
-        // Check for at least one special character
-        if (!password.Any(IsSpecialCharacter))
-        {
-            return false;
-        }
-
-        return true;
+        return Validate(value).IsValid;
     }
 
-    private bool IsSpecialCharacter(char c)
+    public bool IsNotValid(Password value)
     {
-        // Define your own set of special characters
-        string specialCharacters = "!@#$%^&*()_+{}[]|\\:;'<>?,./\"";
-        return specialCharacters.Contains(c);
+        return !IsValid(value);
     }
 }

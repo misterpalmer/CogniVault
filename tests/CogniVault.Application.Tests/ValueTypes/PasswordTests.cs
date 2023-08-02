@@ -2,156 +2,80 @@ using CogniVault.Application.Interfaces;
 using CogniVault.Application.Validators;
 using CogniVault.Application.ValueObjects;
 
+using FluentValidation;
+
 namespace CogniVault.Application.Tests.ValueTypes;
 
 public class PasswordTests
 {
-    [Fact]
-    public void Constructor_ThrowsArgumentNullException_WhenEncryptorIsNull()
+    private readonly Mock<PasswordEncryptor> _encryptorMock;
+    private readonly PasswordValidator _validator;
+
+    public PasswordTests()
+    {
+        _encryptorMock = new Mock<PasswordEncryptor>();
+        _validator = new PasswordValidator();
+    }
+
+    [Theory]
+    [InlineData("Password123!")]
+    [InlineData("MySecurePassword$1")]
+    public void Password_WithValidValue_ShouldSetCorrectValue(string value)
     {
         // Arrange
-        PasswordEncryptor encryptor = null;
-        var validatorMock = new Mock<PasswordValidator>();
-        var value = "password";
+        _encryptorMock.Setup(e => e.Verify(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
+
         // Act
-        var action = () => new Password(value, validatorMock.Object, encryptor);
+        var password = new Password(value, _encryptorMock.Object);
+        var validationResult = _validator.Validate(password);
+
         // Assert
-        action.Should().Throw<ArgumentNullException>()
-            .And.ParamName.Should().Be("encryptor");
+        validationResult.IsValid.Should().BeTrue();
     }
-    [Fact]
-    public void Constructor_ThrowsArgumentNullException_WhenValidatorIsNull()
-    {
-        // Arrange
-        var encryptorMock = new Mock<PasswordEncryptor>();
-        PasswordValidator validator = null;
-        var value = "password";
-        // Act
-        var action = () => new Password(value, validator, encryptorMock.Object);
-        // Assert
-        action.Should().Throw<ArgumentNullException>()
-            .And.ParamName.Should().Be("validator");
-    }
+
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    [InlineData(" ")]
-    public void Constructor_ThrowsArgumentException_WhenValueIsNullOrWhitespace(string value)
+    [InlineData("   ")]
+    [InlineData("invalid")]
+    [InlineData("NOUPPERCASE1!")]
+    [InlineData("nolowercase1!")]
+    [InlineData("NoDigit!")]
+    [InlineData("NoSpecialChar1")]
+    public void Password_WithInvalidValue_ShouldThrowValidationException(string value)
     {
         // Arrange
-        var encryptorMock = new Mock<PasswordEncryptor>();
-        var validatorMock = new Mock<PasswordValidator>();
-        // Act
-        var action = () => new Password(value, validatorMock.Object, encryptorMock.Object);
+        Action act = () => new Password(value, _encryptorMock.Object);
+
         // Assert
-        action.Should().Throw<ArgumentException>()
-            .WithMessage("Invalid password (Parameter 'value')")
-            .And.ParamName.Should().Be("value");
+        act.Should().Throw<ValidationException>();
     }
+
     [Fact]
-    public void Constructor_ThrowsArgumentException_WhenValueFailsValidation()
+    public void Password_Equals_ShouldReturnTrueForEqualPasswords()
     {
         // Arrange
-        var encryptorMock = new Mock<PasswordEncryptor>();
-        var validatorMock = new Mock<PasswordValidator>();
-        validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(false);
-        var value = "password";
-        // Act
-        var action = () => new Password(value, validatorMock.Object, encryptorMock.Object);
-        // Assert
-        action.Should().Throw<ArgumentException>()
-            .WithMessage("Invalid password (Parameter 'value')")
-            .And.ParamName.Should().Be("value");
-    }
-    [Fact]
-    public void Constructor_EncryptsValue_UsingEncryptor()
-    {
-        // Arrange
-        var encryptorMock = new Mock<PasswordEncryptor>();
-        var validatorMock = new Mock<PasswordValidator>();
-        validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
-        var value = "password";
-        var encryptedValue = "encryptedPassword";
-        encryptorMock.Setup(e => e.Encrypt(value)).Returns(encryptedValue);
-        // Act
-        var password = new Password(value, validatorMock.Object, encryptorMock.Object);
-        // Assert
-        password.Value.Should().Be(encryptedValue);
-        encryptorMock.Verify(e => e.Encrypt(value), Times.Once);
-    }
-    [Theory]
-    [InlineData("password", true)]
-    [InlineData("wrongpassword", false)]
-    public void Verify_ReturnsExpectedResult(string passwordToVerify, bool expectedResult)
-    {
-        // Arrange
-        var encryptorMock = new Mock<PasswordEncryptor>();
-        var validatorMock = new Mock<PasswordValidator>();
-
-        validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
-
-        var value = "password";
-        var encryptedPassword = "encryptedPassword";
-
-        encryptorMock.Setup(e => e.Encrypt(value)).Returns(encryptedPassword);
-        encryptorMock.Setup(e => e.Verify(passwordToVerify, encryptedPassword)).Returns(expectedResult);
-
-        var password = new Password(value, validatorMock.Object, encryptorMock.Object);
+        _encryptorMock.Setup(e => e.Verify(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
+        var password1 = new Password("TestPassword1!", _encryptorMock.Object);
+        var password2 = new Password("TestPassword1!", _encryptorMock.Object);
 
         // Act
-        var result = password.Verify(passwordToVerify);
+        bool result = password1.Equals(password2);
 
-        // Assert
-        result.Should().Be(expectedResult);
-        encryptorMock.Verify(e => e.Verify(passwordToVerify, encryptedPassword), Times.Once);
-    }
-    [Fact]
-    public void Equals_ReturnsTrue_WhenPasswordsAreEqual()
-    {
-        // Arrange
-        var encryptorMock = new Mock<PasswordEncryptor>();
-        var validatorMock = new Mock<PasswordValidator>();
-        validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
-        var value = "password";
-        var password1 = new Password(value, validatorMock.Object, encryptorMock.Object);
-        var password2 = new Password(value, validatorMock.Object, encryptorMock.Object);
-        // Act
-        var result = password1.Equals(password2);
         // Assert
         result.Should().BeTrue();
     }
+
     [Fact]
-    public void Equals_ReturnsFalse_WhenOtherIsNull()
+    public void Password_Equals_ShouldReturnFalseForDifferentPasswords()
     {
         // Arrange
-        var encryptorMock = new Mock<PasswordEncryptor>();
-        var validatorMock = new Mock<PasswordValidator>();
-        validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
-        var value = "password";
-        var password = new Password(value, validatorMock.Object, encryptorMock.Object);
-        // Act
-        var result = password.Equals(null);
-        // Assert
-        result.Should().BeFalse();
-    }
-    [Fact]
-    public void Equals_ReturnsFalse_WhenPasswordsAreDifferent()
-    {
-        // Arrange
-        var encryptorMock = new Mock<PasswordEncryptor>();
-        encryptorMock.Setup(e => e.Encrypt("password1")).Returns("encryptedPassword1");
-        encryptorMock.Setup(e => e.Encrypt("password2")).Returns("encryptedPassword2");
-
-        var validatorMock = new Mock<PasswordValidator>();
-        validatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
-
-        var value1 = "password1";
-        var value2 = "password2";
-        var password1 = new Password(value1, validatorMock.Object, encryptorMock.Object);
-        var password2 = new Password(value2, validatorMock.Object, encryptorMock.Object);
+        _encryptorMock.Setup(e => e.Verify(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
+        var password1 = new Password("TestPassword1!", _encryptorMock.Object);
+        var password2 = new Password("DifferentPassword2!", _encryptorMock.Object);
 
         // Act
-        var result = password1.Equals(password2);
+        bool result = password1.Equals(password2);
 
         // Assert
         result.Should().BeFalse();

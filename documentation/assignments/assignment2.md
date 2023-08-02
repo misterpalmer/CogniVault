@@ -49,8 +49,12 @@ public interface IResourceManager
     IPermission GetPermissions(IResource resource);
 }
 
-public interface IResourceOperations : IResourceAccess, IResourceMoveOperation, IResourceCopyOperation, IResourceCreateOperation, IResourceDeleteOperation, IResourceTargetDirectory
+public interface IResourceOperations :
+    IResourceAccess, IResourceMoveOperation
+    , IResourceCopyOperation, IResourceCreateOperation
+    , IResourceDeleteOperation, IResourceTargetDirectory
 {
+    // code removed for brevity
 }
 ```
 

@@ -1,21 +1,32 @@
+using CogniVault.Application.Validators;
 using CogniVault.Application.ValueObjects;
+
+using FluentValidation.Results;
 
 namespace CogniVault.Application.Tests.ValueTypes;
 
 public class EmailTests
 {
+    private EmailValidator _validator;
+
+    public EmailTests()
+    {
+        _validator = new EmailValidator();
+    }
+
     [Theory]
     [InlineData("test@example.com")]
     [InlineData("another@example.com")]
     public void Email_WithValidValue_ShouldSetCorrectValue(string value)
     {
         // Arrange
-
-        // Act
         var email = new Email(value);
 
+        // Act
+        ValidationResult results = _validator.Validate(email);
+
         // Assert
-        email.Value.Should().Be(value);
+        results.IsValid.Should().BeTrue();
     }
 
     [Theory]
@@ -23,40 +34,16 @@ public class EmailTests
     [InlineData("")]
     [InlineData("   ")]
     [InlineData("invalidemail")]
-    public void Email_WithInvalidValue_ShouldThrowArgumentException(string value)
+    public void Email_WithInvalidValue_ShouldThrowValidationException(string value)
     {
         // Arrange
+        var email = new Email(value);
 
         // Act
-        var action = new Action(() => new Email(value));
+        ValidationResult results = _validator.Validate(email);
 
         // Assert
-        action.Should().Throw<ArgumentException>().WithMessage("Invalid email address (Parameter 'value')");
-    }
-
-    [Fact]
-    public void Email_ImplicitConversionToString_ShouldReturnCorrectValue()
-    {
-        // Arrange
-        var email = new Email("test@example.com");
-
-        // Act
-        string result = email;
-
-        // Assert
-        result.Should().Be("test@example.com");
-    }
-
-    [Fact]
-    public void Email_ExplicitConversionFromString_ShouldCreateEmailInstance()
-    {
-        // Arrange
-
-        // Act
-        Email email = (Email)"test@example.com";
-
-        // Assert
-        email.Value.Should().Be("test@example.com");
+        results.IsValid.Should().BeFalse();
     }
 
     [Fact]

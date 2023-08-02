@@ -5,8 +5,7 @@ namespace CogniVault.Application.Abstractions.Resources.AccessControl.Groups;
 
 public interface IFileSystemGroup : IAccessControlEntity
 {
-    Guid Id { get; }
-    GroupName Name { get; set; }
+    new GroupName Name { get; set; }
     ICollection<IFileSystemUser> Users { get; }
 
     void AddUser(IFileSystemUser user);

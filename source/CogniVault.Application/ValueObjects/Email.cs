@@ -1,60 +1,74 @@
-using System.ComponentModel.DataAnnotations;
+using CogniVault.Application.Validators;
+
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace CogniVault.Application.ValueObjects;
 
-public class Email : IEquatable<Email>
+public class Email : IValueObject<Email>
 {
-    private static readonly EmailAddressAttribute emailValidator = new EmailAddressAttribute();
+    private readonly string _value;
 
-    public string Value { get; }
+    public string Value => _value;
 
     public Email(string value)
     {
-        if (!IsValid(value))
+        _value = value;
+        Validate();
+    }
+
+    public int CompareTo(Email? other)
+    {
+        return _value.CompareTo(other?._value);
+    }
+
+    public Email Copy()
+    {
+        return new Email(_value);
+    }
+
+    public bool Equals(Email? other)
+    {
+        return _value == other?._value;
+    }
+
+    public void Validate()
+    {
+        var validator = new EmailValidator();
+        ValidationResult results = validator.Validate(this);
+        
+        if (!results.IsValid)
         {
-            throw new ArgumentException("Invalid email address", nameof(value));
+            throw new ValidationException(results.Errors);
         }
-
-        Value = value;
-    }
-
-    private static bool IsValid(string value)
-    {
-        return !string.IsNullOrWhiteSpace(value) && emailValidator.IsValid(value);
-    }
-
-    public static implicit operator string(Email email) => email.Value;
-
-    public static explicit operator Email(string s) => new Email(s);
-
-    public bool Equals(Email other)
-    {
-        if (other == null)
-        {
-            return false;
-        }
-
-        return Value == other.Value;
-    }
-
-    public override bool Equals(object obj)
-    {
-        if (obj is Email email)
-        {
-            return Equals(email);
-        }
-
-        return false;
-    }
-
-    public override int GetHashCode()
-    {
-        return Value.GetHashCode();
     }
 
     public override string ToString()
     {
-        return Value;
+        return _value;
+    }
+
+    public override int GetHashCode()
+    {
+        return _value.GetHashCode();
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is Email other)
+        {
+            return Equals(other);
+        }
+        return false;
+    }
+
+    public static bool operator ==(Email left, Email right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(Email left, Email right)
+    {
+        return !(left == right);
     }
 }
-

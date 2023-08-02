@@ -62,13 +62,26 @@ public class FileManager : IFileManager
         await _fileSystem.WriteAsync(resource, data);
     }
 
-    public async Task<IEnumerable<IFileSystemNode>> FindByResourceNameAsync(string resourceName)
+    public async Task LockResourceAsync(Guid resourceId)
     {
-        return await _fileSystem.FindByResourceNameAsync(resourceName);
+        var resource = new Resource(resourceId);
+        await _fileSystem.LockResourceAsync(resource);
     }
 
-    public async Task<IEnumerable<IFileSystemNode>> FindByUserAsync(IFileSystemUser user)
+    public async Task UnlockResourceAsync(Guid resourceId)
     {
-        return await _fileSystem.FindByUserAsync(user);
+        var resource = new Resource(resourceId);
+        await _fileSystem.UnlockResourceAsync(resource);
     }
 }
+
+
+// public async Task<IEnumerable<IFileSystemNode>> FindByResourceNameAsync(string resourceName)
+// {
+//     return await _fileSystem.FindByResourceNameAsync(resourceName);
+// }
+
+// public async Task<IEnumerable<IFileSystemNode>> FindByUserAsync(IFileSystemUser user)
+// {
+//     return await _fileSystem.FindByUserAsync(user);
+// }

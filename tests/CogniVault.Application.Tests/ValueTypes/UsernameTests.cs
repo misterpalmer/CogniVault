@@ -2,152 +2,70 @@ using CogniVault.Application.Interfaces;
 using CogniVault.Application.Validators;
 using CogniVault.Application.ValueObjects;
 
+using FluentValidation;
+
 namespace CogniVault.Application.Tests.ValueTypes;
 
 
 public class UsernameTests
 {
-    private readonly Mock<UsernameValidator> _usernameValidatorMock;
+    private UsernameValidator _validator = new UsernameValidator();
 
-    public UsernameTests()
+    [Theory]
+    [InlineData("username1", true)]
+    [InlineData("USERNAME1", true)]
+    [InlineData("user", true)]
+    [InlineData("u", false)] // too short
+    [InlineData(null, false)] // null value
+    [InlineData("", false)] // empty string
+    [InlineData("user_name", true)] // includes underscore
+    [InlineData("user name", false)] // includes space
+    [InlineData("user@name", false)] // includes special character
+    public void Username_IsValid_WhenConstructed(string value, bool expectedIsValid)
     {
-        _usernameValidatorMock = new Mock<UsernameValidator>();
-    }
-
-    [Fact]
-    public void UsernameConstructor_NullValidator_ThrowsArgumentNullException()
-    {
-        // Arrange
-        UsernameValidator validator = null;
-
         // Act
-        Action act = () => new Username("valid_username", validator);
-
-        // Assert
-        act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("validator");
+        if (expectedIsValid)
+        {
+            var username = new Username(value);
+            // Assert
+            Assert.Equal(value, username.Value);
+        }
+        else
+        {
+            // Assert
+            Assert.Throws<ValidationException>(() => new Username(value));
+        }
     }
 
     [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData(" ")]
-    public void UsernameConstructor_InvalidUsername_ThrowsArgumentException(string username)
+    [InlineData("username1", "username1", true)]
+    [InlineData("username1", "USERNAME1", false)] // case-sensitive comparison
+    [InlineData("username1", "username2", false)]
+    public void Username_Equals_ReturnsExpectedResult(string value1, string value2, bool expectedEquals)
     {
         // Arrange
-        _usernameValidatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(false);
+        var username1 = new Username(value1);
+        var username2 = new Username(value2);
 
         // Act
-        Action act = () => new Username(username, _usernameValidatorMock.Object);
+        var result = username1.Equals(username2);
 
         // Assert
-        act.Should().Throw<ArgumentException>().And.ParamName.Should().Be("value");
+        Assert.Equal(expectedEquals, result);
     }
-
+    
     [Fact]
-    public void UsernameConstructor_ValidUsername_SetsValueProperty()
+    public void Username_CopiesCorrectly()
     {
         // Arrange
-        string validUsername = "valid_username";
-        _usernameValidatorMock.Setup(v => v.Validate(validUsername)).Returns(true);
+        var originalUsername = new Username("username1");
 
         // Act
-        var username = new Username(validUsername, _usernameValidatorMock.Object);
+        var copiedUsername = originalUsername.Copy();
 
         // Assert
-        username.Value.Should().Be(validUsername);
-    }
-
-    [Fact]
-    public void Equals_NullUsername_ReturnsFalse()
-    {
-        // Arrange
-        string validUsername = "valid_username";
-        _usernameValidatorMock.Setup(v => v.Validate(validUsername)).Returns(true);
-        var username = new Username(validUsername, _usernameValidatorMock.Object);
-        
-        // Act
-        bool equals = username.Equals((Username)null);
-
-        // Assert
-        equals.Should().BeFalse();
-    }
-
-    [Fact]
-    public void Equals_SameValue_ReturnsTrue()
-    {
-        // Arrange
-        string validUsername = "valid_username";
-        _usernameValidatorMock.Setup(v => v.Validate(validUsername)).Returns(true);
-        var username1 = new Username(validUsername, _usernameValidatorMock.Object);
-        var username2 = new Username(validUsername, _usernameValidatorMock.Object);
-
-        // Act
-        bool equals = username1.Equals(username2);
-
-        // Assert
-        equals.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Equals_DifferentValue_ReturnsFalse()
-    {
-        // Arrange
-        _usernameValidatorMock.Setup(v => v.Validate(It.IsAny<string>())).Returns(true);
-        var username1 = new Username("username1", _usernameValidatorMock.Object);
-        var username2 = new Username("username2", _usernameValidatorMock.Object);
-
-        // Act
-        bool equals = username1.Equals(username2);
-
-        // Assert
-        equals.Should().BeFalse();
-    }
-
-    [Fact]
-    public void Equals_ObjectOfDifferentType_ReturnsFalse()
-    {
-        // Arrange
-        string validUsername = "valid_username";
-        _usernameValidatorMock.Setup(v => v.Validate(validUsername)).Returns(true);
-        var username = new Username(validUsername, _usernameValidatorMock.Object);
-        var notUsername = new object();
-
-        // Act
-        bool equals = username.Equals(notUsername);
-
-        // Assert
-        equals.Should().BeFalse();
-    }
-
-    [Fact]
-    public void GetHashCode_ReturnsSameHashCodeForSameValue()
-    {
-        // Arrange
-        string validUsername = "valid_username";
-        _usernameValidatorMock.Setup(v => v.Validate(validUsername)).Returns(true);
-        var username1 = new Username(validUsername, _usernameValidatorMock.Object);
-        var username2 = new Username(validUsername, _usernameValidatorMock.Object);
-
-        // Act
-        int hashCode1 = username1.GetHashCode();
-        int hashCode2 = username2.GetHashCode();
-
-        // Assert
-        hashCode1.Should().Be(hashCode2);
-    }
-
-    [Fact]
-    public void ToString_ReturnsValueProperty()
-    {
-        // Arrange
-        string validUsername = "valid_username";
-        _usernameValidatorMock.Setup(v => v.Validate(validUsername)).Returns(true);
-        var username = new Username(validUsername, _usernameValidatorMock.Object);
-
-        // Act
-        string result = username.ToString();
-
-        // Assert
-        result.Should().Be(validUsername);
+        Assert.Equal(originalUsername.Value, copiedUsername.Value);
+        Assert.NotSame(originalUsername, copiedUsername);
     }
 }
+

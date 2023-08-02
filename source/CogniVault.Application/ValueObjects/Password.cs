@@ -2,25 +2,22 @@ using CogniVault.Application.Abstractions.Resources.AccessControl.Users;
 using CogniVault.Application.Interfaces;
 using CogniVault.Application.Validators;
 
+using FluentValidation;
+using FluentValidation.Results;
+
 namespace CogniVault.Application.ValueObjects;
 
-public class Password : IEquatable<Password>
+public class Password : IValueObject<Password>
 {
-    private readonly IValidator<string> validator;
     private readonly IPasswordEncryptor encryptor;
     public string Value { get; }
 
-    public Password(string value, IValidator<string> validator, IPasswordEncryptor encryptor)
+    public Password(string value, IPasswordEncryptor encryptor)
     {
-        this.validator = validator ?? throw new ArgumentNullException(nameof(validator));
         this.encryptor = encryptor ?? throw new ArgumentNullException(nameof(encryptor));
+        this.Value = value;
 
-        if (string.IsNullOrWhiteSpace(value) || !this.validator.IsValid(value))
-        {
-            throw new ArgumentException("Invalid password", nameof(value));
-        }
-
-        Value = this.encryptor.Encrypt(value);
+        Validate();
     }
 
     public bool Verify(string passwordToVerify)
@@ -28,7 +25,17 @@ public class Password : IEquatable<Password>
         return encryptor.Verify(passwordToVerify, Value);
     }
 
-    public bool Equals(Password other)
+    public int CompareTo(Password? other)
+    {
+        return Value.CompareTo(other?.Value);
+    }
+
+    public Password Copy()
+    {
+        return new Password(Value, encryptor);
+    }
+
+    public bool Equals(Password? other)
     {
         if (other == null)
         {
@@ -56,5 +63,16 @@ public class Password : IEquatable<Password>
     public override string ToString()
     {
         return Value;
+    }
+
+    public void Validate()
+    {
+        var validator = new PasswordValidator();
+        ValidationResult results = validator.Validate(this);
+        
+        if (!results.IsValid)
+        {
+            throw new ValidationException(results.Errors);
+        }
     }
 }

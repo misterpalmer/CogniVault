@@ -1,0 +1,1 @@
+[AppDomain]::CurrentDomain.GetAssemblies().GetTypes()  | Where-Object {$_.NameSpace -eq 'System.IO'}
