@@ -1,15 +1,35 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    labels:
-      - "dependencies"
+- package-ecosystem: nuget
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "08:00"
+    timezone: America/Los_Angeles
+  open-pull-requests-limit: 100
+  
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "08:00"
+    timezone: America/Los_Angeles
+  open-pull-requests-limit: 100
+  reviewers:
+  - misterpalmer
+  assignees:
+  - misterpalmer
 
-  - package-ecosystem: "npm"
-    directory: "/src/OrchardCore.Modules/OrchardCore.AdminDashboard"
-    schedule:
-      interval: "weekly"
-    labels:
-      - "dependencies"
+- package-ecosystem: docker
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "08:00"
+    timezone: America/Los_Angeles
+  open-pull-requests-limit: 100
+  reviewers:
+  - misterpalmer
+  assignees:
+  - misterpalmer
