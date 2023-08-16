@@ -1,0 +1,1 @@
+puml-gen .\source\Application\ .\documentation\diagrams\source\ -dir -excludePaths bin,obj,Properties -createAssociation -allInOne -excludeProjects **/[Tt]ests/**

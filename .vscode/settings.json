@@ -1,5 +1,5 @@
 {
-    "dotnet-test-explorer.testProjectPath": "**/tests/**/*.@(csproj|vbproj|fsproj)",
+    "dotnet-test-explorer.testProjectPath": "**/tests/**/*Tests.@(csproj|vbproj|fsproj)",
     "plantuml.diagramsRoot": "/documentation/diagrams/source",
     "plantuml.render": "Local",
     "plantuml.server": "http://localhost:8080",

@@ -1,26 +1,30 @@
-using CogniVault.Application.Interfaces;
+using CogniVault.Application.ValueObjects;
+
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace CogniVault.Application.Validators;
 
-public class GroupNameValidator : IGroupNameValidator
+public class GroupNameValidator : AbstractValidator<GroupName>
 {
-    public bool Validate(string groupName)
+    public GroupNameValidator()
     {
-        if (string.IsNullOrWhiteSpace(groupName))
-        {
-            return false; // Group name cannot be null, empty, or contain only whitespace
-        }
+        RuleFor(x => x.Value)
+            .NotEmpty()
+            .WithMessage("Group name cannot be empty")
+            .Must(x => x.All(char.IsLetterOrDigit))
+            .WithMessage("Group name can only contain letters and digits")
+            .Length(1, 50)
+            .WithMessage("Group name should be between 1 and 50 characters long");
+    }
 
-        if (groupName.Length < 3 || groupName.Length > 50)
-        {
-            return false; // Group name should be between 3 and 50 characters long
-        }
+    public bool IsValid(GroupName value)
+    {
+        return Validate(value).IsValid;
+    }
 
-        if (!groupName.All(c => char.IsLetterOrDigit(c) || c == ' '))
-        {
-            return false; // Group name can only contain letters, digits, and spaces
-        }
-
-        return true; // Group name is valid
+    public bool IsNotValid(GroupName value)
+    {
+        return !IsValid(value);
     }
 }

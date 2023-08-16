@@ -2,6 +2,6 @@ namespace CogniVault.Application.Interfaces;
 
 public interface ITimeProvider
 {
-    DateTime Now { get; }
-    DateTime UtcNow { get; }
+    DateTimeOffset Now { get; }
+    DateTimeOffset UtcNow { get; }
 }

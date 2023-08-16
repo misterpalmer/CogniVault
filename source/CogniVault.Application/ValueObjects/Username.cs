@@ -1,51 +1,65 @@
 using CogniVault.Application.Interfaces;
+using CogniVault.Application.Validators;
+
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace CogniVault.Application.ValueObjects;
 
-public class Username : IEquatable<Username>
+public class Username : IValueObject<Username>
 {
-    private readonly IUsernameValidator validator;
-    public string Value { get; }
+    private readonly string _value;
 
-    public Username(string value, IUsernameValidator validator)
+    public string Value => _value;
+
+    public Username(string value)
     {
-        this.validator = validator ?? throw new ArgumentNullException(nameof(validator));
-
-        if (string.IsNullOrWhiteSpace(value) || !this.validator.Validate(value))
-        {
-            throw new ArgumentException("Invalid username", nameof(value));
-        }
-        
-        Value = value;
+        _value = value;
+        Validate();
     }
 
-    public bool Equals(Username other)
+    public int CompareTo(Username? other)
     {
-        if (other == null)
-        {
-            return false;
-        }
-
-        return Value == other.Value;
+        return _value.CompareTo(other?._value);
     }
 
-    public override bool Equals(object obj)
+    public Username Copy()
     {
-        if (obj is Username username)
-        {
-            return Value.Equals(username.Value);
-        }
-
-        return false;
+        return new Username(_value);
     }
 
-    public override int GetHashCode()
+    public bool Equals(Username? other)
     {
-        return Value.GetHashCode();
+        return _value == other?._value;
+    }
+
+    public void Validate()
+    {
+        var validator = new UsernameValidator();
+        ValidationResult results = validator.Validate(this);
+
+        if (!results.IsValid)
+        {
+            throw new ValidationException(results.Errors);
+        }
     }
 
     public override string ToString()
     {
-        return Value;
+        return _value;
+    }
+
+    public override int GetHashCode()
+    {
+        return _value.GetHashCode();
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is Username other)
+        {
+            return Equals(other);
+        }
+        return false;
     }
 }

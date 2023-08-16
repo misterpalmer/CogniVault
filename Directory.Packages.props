@@ -6,12 +6,14 @@
     <PackageVersion Include="Duende.IdentityServer" Version="6.3.3" />
     <PackageVersion Include="Duende.IdentityServer.AspNetIdentity" Version="6.3.3" />
     <PackageVersion Include="Duende.IdentityServer.EntityFramework" Version="6.3.3" />
+    <PackageVersion Include="FluentValidation" Version="11.6.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.9" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.9">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageVersion>
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.9" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageVersion Include="Sodium.Core" Version="1.3.3" />
     <PackageVersion Include="Nuke.Common" Version="7.0.2" />

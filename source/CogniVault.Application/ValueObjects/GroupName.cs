@@ -1,47 +1,66 @@
 using CogniVault.Application.Interfaces;
 using CogniVault.Application.Validators;
 
+using FluentValidation;
+using FluentValidation.Results;
+
 namespace CogniVault.Application.ValueObjects;
 
-public class GroupName : IEquatable<GroupName>
+public class GroupName : IValueObject<GroupName>
 {
-    public string Value { get; }
+    private readonly string _value;
 
-    public GroupName(string value, IGroupNameValidator validator)
+    public string Value => _value;
+
+    public GroupName(string value)
     {
-        if (!validator.Validate(value))
+        _value = value;
+        Validate();
+    }
+
+    public int CompareTo(GroupName? other)
+    {
+        return _value.CompareTo(other?._value);
+    }
+
+    public GroupName Copy()
+    {
+        return new GroupName(_value);
+    }
+
+    public bool Equals(GroupName? other)
+    {
+        return _value == other?._value;
+    }
+
+    public void Validate()
+    {
+        var validator = new GroupNameValidator();
+        ValidationResult results = validator.Validate(this);
+        
+        if (!results.IsValid)
         {
-            throw new ArgumentException("Invalid group name");
+            throw new ValidationException(results.Errors);
         }
-
-        Value = value;
     }
 
-    public override bool Equals(object obj)
+    public override string ToString()
     {
-        return Equals(obj as GroupName);
-    }
-
-    public bool Equals(GroupName other)
-    {
-        if (other is null) return false;
-        if (ReferenceEquals(this, other)) return true;
-        return string.Equals(Value, other.Value, StringComparison.OrdinalIgnoreCase);
+        return _value;
     }
 
     public override int GetHashCode()
     {
-        return StringComparer.OrdinalIgnoreCase.GetHashCode(Value);
+        return _value.GetHashCode();
     }
 
-    public static bool operator ==(GroupName left, GroupName right)
+    public override bool Equals(object obj)
     {
-        if (left is null) return right is null;
-        return left.Equals(right);
-    }
-
-    public static bool operator !=(GroupName left, GroupName right)
-    {
-        return !(left == right);
+        if (obj is GroupName other)
+        {
+            return Equals(other);
+        }
+        return false;
     }
 }
+

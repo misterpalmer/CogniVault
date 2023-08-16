@@ -1,60 +1,64 @@
 using CogniVault.Application.Validators;
 
+using FluentValidation;
+using FluentValidation.Results;
+
 namespace CogniVault.Application.ValueObjects;
 
-public class ResourceName : IEquatable<ResourceName>
+public class ResourceName : IValueObject<ResourceName>
 {
-    private readonly IValidator<string> _validator;
-    public string Value { get; private set; }
+    private readonly string _value;
 
-    public ResourceName(string value, IValidator<string> validator)
+    public string Value => _value;
+
+    public ResourceName(string value)
     {
-        _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+        _value = value;
+        Validate();
+    }
 
-        if (!_validator.IsValid(value))
+    public int CompareTo(ResourceName? other)
+    {
+        return StringComparer.OrdinalIgnoreCase.Compare(_value, other?._value);
+    }
+
+    public ResourceName Copy()
+    {
+        return new ResourceName(_value);
+    }
+
+    public bool Equals(ResourceName? other)
+    {
+        return StringComparer.OrdinalIgnoreCase.Equals(_value, other?._value);
+    }
+
+    public void Validate()
+    {
+        var validator = new ResourceNameValidator();
+        ValidationResult results = validator.Validate(this);
+
+        if (!results.IsValid)
         {
-            throw new ArgumentException("Invalid name.", nameof(value));
+            throw new ValidationException(results.Errors);
         }
-
-        Value = value;
-    }
-    
-    public bool Equals(ResourceName other)
-    {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
-        return string.Equals(Value, other.Value, StringComparison.OrdinalIgnoreCase);
-    }
-
-    public override bool Equals(object obj)
-    {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != GetType()) return false;
-        return Equals((ResourceName)obj);
-    }
-
-    public override int GetHashCode()
-    {
-        return StringComparer.OrdinalIgnoreCase.GetHashCode(Value);
     }
 
     public override string ToString()
     {
-        return Value;
+        return _value;
     }
 
-    public static bool operator ==(ResourceName left, ResourceName right)
+    public override int GetHashCode()
     {
-        if (ReferenceEquals(null, left) && ReferenceEquals(null, right))
-            return true;
-        if (ReferenceEquals(null, left) || ReferenceEquals(null, right))
-            return false;
-        return left.Equals(right);
+        return StringComparer.OrdinalIgnoreCase.GetHashCode(_value);
     }
 
-    public static bool operator !=(ResourceName left, ResourceName right)
+    public override bool Equals(object obj)
     {
-        return !(left == right);
+        if (obj is ResourceName other)
+        {
+            return Equals(other);
+        }
+        return false;
     }
 }
