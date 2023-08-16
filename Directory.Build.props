@@ -1,0 +1,46 @@
+<Project>
+    <PropertyGroup>
+        <LangVersion>latest</LangVersion>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <Version>$(Ver)</Version>
+        <PackageVersion>$(Ver)</PackageVersion>
+        <AssemblyVersion>$(Ver)</AssemblyVersion>
+        <FileVersion>$(Ver)</FileVersion>
+    </PropertyGroup>
+    <PropertyGroup>
+        <Title>CogniVault File System</Title>
+        <Authors>Matthew Andrew</Authors>
+        <Description>Virtual File System for a school project</Description>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/misterpalmer/CogniVault</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/misterpalmer/CogniVault</PackageProjectUrl>
+        <PackageLicenseExpression>MIT-0</PackageLicenseExpression>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageIconUrl>..\documentation\assets\icon.png</PackageIconUrl>
+        <RootNamespace>CogniVault</RootNamespace>
+        <PackageTags>filesystem</PackageTags>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <Optimize>false</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <DefineConstants>RELEASE;TRACE</DefineConstants>
+        <Optimize>true</Optimize>
+    </PropertyGroup>
+	
+    <ItemGroup>
+        <AdditionalFiles  Include="$(MSBuildThisFileDirectory)/BannedSymbols.txt" Link="Properties/BannedSymbols.txt"/>
+        <!-- <Compile Include="$(MSBuildThisFileDirectory)/AssemblyInfo.cs" Link="Properties/AssemblyInfo.common.cs"/> -->
+        <!-- <Compile Include="$(MSBuildThisFileDirectory)/GlobalSuppressions.cs" Link="GlobalSuppressions.common.cs"/>
+        <Compile Include="$(MSBuildThisFileDirectory)/Directory.Build.targets" Link="Directory.Build.targets"/> -->
+    </ItemGroup>
+    <ItemGroup>
+        <!-- <Content Include="$(MSBuildThisFileDirectory)icon.png" Pack="true" PackagePath="/"> -->
+            <!-- <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content> -->
+    </ItemGroup>
+
+</Project>

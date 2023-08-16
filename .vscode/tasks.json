@@ -1,5 +1,5 @@
 {
-    "version": "2.0.0",
+	"version": "2.0.0",
     "linux": {
         "command": "sh",
         "args": [
@@ -16,7 +16,31 @@
           }
         }
       },
-    "tasks": [
+	"tasks": [
+        {
+            "type": "nuke",
+            "target": "Compile",
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "label": "nuke: Compile",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "nuke",
+            "target": "Default",
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "label": "nuke: Default",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
         {
             "label": "build",
             "command": "dotnet",
@@ -53,230 +77,5 @@
             ],
             "problemMatcher": "$msCompile"
         },
-        {
-            "label": "dotnet watch - net7.0",
-            "type": "process",
-            "command": "dotnet",
-            "args": [
-              "watch",
-              "run",
-              "${workspaceRoot}/src/OrchardCore.Cms.Web",
-              "-f",
-              "net7.0"
-            ],
-            "options": {
-              "cwd": "${workspaceRoot}/src/OrchardCore.Cms.Web"
-            },
-            "problemMatcher": "$msCompile"
-          },
-          {
-            "label": "dotnet run",
-            "type": "shell",
-            "command": "dotnet",
-            "args": [
-              "run",
-              "--project",
-              "${workspaceRoot}\\src\\OrchardCore.Cms.Web\\OrchardCore.Cms.Web.csproj",
-              "-f",
-              "net7.0"
-            ]
-          },
-          {
-            "label": "dotnet restore",
-            "type": "shell",
-            "command": "dotnet",
-            "args": [
-              "restore"
-            ]
-          },
-          {
-            "label": "dotnet restore force",
-            "type": "shell",
-            "command": "dotnet",
-            "args": [
-              "restore",
-              "--no-cache"
-            ]
-          },
-          {
-            "label": "dotnet clean (debug)",
-            "type": "shell",
-            "command": "dotnet",
-            "args": [
-              "clean",
-              "--configuration",
-              "Debug"
-            ]
-          },
-          {
-            "label": "dotnet clean (release)",
-            "type": "shell",
-            "command": "dotnet",
-            "args": [
-              "clean",
-              "--configuration",
-              "Release"
-            ]
-          },
-          {
-            "label": "dotnet build (debug) - net7.0",
-            "type": "shell",
-            "command": "dotnet",
-            "args": [
-              "build",
-              "${workspaceRoot}/src/OrchardCore.Cms.Web",
-              "-c",
-              "Debug",
-              "-f",
-              "net7.0"
-            ],
-            "problemMatcher": "$msCompile"
-          },
-          {
-            "label": "dotnet build (release) - net7.0",
-            "type": "shell",
-            "command": "dotnet",
-            "args": [
-              "build",
-              "${workspaceRoot}/src/OrchardCore.Cms.Web",
-              "-c",
-              "Release",
-              "-f",
-              "net7.0"
-            ],
-            "problemMatcher": "$msCompile"
-          },
-          {
-            "label": "dotnet rebuild (debug) - net7.0",
-            "type": "shell",
-            "command": "dotnet",
-            "args": [
-              "build",
-              "${workspaceRoot}/src/OrchardCore.Cms.Web",
-              "--no-incremental",
-              "-c",
-              "Debug",
-              "-f",
-              "net7.0"
-            ],
-            "problemMatcher": "$msCompile"
-          },
-          {
-            "label": "dotnet rebuild (release) - net7.0",
-            "type": "shell",
-            "command": "dotnet",
-            "args": [
-              "build",
-              "${workspaceRoot}/src/OrchardCore.Cms.Web",
-              "--no-incremental",
-              "-c",
-              "Release",
-              "-f",
-              "net7.0"
-            ],
-            "problemMatcher": "$msCompile"
-          },
-          {
-            "label": "cleanup publish folder",
-            "type": "shell",
-            "command": "rm",
-            "windows": {
-              "command": "Remove-Item",
-              "args": [
-                "${workspaceRoot}\\.build\\release\\*",
-                "-recurse"
-              ]
-            },
-            "args": [
-              "-rfv",
-              "${workspaceRoot}/.build/release/*"
-            ]
-          },
-          {
-            "label": "dotnet publish (self-contained) - release - net7.0",
-            "type": "shell",
-            "command": "dotnet",
-            "windows": {
-              "command": "dotnet",
-              "args": [
-                "publish",
-                "${workspaceRoot}\\src\\OrchardCore.Cms.Web",
-                "--configuration",
-                "release",
-                "--runtime",
-                "win-x64",
-                "--self-contained",
-                "--framework",
-                "net7.0",
-                "--output",
-                ".\\.build\\release"
-              ]
-            },
-            "args": [
-              "publish",
-              "${workspaceRoot}/src/OrchardCore.Cms.Web",
-              "--configuration",
-              "release",
-              "--runtime",
-              "linux-x64",
-              "--self-contained",
-              "--framework",
-              "net7.0",
-              "--output",
-              "./.build/release"
-            ],
-            "problemMatcher": "$msCompile"
-          },
-          {
-            "label": "dotnet publish (framework dependent) - release - net7.0",
-            "type": "shell",
-            "command": "dotnet",
-            "windows": {
-              "command": "dotnet",
-              "args": [
-                "publish",
-                "${workspaceRoot}\\src\\OrchardCore.Cms.Web",
-                "--configuration",
-                "release",
-                "--runtime",
-                "win-x64",
-                "--self-contained",
-                "false",
-                "--framework",
-                "net7.0",
-                "--output",
-                ".\\.build\\release"
-              ]
-            },
-            "args": [
-              "publish",
-              "${workspaceRoot}/src/OrchardCore.Cms.Web",
-              "--configuration",
-              "release",
-              "--runtime",
-              "linux-x64",
-              "--self-contained",
-              "false",
-              "--framework",
-              "net7.0",
-              "--output",
-              "./.build/release"
-            ],
-            "problemMatcher": "$msCompile"
-          },
-          {
-            "label": "tasks: dotnet publish release (self-contained) - net7.0",
-            "dependsOn": [
-              "cleanup publish folder",
-              "dotnet publish (self-contained) - net7.0"
-            ]
-          },
-          {
-            "label": "tasks: dotnet publish release (framework dependent) - net7.0",
-            "dependsOn": [
-              "cleanup publish folder",
-              "dotnet publish (framework dependent) - net7.0"
-            ]
-          }
     ]
 }

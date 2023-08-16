@@ -2,6 +2,33 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Blazor WebAssembly",
+      "type": "chrome",
+      "request": "launch",
+      "url": "https://localhost:5001",
+      "webRoot": "${workspaceFolder}/source/CogniVault.Client",
+      "sourceMapPathOverrides": {
+        "webpack:///CogniVault.Client/*": "${webRoot}/*"
+      }
+    },
+    {
+      "name": "CogniVault API",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/CogniVault.Api/bin/Debug/net7.0/CogniVault.Api.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/source/CogniVault.Api",
+      "stopAtEntry": false,
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    {
       // Use IntelliSense to find out which attributes exist for C# debugging
       // Use hover for the description of the existing attributes
       // For further information visit https://github.com/dotnet/vscode-csharp/blob/main/debugger-launchjson.md
@@ -92,10 +119,9 @@
       "request": "launch",
       "task": "dotnet watch - net7.0",
       "program": "OrchardCore.Cms.Web.exe",
-      "args": {
-        "env": {
-          "ASPNETCORE_ENVIRONMENT": "Development"
-        }
+      "args": [],
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "cwd": "${workspaceRoot}/src/OrchardCore.Cms.Web",
       "stopAtEntry": false,
@@ -103,6 +129,12 @@
         "action": "openExternally",
         "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
       }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Both Projects",
+      "configurations": ["Blazor WebAssembly", "CogniVault API"]
     }
   ]
 }
