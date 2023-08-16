@@ -1,22 +1,16 @@
 namespace CogniVault.Platform.Core.Entities;
 
-public abstract class EntityBase<TId> : IEntityBase<TId>, IAuditableEntity
+public abstract class EntityBase<TId> : IEntityBase<TId>, IAuditableEntity where TId : IEquatable<TId>
 {
+    public required TId Id { get; set; }
+    public required string CreatedBy { get; set; }
+    public required DateTimeOffset CreatedOnUtc { get; set; }
+    public required string ModifiedBy { get; set; }
+    public required DateTimeOffset ModifiedOnUtc { get; set; }
     private int? _requestedHashCode;
 
-    public string CreatedBy { get; set; } = string.Empty;
-    public DateTimeOffset CreatedOnUtc { get; set; }
-    public string ModifiedBy { get; set; } = string.Empty;
-    public DateTimeOffset ModifiedOnUtc { get; set; }
 
-    public TId Id { get; set; }
-
-    public bool IsTransient()
-    {
-        return Id.Equals(default(TId));
-    }
-
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj == null || !(obj is EntityBase<TId>))
             return false;
@@ -60,5 +54,10 @@ public abstract class EntityBase<TId> : IEntityBase<TId>, IAuditableEntity
     public static bool operator !=(EntityBase<TId> left, EntityBase<TId> right)
     {
         return !(left == right);
+    }
+
+    public bool IsTransient()
+    {
+        return Id.Equals(default(TId));
     }
 }

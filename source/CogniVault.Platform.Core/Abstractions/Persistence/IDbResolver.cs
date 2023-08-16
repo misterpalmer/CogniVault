@@ -1,4 +1,4 @@
-namespace CogniVault.Platform.Core.Persistence;
+namespace CogniVault.Platform.Core.Abstractions.Persistence;
 
 public interface IDbResolver
 {

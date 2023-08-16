@@ -2,12 +2,11 @@ using MediatR;
 
 namespace CogniVault.Platform.Core.Entities;
 
-public abstract class DomainEntityBase : EntityBase, IDomainEntity
+public abstract class DomainEntityBase : EntityBase<Guid>, IDomainEntity
 {
-    private List<INotification> _domainEvents;
+    private List<INotification> _domainEvents = new();
 
     private int? _requestedHashCode;
-    public virtual int Id { get; set; }
 
     public IReadOnlyCollection<INotification> GetDomainEvents()
     {
@@ -30,9 +29,9 @@ public abstract class DomainEntityBase : EntityBase, IDomainEntity
         _domainEvents?.Clear();
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        if (obj == null || !(obj is EntityBase))
+        if (obj == null || !(obj is DomainEntityBase))
             return false;
 
         if (ReferenceEquals(this, obj))
@@ -41,7 +40,7 @@ public abstract class DomainEntityBase : EntityBase, IDomainEntity
         if (GetType() != obj.GetType())
             return false;
 
-        var item = (EntityBase) obj;
+        var item = (DomainEntityBase) obj;
 
         if (item.IsTransient() || IsTransient())
             return false;
