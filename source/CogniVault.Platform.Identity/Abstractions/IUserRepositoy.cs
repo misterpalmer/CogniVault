@@ -1,4 +1,4 @@
-﻿namespace CogniVault.Platform.Identity;
+namespace CogniVault.Platform.Identity;
 
 
 public interface IUserRepositiy
