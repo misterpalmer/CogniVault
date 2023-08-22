@@ -5,7 +5,7 @@ using CogniVault.Platform.Identity.Provider;
 
 using FluentValidation;
 
-namespace CogniVault.Application.Tests.ValueTypes;
+namespace CogniVault.Application.Tests.ValueObjects;
 
 public class PasswordTests
 {

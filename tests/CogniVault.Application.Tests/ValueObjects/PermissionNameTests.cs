@@ -3,7 +3,7 @@ using CogniVault.Application.ValueObjects;
 
 using FluentValidation.Results;
 
-namespace CogniVault.Application.Tests.ValueTypes;
+namespace CogniVault.Application.Tests.ValueObjects;
 
 public class PermissionNameTests
 {

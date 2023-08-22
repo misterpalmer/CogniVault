@@ -2,7 +2,7 @@ using Xunit;
 using FluentValidation;
 using CogniVault.Application.ValueObjects;
 
-namespace CogniVault.Application.Tests.ValueTypes;
+namespace CogniVault.Application.Tests.ValueObjects;
 
 public class DirectoryNameTests
 {

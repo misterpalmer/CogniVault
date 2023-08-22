@@ -4,7 +4,7 @@ using CogniVault.Platform.Identity.Validators;
 
 using FluentValidation.Results;
 
-namespace CogniVault.Application.Tests.ValueTypes;
+namespace CogniVault.Application.Tests.ValueObjects;
 
 public class EmailTests
 {

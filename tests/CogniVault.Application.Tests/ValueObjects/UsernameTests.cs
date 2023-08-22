@@ -4,7 +4,7 @@ using CogniVault.Application.ValueObjects;
 
 using FluentValidation;
 
-namespace CogniVault.Application.Tests.ValueTypes;
+namespace CogniVault.Application.Tests.ValueObjects;
 
 
 public class UsernameTests

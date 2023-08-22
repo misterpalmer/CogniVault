@@ -1,7 +1,7 @@
 using CogniVault.Application.Validators;
 using CogniVault.Application.ValueObjects;
 
-namespace CogniVault.Application.Tests.ValueTypes;
+namespace CogniVault.Application.Tests.ValueObjects;
 
 //  public class ResourceNameTests
 // {
