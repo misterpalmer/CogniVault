@@ -1,6 +1,7 @@
 using CogniVault.Application.Interfaces;
 using CogniVault.Application.Validators;
 using CogniVault.Application.ValueObjects;
+using CogniVault.Platform.Identity.Provider;
 
 using FluentValidation;
 

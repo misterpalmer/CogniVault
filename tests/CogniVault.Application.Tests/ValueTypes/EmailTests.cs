@@ -1,5 +1,6 @@
 using CogniVault.Application.Validators;
 using CogniVault.Application.ValueObjects;
+using CogniVault.Platform.Identity.Validators;
 
 using FluentValidation.Results;
 
@@ -20,7 +21,7 @@ public class EmailTests
     public void Email_WithValidValue_ShouldSetCorrectValue(string value)
     {
         // Arrange
-        var email = new Email(value);
+        var email = new Email(_validator, value);
 
         // Act
         ValidationResult results = _validator.Validate(email);
@@ -37,7 +38,7 @@ public class EmailTests
     public void Email_WithInvalidValue_ShouldThrowValidationException(string value)
     {
         // Arrange
-        var email = new Email(value);
+        var email = new Email(_validator, value);
 
         // Act
         ValidationResult results = _validator.Validate(email);
@@ -50,8 +51,8 @@ public class EmailTests
     public void Email_Equals_ShouldReturnTrueForEqualEmails()
     {
         // Arrange
-        var email1 = new Email("test@example.com");
-        var email2 = new Email("test@example.com");
+        var email1 = new Email(_validator, "test@example.com");
+        var email2 = new Email(_validator, "test@example.com");
 
         // Act
         bool result = email1.Equals(email2);
@@ -64,8 +65,8 @@ public class EmailTests
     public void Email_Equals_ShouldReturnFalseForDifferentEmails()
     {
         // Arrange
-        var email1 = new Email("test@example.com");
-        var email2 = new Email("another@example.com");
+        var email1 = new Email(_validator, "test@example.com");
+        var email2 = new Email(_validator, "test@example.com");
 
         // Act
         bool result = email1.Equals(email2);
@@ -78,7 +79,7 @@ public class EmailTests
     public void Email_Equals_ShouldReturnFalseForNull()
     {
         // Arrange
-        var email = new Email("test@example.com");
+        var email = new Email(_validator, "test@example.com");
 
         // Act
         bool result = email.Equals(null);
@@ -91,7 +92,7 @@ public class EmailTests
     public void Email_Equals_ShouldReturnFalseForDifferentObjectType()
     {
         // Arrange
-        var email = new Email("test@example.com");
+        var email = new Email(_validator, "test@example.com");
         var otherObject = new object();
 
         // Act
@@ -105,8 +106,8 @@ public class EmailTests
     public void Email_GetHashCode_ShouldReturnSameHashCodeForEqualEmails()
     {
         // Arrange
-        var email1 = new Email("test@example.com");
-        var email2 = new Email("test@example.com");
+        var email1 = new Email(_validator, "test@example.com");
+        var email2 = new Email(_validator, "test@example.com");
 
         // Act
         int hashCode1 = email1.GetHashCode();
@@ -120,7 +121,7 @@ public class EmailTests
     public void Email_ToString_ShouldReturnCorrectValue()
     {
         // Arrange
-        var email = new Email("test@example.com");
+        var email = new Email(_validator, "test@example.com");
 
         // Act
         string result = email.ToString();

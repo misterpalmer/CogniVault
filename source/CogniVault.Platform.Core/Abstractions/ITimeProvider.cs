@@ -1,4 +1,4 @@
-namespace CogniVault.Application.Interfaces;
+namespace CogniVault.Platform.Core.Abstractions;
 
 public interface ITimeProvider
 {

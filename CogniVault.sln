@@ -31,7 +31,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CogniVault.Api.FileManager"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CogniVault.FileSystem.Provider.Blob", "source\CogniVault.FileSystem.Provider.Blob\CogniVault.FileSystem.Provider.Blob.csproj", "{93D4B474-DA9A-48BA-9C5B-8C126A138B46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CogniVault.Platform.Identity.EFCorek", "source\CogniVault.Platform.Identity.EFCore\CogniVault.Platform.Identity.EFCorek.csproj", "{7357BDE4-58CB-4166-9FCF-208E4CD3BE3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CogniVault.Platform.Identity.EFCore", "source\CogniVault.Platform.Identity.EFCore\CogniVault.Platform.Identity.EFCore.csproj", "{7357BDE4-58CB-4166-9FCF-208E4CD3BE3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CogniVault.Platform.Core.RestApi", "source\CogniVault.Platform.Core.RestApi\CogniVault.Platform.Core.RestApi.csproj", "{EAF47A61-3DA3-4AF1-9E7F-EEF017C50FEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,6 +94,10 @@ Global
 		{7357BDE4-58CB-4166-9FCF-208E4CD3BE3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7357BDE4-58CB-4166-9FCF-208E4CD3BE3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7357BDE4-58CB-4166-9FCF-208E4CD3BE3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAF47A61-3DA3-4AF1-9E7F-EEF017C50FEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAF47A61-3DA3-4AF1-9E7F-EEF017C50FEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAF47A61-3DA3-4AF1-9E7F-EEF017C50FEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAF47A61-3DA3-4AF1-9E7F-EEF017C50FEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5BE2BE5A-FCDA-4A2D-B25E-5228B07A6D0C} = {0CFAE81F-2932-4250-A674-F8F5275E858D}
@@ -106,5 +112,6 @@ Global
 		{1A3CAF3D-94BC-4103-867D-EDE4D5FE05FC} = {0CFAE81F-2932-4250-A674-F8F5275E858D}
 		{93D4B474-DA9A-48BA-9C5B-8C126A138B46} = {0CFAE81F-2932-4250-A674-F8F5275E858D}
 		{7357BDE4-58CB-4166-9FCF-208E4CD3BE3D} = {0CFAE81F-2932-4250-A674-F8F5275E858D}
+		{EAF47A61-3DA3-4AF1-9E7F-EEF017C50FEF} = {0CFAE81F-2932-4250-A674-F8F5275E858D}
 	EndGlobalSection
 EndGlobal

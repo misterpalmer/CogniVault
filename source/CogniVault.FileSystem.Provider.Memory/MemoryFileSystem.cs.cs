@@ -19,16 +19,6 @@ public class MemoryFileSystem : IFileSystem
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<IFileSystemNode>> FindByResourceNameAsync(string resourceName)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<IFileSystemNode>> FindByUserAsync(IFileSystemUser user)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<IFileSystemNode> GetNodeAsync(Guid id)
     {
         throw new NotImplementedException();

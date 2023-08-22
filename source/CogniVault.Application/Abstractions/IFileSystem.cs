@@ -21,9 +21,6 @@ public interface IFileSystem
     Task UnlockResourceAsync(IResource resource);
     Task<T> ReadAsync<T>(IResource resource);
     Task WriteAsync<T>(IResource resource, T data);
-
-    Task<IEnumerable<IFileSystemNode>> FindByResourceNameAsync(string resourceName);
-    Task<IEnumerable<IFileSystemNode>> FindByUserAsync(IFileSystemUser user);
 }
 
 

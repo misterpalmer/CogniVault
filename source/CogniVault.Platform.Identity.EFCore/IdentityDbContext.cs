@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace CogniVault.Platform.Identity.EFCorek;
 
 public class IdentityDbContext : DbContext

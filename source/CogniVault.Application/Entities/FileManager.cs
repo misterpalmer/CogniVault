@@ -64,14 +64,36 @@ public class FileManager : IFileManager
 
     public async Task LockResourceAsync(Guid resourceId)
     {
-        var resource = new Resource(resourceId);
+        var resource = new FileSystemResource();
+        // var resource = new Resource(resourceId);
         await _fileSystem.LockResourceAsync(resource);
     }
 
     public async Task UnlockResourceAsync(Guid resourceId)
     {
-        var resource = new Resource(resourceId);
+        var resource = new FileSystemResource();
+        // var resource = new Resource(resourceId);
         await _fileSystem.UnlockResourceAsync(resource);
+    }
+
+    public Task<bool> MoveNodeAsync(Guid nodeId, Guid newParentId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task DeleteNodeAsync(Guid nodeId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<T> ReadResourceAsync<T>(Guid resourceId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task WriteResourceAsync<T>(Guid resourceId, T data)
+    {
+        throw new NotImplementedException();
     }
 }
 

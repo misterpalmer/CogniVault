@@ -1,8 +1,9 @@
+using CogniVault.Application.Abstractions.Resources.AccessControl;
 using CogniVault.Application.Abstractions.Resources.AccessControl.Users;
 using CogniVault.Application.Extensions;
 using CogniVault.Application.Interfaces;
 using CogniVault.Application.ValueObjects;
-
+using CogniVault.Platform.Core.Abstractions;
 
 namespace CogniVault.Application.Entities.AccessControl;
 
@@ -24,7 +25,11 @@ public class FileSystemUser : IFileSystemUser, IUserAuthentication, IUserManagem
     public DateTimeOffset LastLoginAt => _lastLoginAt.ToOffset(TimeZone.GetUtcOffset(_lastLoginAt));
     public DateTimeOffset UpdatedAt => _updatedAt.ToOffset(TimeZone.GetUtcOffset(_updatedAt));
     public DateTimeOffset CreatedAt => _createdAt.ToOffset(TimeZone.GetUtcOffset(_createdAt));
-    public ResourceName Name => throw new NotImplementedException();
+
+    Username IFileSystemUser.Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+    ResourceName IAccessControlEntity.Name => throw new NotImplementedException();
+
     private readonly ITimeProvider _timeProvider;
     
 

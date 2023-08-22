@@ -1,8 +1,8 @@
 using CogniVault.Platform.Core.Abstractions;
 
-namespace CogniVault.Application.Entities;
+namespace CogniVault.Platform.Identity.Provider;
 
-public class TimeProvider : ITimeProvider
+public class NullTimeProvider : ITimeProvider
 {
     public DateTimeOffset Now => DateTimeOffset.Now;
     public DateTimeOffset UtcNow => DateTimeOffset.UtcNow;

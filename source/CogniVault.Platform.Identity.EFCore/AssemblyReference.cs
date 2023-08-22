@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace CogniVault.Platform.Identity.EFCorek;
 
 public static class AssemblyReference
