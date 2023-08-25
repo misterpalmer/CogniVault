@@ -1,0 +1,21 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.8'
+
+services:
+  cognivaultapiidentity:
+    image: cognivaultapiidentity
+    build:
+      context: .
+      dockerfile: source/CogniVault.Api.Identity/Dockerfile
+    ports:
+      - 5166:5166
+      - 7166:7166  # Mapping the HTTPS port from the host to the container
+    environment:
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=7166
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=[password]
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ${HOME}/.cert/cognivault.pfx:/https/aspnetapp.pfx:ro  # Mounting the certificate from the host to the container
+
