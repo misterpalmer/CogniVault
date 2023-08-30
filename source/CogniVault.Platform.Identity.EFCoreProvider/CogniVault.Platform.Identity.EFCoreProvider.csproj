@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CogniVault.Platform.Core\CogniVault.Platform.Core.csproj" />
+    <ProjectReference Include="..\CogniVault.Platform.Identity\CogniVault.Platform.Identity.csproj" />
+  </ItemGroup>
+
+</Project>

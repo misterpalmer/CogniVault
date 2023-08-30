@@ -11,4 +11,9 @@
     <PackageReference Include="Sodium.Core" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CogniVault.Platform.Core\CogniVault.Platform.Core.csproj" />
+    <ProjectReference Include="..\CogniVault.Platform.Identity\CogniVault.Platform.Identity.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -4,9 +4,9 @@ using CogniVault.Platform.Identity.ValueObjects;
 
 namespace CogniVault.Platform.Identity.Entities;
 
-public class PlatformUser<T> : IPlatformUser<Guid>
+public class PlatformUser<TId> : IPlatformUser<TId> where TId : struct
 {
-    public Guid Id { get; set; } 
+    public TId Id { get; set; } 
     public Username Username { get; private set; }
     public Password Password { get; private set; }
     public Email? Email { get; private set; }

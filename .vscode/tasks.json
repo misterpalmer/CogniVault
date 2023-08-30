@@ -18,6 +18,16 @@
       },
 	"tasks": [
         {
+            "label": "build identity",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/source/CogniVault.Api.Identity/CogniVault.Api.Identity.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
             "type": "nuke",
             "target": "Compile",
             "problemMatcher": [
@@ -42,7 +52,7 @@
             }
         },
         {
-            "label": "build",
+            "label": "test",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -59,7 +69,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/tests/Application.Unit/Application.Unit.csproj",
+                "${workspaceFolder}/CogniVault.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -73,9 +83,81 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/tests/Application.Unit/Application.Unit.csproj"
+                "${workspaceFolder}/CogniVault.sln"
             ],
             "problemMatcher": "$msCompile"
         },
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/CogniVault.sln",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build: debug",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "cognivault:dev",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/source/CogniVault.Api.Identity/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/source/CogniVault.Api.Identity/CogniVault.Api.Identity.csproj"
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build: release",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "cognivault:latest",
+                "dockerfile": "${workspaceFolder}/source/CogniVault.Api.Identity/Dockerfile",
+                "context": "${workspaceFolder}",
+                "platform": {
+                    "os": "linux",
+                    "architecture": "amd64"
+                },
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/source/CogniVault.Api.Identity/CogniVault.Api.Identity.csproj"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: debug",
+            "dependsOn": [
+                "docker-build: debug"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/source/CogniVault.Api.Identity/CogniVault.Api.Identity.csproj",
+                "enableDebugging": true
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: release",
+            "dependsOn": [
+                "docker-build: release"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/source/CogniVault.Api.Identity/CogniVault.Api.Identity.csproj"
+            }
+        }
     ]
 }

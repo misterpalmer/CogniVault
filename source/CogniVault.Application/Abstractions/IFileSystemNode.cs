@@ -23,7 +23,7 @@ public interface IFileSystemNode
     /// <summary>
     /// The parent node of the node.
     /// </summary>
-    IFileSystemNode Parent { get; }
+    IFileSystemNode Parent { get; set; }
 
     /// <summary>
     /// The children nodes of the node.
@@ -64,9 +64,6 @@ public interface IFileSystemNode
     /// The write operation associated with the node.
     /// </summary>
     Task WriteAsync<T>(T data);
-
-    Task<IFileSystemNode> FindChildByResourceNameAsync(ResourceName resourceName);
-    Task<IFileSystemNode> FindChildByUserAsync(IFileSystemUser user);
 }
 
 

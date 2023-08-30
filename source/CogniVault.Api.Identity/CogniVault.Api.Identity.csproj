@@ -6,16 +6,24 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <OutputType>Exe</OutputType>
     <LangVersion>latest</LangVersion>
-    <AssemblyName>CogniVault.Api</AssemblyName>
-    <RootNamespace>CogniVault.Api</RootNamespace>
+    <AssemblyName>CogniVault.Api.Identity</AssemblyName>
+    <RootNamespace>CogniVault.Api.Identity</RootNamespace>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\CogniVault.Api.xml</DocumentationFile>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\CogniVault.Api.Identity.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Serilog.AspNetCore" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CogniVault.Platform.Core\CogniVault.Platform.Core.csproj" />
+    <ProjectReference Include="..\CogniVault.Platform.Identity\CogniVault.Platform.Identity.csproj" />
+    <ProjectReference Include="..\CogniVault.Platform.Identity.InMemoryProvider\CogniVault.Platform.Identity.InMemoryProvider.csproj" />
+    <ProjectReference Include="..\CogniVault.Platform.Core.RestApi\CogniVault.Platform.Core.RestApi.csproj" />
   </ItemGroup>
 
 </Project>

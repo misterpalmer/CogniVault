@@ -1,4 +1,4 @@
-using CogniVault.Application.Interfaces;
+using CogniVault.Platform.Core.Abstractions;
 
 namespace CogniVault.Application.Entities;
 

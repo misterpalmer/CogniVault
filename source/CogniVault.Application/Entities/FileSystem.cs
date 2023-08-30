@@ -2,6 +2,7 @@ using CogniVault.Application.Abstractions;
 using CogniVault.Application.Abstractions.Providers;
 using CogniVault.Application.Abstractions.Resources;
 using CogniVault.Application.Abstractions.Resources.AccessControl.Users;
+using CogniVault.Application.ValueObjects;
 
 namespace CogniVault.Application;
 
@@ -36,15 +37,15 @@ public class FileSystem : IFileSystem
         return Task.CompletedTask;
     }
 
-    public Task<IEnumerable<IFileSystemNode>> FindByResourceNameAsync(string resourceName)
+    public Task<IEnumerable<IFileSystemNode>> FindByResourceNameAsync(IResourceName resourceName)
     {
-        var result = _fileSystemNodes.Values.Where(node => node.ResourceName == resourceName);
+        var result = _fileSystemNodes.Values.Where(node => node.Resource.Name == resourceName);
         return Task.FromResult(result);
     }
 
     public Task<IEnumerable<IFileSystemNode>> FindByUserAsync(IFileSystemUser user)
     {
-        var result = _fileSystemNodes.Values.Where(node => node.User == user);
+        var result = _fileSystemNodes.Values.Where(node => node.Resource.Owner == user);
         return Task.FromResult(result);
     }
 

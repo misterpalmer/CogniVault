@@ -2,13 +2,12 @@ namespace CogniVault.Platform.Core.Entities;
 
 public abstract class EntityBase<TId> : IEntityBase<TId>, IAuditableEntity where TId : IEquatable<TId>
 {
-    public required TId Id { get; set; }
-    public required string CreatedBy { get; set; }
-    public required DateTimeOffset CreatedOnUtc { get; set; }
-    public required string ModifiedBy { get; set; }
-    public required DateTimeOffset ModifiedOnUtc { get; set; }
+    public TId Id { get; set; }
+    public string CreatedBy { get; set; }
+    public DateTimeOffset CreatedOnUtc { get; set; }
+    public string ModifiedBy { get; set; }
+    public DateTimeOffset ModifiedOnUtc { get; set; }
     private int? _requestedHashCode;
-
 
     public override bool Equals(object? obj)
     {

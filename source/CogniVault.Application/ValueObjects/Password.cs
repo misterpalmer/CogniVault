@@ -1,6 +1,7 @@
 using CogniVault.Application.Abstractions.Resources.AccessControl.Users;
 using CogniVault.Application.Interfaces;
 using CogniVault.Application.Validators;
+using CogniVault.Platform.Identity.Abstractions;
 
 using FluentValidation;
 using FluentValidation.Results;

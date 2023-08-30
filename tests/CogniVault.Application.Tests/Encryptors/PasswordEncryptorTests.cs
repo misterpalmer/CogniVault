@@ -1,3 +1,5 @@
+using CogniVault.Platform.Identity.Provider;
+
 namespace CogniVault.Application.Tests.Encryptors;
 
 
