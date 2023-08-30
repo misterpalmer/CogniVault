@@ -29,12 +29,6 @@ public class Permission : IAccessControlPermission
 
 // public IFileSystemGroup GrantedGroup { get;}
 
-// public Permission(PermissionType type, IFileSystemUser user)
-// {
-//     Type = type;
-//     GrantedUser = user ?? throw new ArgumentNullException(nameof(user));
-// }
-
 // public Permission(PermissionType type, IFileSystemGroup group)
 // {
 //     Type = type;

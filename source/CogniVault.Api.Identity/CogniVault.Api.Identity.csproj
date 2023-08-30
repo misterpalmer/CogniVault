@@ -21,6 +21,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CogniVault.Platform.Core\CogniVault.Platform.Core.csproj" />
+    <ProjectReference Include="..\CogniVault.Platform.Identity\CogniVault.Platform.Identity.csproj" />
+    <ProjectReference Include="..\CogniVault.Platform.Identity.InMemoryProvider\CogniVault.Platform.Identity.InMemoryProvider.csproj" />
+    <ProjectReference Include="..\CogniVault.Platform.Core.RestApi\CogniVault.Platform.Core.RestApi.csproj" />
   </ItemGroup>
 
 </Project>

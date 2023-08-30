@@ -4,7 +4,7 @@ version: '3.8'
 
 services:
   cognivaultapiidentity:
-    image: cognivaultapiidentity
+    image: identity
     build:
       context: .
       dockerfile: source/CogniVault.Api.Identity/Dockerfile
@@ -17,5 +17,5 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=[password]
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     volumes:
-      - ${HOME}/.cert/cognivault.pfx:/https/aspnetapp.pfx:ro  # Mounting the certificate from the host to the container
+      - ./.certs/cognivault.pfx:/https/aspnetapp.pfx:ro  # Mounting the certificate from the host to the container
 
