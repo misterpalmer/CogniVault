@@ -1,4 +1,4 @@
-using CogniVault.Application.ValueObjects;
+using CogniVault.Platform.Identity.ValueObjects;
 
 namespace CogniVault.Application.Abstractions.Resources.AccessControl.Users;
 

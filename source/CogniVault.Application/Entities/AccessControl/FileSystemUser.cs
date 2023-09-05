@@ -3,19 +3,21 @@ using CogniVault.Application.Abstractions.Resources.AccessControl.Users;
 using CogniVault.Application.Extensions;
 using CogniVault.Application.Interfaces;
 using CogniVault.Application.ValueObjects;
+
+// using CogniVault.Application.ValueObjects;
 using CogniVault.Platform.Core.Abstractions;
+using CogniVault.Platform.Identity.ValueObjects;
+
 
 namespace CogniVault.Application.Entities.AccessControl;
 
 
 public class FileSystemUser : IFileSystemUser, IUserAuthentication, IUserManagement, IUserTimeZone, IUserActivity
 {
-    // Unique identifier of the user
     public Guid Id { get; set; }
-    Username Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-     // Username of the user
+    public ResourceName Name { get; private set;}
     public Username Username { get; private set; }
-    public Password Password { get; private set; }
+    public EncryptedPassword Password { get; private set; }
     public Email? Email { get; private set; }
     public Quota Quota { get; private set; }
     public TimeZoneInfo TimeZone { get; private set; }
@@ -26,14 +28,10 @@ public class FileSystemUser : IFileSystemUser, IUserAuthentication, IUserManagem
     public DateTimeOffset UpdatedAt => _updatedAt.ToOffset(TimeZone.GetUtcOffset(_updatedAt));
     public DateTimeOffset CreatedAt => _createdAt.ToOffset(TimeZone.GetUtcOffset(_createdAt));
 
-    Username IFileSystemUser.Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-    ResourceName IAccessControlEntity.Name => throw new NotImplementedException();
-
     private readonly ITimeProvider _timeProvider;
     
 
-    public FileSystemUser(ITimeProvider timeProvider, Username username, Password password, TimeZoneInfo timeZoneInfo, Quota quota)
+    public FileSystemUser(ITimeProvider timeProvider, Username username, EncryptedPassword password, TimeZoneInfo timeZoneInfo, Quota quota)
     {
         _timeProvider = timeProvider;
         Username = username;
@@ -74,7 +72,7 @@ public class FileSystemUser : IFileSystemUser, IUserAuthentication, IUserManagem
     /// </summary>
     /// <param name="newPassword">The new password.</param>
     /// <exception cref="ArgumentNullException">newPassword</exception>
-    public void ChangePassword(Password newPassword)
+    public void ChangePassword(EncryptedPassword newPassword)
     {
         Password = newPassword;
         ModifyUpdatedAt(_timeProvider.UtcNow);

@@ -2,6 +2,8 @@ using CogniVault.Platform.Core.Abstractions.Persistence;
 using CogniVault.Platform.Core.Entities;
 using CogniVault.Platform.Identity.InMemoryProvider.Repositories;
 
+using Microsoft.Extensions.DependencyInjection;
+
 namespace CogniVault.Platform.Identity.InMemoryProvider;
 
 public class InMemoryUnitOfWork : IUnitOfWork
@@ -33,11 +35,16 @@ public class InMemoryUnitOfWork : IUnitOfWork
         }
     }
 
+    private readonly IServiceProvider _serviceProvider;
     private readonly Dictionary<RepositoryKey, object> _repositories = new Dictionary<RepositoryKey, object>();
     private bool _disposed;
 
-    public IQueryRepositoryAsync<TEntity, TId> QueryRepository<TEntity, TId>() 
-        where TEntity : DomainEntityBase
+    public InMemoryUnitOfWork(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;   
+    }
+
+    public IQueryRepositoryAsync<TEntity, TId> QueryRepository<TEntity, TId>() where TEntity : DomainEntityBase
     {
         var key = new RepositoryKey(typeof(TEntity), typeof(TId));
 
@@ -47,14 +54,13 @@ public class InMemoryUnitOfWork : IUnitOfWork
         }
 
         var repositoryType = typeof(InMemoryRepositoryAsync<,>).MakeGenericType(typeof(TEntity), typeof(TId));
-        var repositoryInstance = Activator.CreateInstance(repositoryType);
+        var repositoryInstance = _serviceProvider.GetRequiredService(repositoryType);
 
         _repositories[key] = repositoryInstance;
         return (IQueryRepositoryAsync<TEntity, TId>)repositoryInstance;
     }
 
-    public ICommandRepositoryAsync<TEntity, TId> CommandRepository<TEntity, TId>() 
-        where TEntity : DomainEntityBase
+    public ICommandRepositoryAsync<TEntity, TId> CommandRepository<TEntity, TId>() where TEntity : DomainEntityBase
     {
         return (ICommandRepositoryAsync<TEntity, TId>) QueryRepository<TEntity, TId>();
     }

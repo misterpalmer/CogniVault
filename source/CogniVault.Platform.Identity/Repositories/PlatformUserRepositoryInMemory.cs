@@ -7,23 +7,23 @@ using CogniVault.Platform.Identity.ValueObjects;
 namespace CogniVault.Platform.Identity.Repositories;
 
 [IdentityRepositoryProvider(IdentityRepositoryProviderKeyConstants.InMemory)]
-public class PlatformUserRepositoryInMemory : IPlatformUserRepository
+public class PlatformUserRepositoryInMemory : IPlatformUserRepository<PlatformUser>
 {
-    private readonly Dictionary<Guid, PlatformUser<Guid>> _storage = new Dictionary<Guid, PlatformUser<Guid>>();
+    private readonly Dictionary<Guid, PlatformUser> _storage = new Dictionary<Guid, PlatformUser>();
 
-    public async Task<PlatformUser<Guid>> GetByIdAsync(Guid id)
+    public async Task<PlatformUser> GetByIdAsync(Guid id)
     {
         _storage.TryGetValue(id, out var user);
         return await Task.FromResult(user);
     }
 
-    public async Task<PlatformUser<Guid>> GetByUsernameAsync(Username username)
+    public async Task<PlatformUser> GetByUsernameAsync(Username username)
     {
         var user = _storage.Values.FirstOrDefault(u => u.Username == username);
         return await Task.FromResult(user);
     }
 
-    public async Task<bool> IsValidUserCredentialsAsync(Username username, Password password)
+    public async Task<bool> IsValidUserCredentialsAsync(Username username, EncryptedPassword password)
     {
         var user = await GetByUsernameAsync(username);
         if (user == null) return false;
@@ -31,7 +31,7 @@ public class PlatformUserRepositoryInMemory : IPlatformUserRepository
         return user.Password == password;  // You might want to replace this with a more secure password comparison.
     }
 
-    public async Task AddAsync(PlatformUser<Guid> platformUser)
+    public async Task AddAsync(PlatformUser platformUser)
     {
         if (!_storage.ContainsKey(platformUser.Id))
         {
@@ -42,7 +42,7 @@ public class PlatformUserRepositoryInMemory : IPlatformUserRepository
         await Task.CompletedTask;
     }
 
-    public async Task UpdateAsync(PlatformUser<Guid> platformUser)
+    public async Task UpdateAsync(PlatformUser platformUser)
     {
         // Update if exists, or add if it doesn't.
         _storage[platformUser.Id] = platformUser;

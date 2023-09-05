@@ -30,9 +30,9 @@ public class TokenService
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtProvider.JwtSettings.SecretKey)),
             ValidateIssuer = true, 
             ValidateAudience = true, 
-            ValidIssuer = _jwtProvider.JwtSettings.Issuer,
-            ValidAudience = _jwtProvider.JwtSettings.Audience,
-            ClockSkew = TimeSpan.Zero
+            ValidIssuers = _jwtProvider.JwtSettings.Issuers, // Supporting multiple issuers
+            ValidAudiences = _jwtProvider.JwtSettings.ValidAudiences, // Supporting multiple audiences
+            ClockSkew = TimeSpan.FromMinutes(_jwtProvider.JwtSettings.ClockSkew)
         };
 
         var handler = new JwtSecurityTokenHandler();

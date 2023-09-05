@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CogniVault.Platform.Identity.EFCore.Configurations;
 
-public class PlatformUserConfiguration : IEntityTypeConfiguration<PlatformUser<Guid>>
+public class PlatformUserConfiguration : IEntityTypeConfiguration<PlatformUser>
 {
-    public void Configure(EntityTypeBuilder<PlatformUser<Guid>> builder)
+    public void Configure(EntityTypeBuilder<PlatformUser> builder)
     {
         // Primary Key
         builder.HasKey(u => u.Id);

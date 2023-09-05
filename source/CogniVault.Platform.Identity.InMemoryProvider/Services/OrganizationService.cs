@@ -24,16 +24,16 @@ public class OrganizationService : IPlatformOrganizationService
     public async Task<PlatformOrganization> CreateOrganizationAsync(OrganizationName organizationName)
     {
         var auditInfo = new AuditInfo(
-        createdBy: Assembly.GetAssembly(typeof(PlatformOrganization)).FullName ?? "System",
-        createdOnUtc: DateTimeOffset.UtcNow,
-        modifiedBy: Assembly.GetAssembly(typeof(PlatformOrganization)).FullName ?? "System",
-        modifiedOnUtc: DateTimeOffset.UtcNow
-    );
+            createdBy: Assembly.GetAssembly(typeof(PlatformOrganization)).FullName ?? "System",
+            createdOnUtc: DateTimeOffset.UtcNow,
+            modifiedBy: Assembly.GetAssembly(typeof(PlatformOrganization)).FullName ?? "System",
+            modifiedOnUtc: DateTimeOffset.UtcNow
+        );
 
-    var organization = new PlatformOrganization(organizationName)
-    {
-        Id = Guid.NewGuid()
-    };
+        var organization = new PlatformOrganization(organizationName)
+        {
+            Id = Guid.NewGuid()
+        };
 
 
         await OrganizationCommandRepository.InsertAsync(organization);

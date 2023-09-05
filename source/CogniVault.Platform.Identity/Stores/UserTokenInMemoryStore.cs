@@ -1,6 +1,5 @@
 using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
-
 using CogniVault.Platform.Identity.ValueObjects;
 
 namespace CogniVault.Platform.Identity.Stores;

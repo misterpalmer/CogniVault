@@ -1,9 +1,9 @@
-using CogniVault.Application.ValueObjects;
+using CogniVault.Platform.Identity.ValueObjects;
 
 namespace CogniVault.Application.Interfaces;
 
 public interface IUserAuthentication
 {
-    Password Password { get; }
-    void ChangePassword(Password newPassword);
+    EncryptedPassword Password { get; }
+    void ChangePassword(EncryptedPassword newPassword);
 }

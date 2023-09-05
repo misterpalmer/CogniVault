@@ -1,3 +1,5 @@
+using CogniVault.Platform.Core.RestApi.Configuration;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 

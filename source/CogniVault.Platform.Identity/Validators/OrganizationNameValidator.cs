@@ -22,7 +22,6 @@ public class OrganizationNameValidator : AbstractValidator<OrganizationName>
             .WithMessage("Organization name must be between 3 and 100 characters or can be empty.")
             .Matches(@"^[a-zA-Z0-9_][a-zA-Z0-9_\s]*[a-zA-Z0-9_]$|^$")
             .WithMessage("Organization name can only contain alphanumeric characters, underscores, and spaces (not at the beginning or end), or be empty.");
-
     }
 
     private async Task<bool> BeUniqueName(string name, CancellationToken cancellationToken)

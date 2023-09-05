@@ -1,7 +1,5 @@
-using CogniVault.Application.ValueObjects;
-
+using CogniVault.Platform.Identity.ValueObjects;
 using FluentValidation;
-using FluentValidation.Results;
 
 namespace CogniVault.Platform.Identity.Validators;
 

@@ -4,12 +4,13 @@ using FluentValidation;
 
 namespace CogniVault.Platform.Identity.Validators;
 
-public class PasswordValidator : AbstractValidator<Password>
+public class PlainPasswordValidator : AbstractValidator<PlainPassword>
 {
-    public PasswordValidator()
+    public PlainPasswordValidator()
     {
         RuleFor(x => x.Value)
             .NotEmpty()
+            .NotNull()
             .MinimumLength(8)
             .WithMessage("Password must be at least 8 characters.")
             .Matches("[A-Z]")
@@ -22,12 +23,12 @@ public class PasswordValidator : AbstractValidator<Password>
             .WithMessage("Password must contain at least one special character.");
     }
 
-    public bool IsValid(Password value)
+    public bool IsValid(PlainPassword value)
     {
         return Validate(value).IsValid;
     }
 
-    public bool IsNotValid(Password value)
+    public bool IsNotValid(PlainPassword value)
     {
         return !IsValid(value);
     }

@@ -12,13 +12,13 @@ namespace CogniVault.Api.Identity.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PlatformOrganizationController : ControllerBase
+public class OrganizationController : ControllerBase
 {
     private readonly IPlatformOrganizationService _organizationService;
     // private readonly IQueryRepositoryAsync<PlatformOrganization, Guid> _organizationRepository;
     private readonly IValidator<OrganizationName> _organizationNameValidator;
 
-    public PlatformOrganizationController(IPlatformOrganizationService organizationService,
+    public OrganizationController(IPlatformOrganizationService organizationService,
         IQueryRepositoryAsync<PlatformOrganization, Guid> organizationRepository,
         IValidator<OrganizationName> organizationNameValidator)
     {

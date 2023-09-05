@@ -3,6 +3,15 @@ using CogniVault.Platform.Core.Services;
 using CogniVault.Platform.Identity.InMemoryProvider;
 using CogniVault.Platform.Core.RestApi;
 using CogniVault.Platform.Core.RestApi.Middleware;
+using CogniVault.Platform.Identity.Services;
+using CogniVault.Platform.Identity.Abstractions;
+using CogniVault.Platform.Identity.Provider;
+using CogniVault.Api.Identity.Extensions;
+using Microsoft.OpenApi.Models;
+using CogniVault.Platform.Core.RestApi.Configuration;
+using Microsoft.Extensions.Options;
+using System.Text.Json;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace CogniVault.Api.Identity;
 public class Program
@@ -22,9 +31,20 @@ public class Program
             builder.Services.AddRestApi();
             builder.Services.AddInMemoryRepositories();
 
+            // Registering the required services for LoginController
+            builder.Services.AddTransient<IAuthorizationService, AuthorizationService>();
+            builder.Services.AddTransient<TokenService>();
+            builder.Services.AddTransient<LoginService>();
+            builder.Services.AddTransient<IPasswordEncryptor, PasswordEncryptor>();
+
             // Learn more about configuring Swagger / OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(swagger =>
+            {
+                swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "Identity API Swagger", Version = "v1" });
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "CogniVault.Api.Identity.xml");
+                swagger.IncludeXmlComments(filePath);
+            });
 
             builder.Services.AddHttpsRedirection(options =>
             {
@@ -39,6 +59,22 @@ public class Program
                     builder.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader();
+                });
+            });
+
+            builder.Services.SeedPlatformUsers(builder.Configuration);
+
+            builder.Services.AddSingleton<IPostConfigureOptions<JwtBearerOptions>, JwtBearerOptionsSetup>();
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer();
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "CogniVault.Api.Identity");
                 });
             });
 
@@ -58,8 +94,16 @@ public class Program
             }
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();  // Add this middleware before UseAuthorization
             app.UseAuthorization();
+
             app.MapControllers();
+            // app.UseEndpoints(endpoints =>
+            // {
+            //     endpoints.MapControllers();
+            //     // ... other endpoints
+            // });
 
             app.Run();
         }
@@ -77,6 +121,7 @@ public class Program
         }
     }
 }
+
 
 
 // builder.Services.AddAuthentication("Bearer")

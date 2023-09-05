@@ -1,59 +1,60 @@
 using System.Security.Claims;
 
+using CogniVault.Platform.Core.Abstractions.Persistence;
 using CogniVault.Platform.Identity.Abstractions;
+using CogniVault.Platform.Identity.Entities;
 using CogniVault.Platform.Identity.Provider;
 using CogniVault.Platform.Identity.Stores;
 using CogniVault.Platform.Identity.ValueObjects;
-
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-
 namespace CogniVault.Platform.Identity.Services;
 
 public class AuthorizationService : IAuthorizationService
 {
-    private readonly IPlatformUserRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IPlatformUserService _userService;
+    // private readonly IPlatformUserRepository<PlatformUser> _userRepository;
     private readonly IUserTokenStore<Guid> _userTokenStore;
-    private readonly IRolePermissionStore<IPlatformUser<Guid>, Guid> _rolePermissionStore;
+    private readonly IRolePermissionStore<PlatformUser, Guid> _rolePermissionStore;
     private readonly IJwtProvider _jwtProvider;
 
-    public AuthorizationService(IPlatformUserRepository userRepository,
+    public AuthorizationService(IUnitOfWork unitOfWork,
+        IPlatformUserService platformUserService,
         IUserTokenStore<Guid> userTokenStore,
-        IRolePermissionStore<IPlatformUser<Guid>, Guid> rolePermissionStore,
+        IRolePermissionStore<PlatformUser, Guid> rolePermissionStore,
         IJwtProvider jwtProvider)
     {
-        _userRepository = userRepository;
+        _unitOfWork = unitOfWork;
+        _userService = platformUserService;
         _userTokenStore = userTokenStore;
         _rolePermissionStore = rolePermissionStore;
         _jwtProvider = jwtProvider;
     }
 
-    public async Task<IResult> AuthorizeUserAsync(HttpContext context,
-        Username username,
-        Password password)
+    public async Task<IResult> AuthorizeUserAsync(HttpContext context, Username username, PlainPassword password)
     {
         // Check if the user credentials are valid
-        if (await _userRepository.IsValidUserCredentialsAsync(username, password))
+        if (await _userService.IsValidUserCredentialsAsync(username, password))
         {
             // Generate JWT
             var token = await _jwtProvider.GetJwtAsync(username.Value);
 
-            // Store the token
-            // _userTokenStore.StoreToken(await _userRepository.GetByUsernameAsync(username), token);
+            // Fetch the user by username
+            var user = await _userService.GetByUsernameAsync(username);
 
-            // Authenticate user within the context
-            await context.SignInAsync("cookie", new ClaimsPrincipal(new ClaimsIdentity(
-                new[] { new Claim(ClaimTypes.NameIdentifier, username.Value) },
-                "cookie")));
+            // Store the token
+            _userTokenStore.StoreToken(user.Id, token);
 
             return Results.Ok(new { Token = token }); // Return token to the user
         }
-        
+
         return Results.Unauthorized();
     }
 
-    public IResult CheckUserAuthorization(IPlatformUser<Guid> user, PermissionName permission)
+    public IResult CheckUserAuthorization(PlatformUser user, PermissionName permission)
     {
         if (_rolePermissionStore.UserHasPermission(user.Id, permission))
         {

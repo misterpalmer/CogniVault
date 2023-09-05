@@ -1,4 +1,4 @@
-using CogniVault.Platform.Identity.Options;
+using CogniVault.Platform.Core.RestApi.Configuration;
 
 namespace CogniVault.Platform.Identity.Provider;
 
