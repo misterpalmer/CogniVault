@@ -6,34 +6,58 @@ namespace CogniVault.Platform.Identity.ValueObjects;
 
 public class InterfaceName : IValueObject<InterfaceName>
 {
-    protected readonly IValidator<InterfaceName> _validator;
-
     public string Value { get; }
 
-    public InterfaceName(IValidator<InterfaceName> validator, string value)
+    private InterfaceName(string value)
     {
-        _validator = validator;
         Value = value;
-        Validate();
+    }
+
+    public static InterfaceName Null => new InterfaceName(string.Empty);
+
+    public static async Task<InterfaceName> CreateAsync(string value, IValidator<InterfaceName> validator)
+    {
+        var instance = new InterfaceName(value);
+        var results = await validator.ValidateAsync(instance);
+        if (!results.IsValid)
+        {
+            throw new ValidationException(results.Errors);
+        }
+        return instance;
     }
 
     public int CompareTo(InterfaceName? other)
     {
-        throw new NotImplementedException();
+        return Value.CompareTo(other?.Value);
     }
 
     public InterfaceName Copy()
     {
-        throw new NotImplementedException();
+        return new InterfaceName(Value);
     }
 
     public bool Equals(InterfaceName? other)
     {
-        throw new NotImplementedException();
+        return Value == other?.Value;
     }
 
-    public void Validate()
+    public override int GetHashCode()
     {
-        throw new NotImplementedException();
+        return Value.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+        return Value;
+    }
+
+    public static explicit operator InterfaceName(string? v)
+    {
+        if (v == null)
+        {
+            throw new ArgumentNullException(nameof(v), "The input string cannot be null.");
+        }
+
+        return new InterfaceName(v);
     }
 }

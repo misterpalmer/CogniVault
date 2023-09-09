@@ -48,18 +48,18 @@ public class LoginController : ControllerBase
     /// 
     ///     POST /authenticate
     ///     {
-    ///       "username": "sampleUser",
-    ///       "password": "samplePassword.23"
+    ///       "username": "PlatformAdministrator",
+    ///       "password": "PlatformAdministrator.23"
     ///     }
     ///
     /// Default values:
     /// 
-    /// - username: "sampleUser"
-    /// - password: "samplePassword.23"
+    /// - username: "PlatformAdministrator"
+    /// - password: "PlatformAdministrator.23"
     /// </remarks>
     [HttpPost("authenticate")]
-    public async Task<IActionResult> AuthenticateAsync([FromQuery, DefaultValue("sampleUser")] string usernameValue,
-        [FromQuery, DefaultValue("samplePassword.23")] string passwordPlainText)
+    public async Task<IActionResult> AuthenticateAsync([FromQuery, DefaultValue("PlatformAdministrator")] string usernameValue,
+        [FromQuery, DefaultValue("PlatformAdministrator.23")] string passwordPlainText)
     {
         var username = await Username.CreateAsync(usernameValue, _usernameValidator);
         var password = await PlainPassword.CreateAsync(passwordPlainText, _passwordValidator);

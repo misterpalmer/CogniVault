@@ -1,3 +1,4 @@
+using CogniVault.Api.Identity.Dtos;
 using CogniVault.Platform.Core.Abstractions.Persistence;
 using CogniVault.Platform.Identity.Abstractions;
 using CogniVault.Platform.Identity.Entities;
@@ -66,7 +67,9 @@ public class OrganizationController : ControllerBase
         if (existingOrganization == null)
             return NotFound();
 
-        await existingOrganization.UpdateNameAsync(organizationNameDto.Name, _organizationNameValidator);
+        // TODO check if the organization name is unique / validate
+        var organizationName = await OrganizationName.CreateAsync(organizationNameDto.Name.Trim(), _organizationNameValidator);
+        await existingOrganization.UpdateNameAsync(organizationName);
         await _organizationService.UpdateOrganizationAsync(existingOrganization);
         return NoContent();
     }
@@ -83,7 +86,3 @@ public class OrganizationController : ControllerBase
     }
 }
 
-public class OrganizationNameDto
-{
-    public string Name { get; set; }
-}

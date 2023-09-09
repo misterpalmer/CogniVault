@@ -4,7 +4,8 @@ using CogniVault.Platform.Identity.ValueObjects;
 
 namespace CogniVault.Platform.Identity.InMemoryProvider.Repositories;
 
-public class UserRepository : InMemoryRepositoryAsync<PlatformUser, Guid>, IPlatformUserRepository<PlatformUser>
+public class UserRepository : InMemoryRepositoryAsync<PlatformUser, Guid>
+    , IPlatformUserRepository<PlatformUser>
 {
     public Task<PlatformUser> GetByUsernameAsync(Username username)
     {

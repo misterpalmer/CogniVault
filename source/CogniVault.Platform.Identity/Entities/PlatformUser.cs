@@ -119,7 +119,7 @@ public class PlatformUser : DomainEntityBase
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
-    public bool IsAuthenticated => throw new NotImplementedException();
+    public bool IsAuthenticated => true;
 
     // Null Object Pattern implementation:
     public static PlatformUser Null => new PlatformUser(Username.Null)

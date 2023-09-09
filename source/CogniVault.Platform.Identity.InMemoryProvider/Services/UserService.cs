@@ -1,7 +1,7 @@
 using CogniVault.Platform.Core.Abstractions.Persistence;
 using CogniVault.Platform.Identity.Abstractions;
 using CogniVault.Platform.Identity.Entities;
-using CogniVault.Platform.Identity.InMemoryProvider.Extensions;
+using CogniVault.Platform.Core.Extensions;
 using CogniVault.Platform.Identity.InMemoryProvider.Specifications;
 using CogniVault.Platform.Identity.ValueObjects;
 
@@ -17,8 +17,10 @@ public class UserService : IPlatformUserService
         _unitOfWork = unitOfWork;
     }
 
-    private IQueryRepositoryAsync<PlatformUser, Guid> UserQueryRepository => _unitOfWork.QueryRepository<PlatformUser, Guid>();
-    private ICommandRepositoryAsync<PlatformUser, Guid> UserCommandRepository => _unitOfWork.CommandRepository<PlatformUser, Guid>();
+    private IQueryRepositoryAsync<PlatformUser, Guid> UserQueryRepository =>
+        _unitOfWork.QueryRepository<PlatformUser, Guid>();
+    private ICommandRepositoryAsync<PlatformUser, Guid> UserCommandRepository =>
+        _unitOfWork.CommandRepository<PlatformUser, Guid>();
     
 
     public async Task<PlatformUser> CreateUserAsync(Username username,

@@ -44,7 +44,7 @@ public class PlainPassword : IValueObject<PlainPassword>
     public static async Task<PlainPassword> CreateAsync(string plainPassword, IValidator<PlainPassword> passwordValidator)
     {
         var instance = new PlainPassword(plainPassword);
-        var validationResult = passwordValidator.Validate(instance);
+        var validationResult = await passwordValidator.ValidateAsync(instance);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);

@@ -12,10 +12,35 @@ services:
       - 5166:5166
       - 7166:7166  # Mapping the HTTPS port from the host to the container
     environment:
-      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_URLS=http://+:5166;https://+:7166;
       - ASPNETCORE_HTTPS_PORT=7166
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=[password]
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=misterpalmer
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cognivault.pfx
     volumes:
-      - ./.certs/cognivault.pfx:/https/aspnetapp.pfx:ro  # Mounting the certificate from the host to the container
-
+      - ./cognivault.pfx:/https/cognivault.pfx:ro  # Mounting the certificate from the host to the container
+    networks:
+      - default
+  cognivaultapifilemanager:
+    image: filemanager
+    build:
+      context: .
+      dockerfile: source/CogniVault.Api.FileManager/Dockerfile
+    ports:
+      - 5167:5167
+      - 7167:7167  # Mapping the HTTPS port from the host to the container
+    environment:
+      - ASPNETCORE_URLS=http://+:5167;https://+:7167;
+      - ASPNETCORE_HTTPS_PORT=7167
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=misterpalmer
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cognivault.pfx
+      - IDENTITY_API_URL=http://identity:7166
+    volumes:
+      - ./cognivault.pfx:/https/cognivault.pfx:ro  # Mounting the certificate from the host to the container
+    depends_on:
+      - cognivaultapiidentity
+    networks:
+      - default
+networks:
+  default:
+      name: cognivault
+      external: false

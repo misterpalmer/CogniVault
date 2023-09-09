@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CogniVault.Platform.Identity.InMemoryProvider;
 
-public class InMemoryUnitOfWork : IUnitOfWork
+public class IdentityInMemoryUnitOfWork : IUnitOfWork
 {
     private struct RepositoryKey
     {
@@ -39,7 +39,7 @@ public class InMemoryUnitOfWork : IUnitOfWork
     private readonly Dictionary<RepositoryKey, object> _repositories = new Dictionary<RepositoryKey, object>();
     private bool _disposed;
 
-    public InMemoryUnitOfWork(IServiceProvider serviceProvider)
+    public IdentityInMemoryUnitOfWork(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;   
     }

@@ -24,6 +24,8 @@ public static class DependencyInjection
         // services.AddSingleton<IPlatformInterfaceRepository, InterfaceRepository>();
 
         services.AddTransient<IValidator<OrganizationName>, OrganizationNameValidator>();
+        services.AddTransient<IValidator<TenantName>, TenantNameValidator>();
+        services.AddTransient<IValidator<InterfaceName>, InterfaceNameValidator>();
         services.AddTransient<IValidator<Username>, UsernameValidator>();
         services.AddTransient<IValidator<PlainPassword>, PlainPasswordValidator>();
 
@@ -44,7 +46,7 @@ public static class DependencyInjection
         services.AddSingleton<ICommandRepositoryAsync<PlatformInterface, Guid>, InMemoryRepositoryAsync<PlatformInterface, Guid>>();
 
         // ... Repeat for other entities as necessary
-        services.AddSingleton<IUnitOfWork, InMemoryUnitOfWork>();
+        services.AddSingleton<IUnitOfWork, IdentityInMemoryUnitOfWork>();
         services.AddSingleton<IPlatformUserService, UserService>();
         services.AddSingleton<IPlatformOrganizationService, OrganizationService>();
 

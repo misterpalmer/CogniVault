@@ -1,4 +1,4 @@
-namespace CogniVault.Platform.Identity.InMemoryProvider.Extensions;
+namespace CogniVault.Platform.Core.Extensions;
 
 public static class AsyncEnumerableExtensions
 {
@@ -27,4 +27,3 @@ public static class AsyncEnumerableExtensions
         return list;
     }
 }
-

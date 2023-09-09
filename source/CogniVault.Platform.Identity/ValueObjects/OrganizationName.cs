@@ -13,6 +13,20 @@ public class OrganizationName : IValueObject<OrganizationName>
         Value = value;
     }
 
+    public static OrganizationName Null => new OrganizationName(string.Empty);
+
+    public static async Task<OrganizationName> CreateAsync(string value, IValidator<OrganizationName> validator)
+    {
+        var instance = new OrganizationName(value);
+        var results = await validator.ValidateAsync(instance);
+        if (!results.IsValid)
+        {
+            throw new ValidationException(results.Errors);
+        }
+        return instance;
+    }
+
+
     public int CompareTo(OrganizationName? other)
     {
         return Value.CompareTo(other?.Value);
@@ -37,19 +51,6 @@ public class OrganizationName : IValueObject<OrganizationName>
     {
         return Value;
     }
-
-    public static async Task<OrganizationName> CreateAsync(string value, IValidator<OrganizationName> validator)
-    {
-        var instance = new OrganizationName(value);
-        var results = await validator.ValidateAsync(instance);
-        if (!results.IsValid)
-        {
-            throw new ValidationException(results.Errors);
-        }
-        return instance;
-    }
-
-    public static OrganizationName Null => new OrganizationName(string.Empty);
 
     public static explicit operator OrganizationName(string? v)
     {

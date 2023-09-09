@@ -4,8 +4,7 @@ using CogniVault.Platform.Identity.Abstractions;
 using CogniVault.Platform.Identity.Entities;
 using CogniVault.Platform.Identity.InMemoryProvider.Specifications;
 using CogniVault.Platform.Identity.ValueObjects;
-using CogniVault.Platform.Identity.InMemoryProvider.Extensions;
-using CogniVault.Platform.Core.Entities;
+using CogniVault.Platform.Core.Extensions;
 
 namespace CogniVault.Platform.Identity.InMemoryProvider.Services;
 
@@ -18,23 +17,18 @@ public class OrganizationService : IPlatformOrganizationService
         _unitOfWork = unitOfWork;
     }
 
-    private ICommandRepositoryAsync<PlatformOrganization, Guid> OrganizationCommandRepository => _unitOfWork.CommandRepository<PlatformOrganization, Guid>();
-    private IQueryRepositoryAsync<PlatformOrganization, Guid> OrganizationQueryRepository => _unitOfWork.QueryRepository<PlatformOrganization, Guid>();
+    private IQueryRepositoryAsync<PlatformOrganization, Guid> OrganizationQueryRepository =>
+        _unitOfWork.QueryRepository<PlatformOrganization, Guid>();
+    private ICommandRepositoryAsync<PlatformOrganization, Guid> OrganizationCommandRepository =>
+        _unitOfWork.CommandRepository<PlatformOrganization, Guid>();
 
     public async Task<PlatformOrganization> CreateOrganizationAsync(OrganizationName organizationName)
     {
-        var auditInfo = new AuditInfo(
-            createdBy: Assembly.GetAssembly(typeof(PlatformOrganization)).FullName ?? "System",
-            createdOnUtc: DateTimeOffset.UtcNow,
-            modifiedBy: Assembly.GetAssembly(typeof(PlatformOrganization)).FullName ?? "System",
-            modifiedOnUtc: DateTimeOffset.UtcNow
-        );
-
-        var organization = new PlatformOrganization(organizationName)
-        {
-            Id = Guid.NewGuid()
-        };
-
+        // Await the async CreateAsync method and assign it to 'organization'
+        var organization = await PlatformOrganization.CreateAsync(organizationName);
+        
+        // This line is redundant as Name is already set inside PlatformOrganization.CreateAsync()
+        // organization.Name = organizationName.Copy();
 
         await OrganizationCommandRepository.InsertAsync(organization);
 
@@ -43,6 +37,7 @@ public class OrganizationService : IPlatformOrganizationService
 
         return organization;
     }
+
 
     public async Task<PlatformOrganization> GetOrganizationAsync(Guid organizationId)
     {
@@ -54,7 +49,6 @@ public class OrganizationService : IPlatformOrganizationService
 
         return organization;
     }
-
 
     public async Task<IEnumerable<PlatformOrganization>> GetAllOrganizationsAsync()
     {

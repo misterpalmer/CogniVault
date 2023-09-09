@@ -10,7 +10,7 @@ ENV ASPNETCORE_ENVIRONMENT=Development
 # Set ASP.NET Core to listen on both HTTP and HTTPS ports
 ENV ASPNETCORE_URLS=http://+:5166;https://+:7166;
 ENV ASPNETCORE_Kestrel__Certificates__Default__Password="misterpalmer"
-ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cognivault.pfx
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
@@ -43,6 +43,6 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 # Adjust the path to copy the certificate from the .certs directory relative to Dockerfile's location
-COPY ../../.certs/cognivault.pfx /https/aspnetapp.pfx
+COPY ../../cognivault.pfx /https/cognivault.pfx
 
 ENTRYPOINT ["dotnet", "CogniVault.Api.Identity.dll"]
