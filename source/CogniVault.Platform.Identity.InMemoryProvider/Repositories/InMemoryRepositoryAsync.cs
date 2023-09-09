@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using CogniVault.Platform.Core.Abstractions;
 using CogniVault.Platform.Core.Abstractions.Persistence;
 using CogniVault.Platform.Core.Entities;
-using CogniVault.Platform.Identity.InMemoryProvider.Extensions;
+using CogniVault.Platform.Core.Extensions;
 using CogniVault.Platform.Identity.InMemoryProvider.Specifications;
 
 namespace CogniVault.Platform.Identity.InMemoryProvider.Repositories;

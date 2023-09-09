@@ -1,9 +1,10 @@
 using CogniVault.Platform.Identity.Abstractions;
+using CogniVault.Platform.Identity.Entities;
 using CogniVault.Platform.Identity.ValueObjects;
 
 namespace CogniVault.Platform.Identity.Stores;
 
-public class RolePermissionInMemoryStore<T, TId> : IRolePermissionStore<T, TId> where T : IPlatformUser<TId> where TId : struct
+public class RolePermissionInMemoryStore<T, TId> : IRolePermissionStore<T, TId> where T : PlatformUser where TId : struct
 {
     private readonly Dictionary<TId, List<RoleName>> _userRoles = new();
     private readonly Dictionary<RoleName, List<PermissionName>> _rolePermissions = new();

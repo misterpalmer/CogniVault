@@ -28,6 +28,16 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "build filemanager",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/source/CogniVault.Api.FileManager/CogniVault.Api.FileManager.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
             "type": "nuke",
             "target": "Compile",
             "problemMatcher": [

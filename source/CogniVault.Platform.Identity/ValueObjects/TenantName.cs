@@ -1,39 +1,62 @@
 using CogniVault.Platform.Core.Entities;
-
 using FluentValidation;
 
 namespace CogniVault.Platform.Identity.ValueObjects;
 
 public class TenantName : IValueObject<TenantName>
 {
-    private readonly IValidator<TenantName> _validator;
-
     public string Value { get; }
 
-    public TenantName(IValidator<TenantName> validator, string value)
+    private TenantName(string value)
     {
-        _validator = validator;
         Value = value;
-        Validate();
+    }
+
+    public static TenantName Null => new TenantName(string.Empty);
+
+    public static async Task<TenantName> CreateAsync(string value, IValidator<TenantName> validator)
+    {
+        var instance = new TenantName(value);
+        var results = await validator.ValidateAsync(instance);
+        if (!results.IsValid)
+        {
+            throw new ValidationException(results.Errors);
+        }
+        return instance;
     }
 
     public int CompareTo(TenantName? other)
     {
-        throw new NotImplementedException();
+        return Value.CompareTo(other?.Value);
     }
 
     public TenantName Copy()
     {
-        throw new NotImplementedException();
+        return new TenantName(Value);
     }
 
     public bool Equals(TenantName? other)
     {
-        throw new NotImplementedException();
+        return Value == other?.Value;
     }
 
-    public void Validate()
+    public override int GetHashCode()
     {
-        throw new NotImplementedException();
+        return Value.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+        return Value;
+    }
+
+    public static explicit operator TenantName(string? v)
+    {
+        if (v == null)
+        {
+            throw new ArgumentNullException(nameof(v), "The input string cannot be null.");
+        }
+
+        return new TenantName(v);
     }
 }

@@ -1,22 +1,16 @@
-using CogniVault.Application.Validators;
 using CogniVault.Platform.Core.Entities;
-
 using FluentValidation;
-using FluentValidation.Results;
 
-namespace CogniVault.Application.ValueObjects;
+
+namespace CogniVault.Platform.Identity.ValueObjects;
 
 public class Email : IValueObject<Email>
 {
-    private readonly IValidator<Email> _validator;
+    public string Value { get; private set; }
 
-    public string Value { get; }
-
-    public Email(IValidator<Email> validator, string value)
+    private Email(string value)
     {
-        _validator = validator;
         Value = value;
-        Validate();
     }
 
     public int CompareTo(Email? other)
@@ -26,7 +20,7 @@ public class Email : IValueObject<Email>
 
     public Email Copy()
     {
-        return new Email(_validator, Value);
+        return new Email(Value);
     }
 
     public bool Equals(Email? other)
@@ -34,14 +28,9 @@ public class Email : IValueObject<Email>
         return Value == other?.Value;
     }
 
-    public void Validate()
+    public override int GetHashCode()
     {
-        ValidationResult results = _validator.Validate(this);
-        
-        if (!results.IsValid)
-        {
-            throw new ValidationException(results.Errors);
-        }
+        return Value.GetHashCode();
     }
 
     public override string ToString()
@@ -49,27 +38,26 @@ public class Email : IValueObject<Email>
         return Value;
     }
 
-    public override int GetHashCode()
+    public static async Task<Email> CreateAsync(string value, IValidator<Email> validator)
     {
-        return Value.GetHashCode();
-    }
-
-    public override bool Equals(object obj)
-    {
-        if (obj is Email other)
+        var instance = new Email(value);
+        var results = await validator.ValidateAsync(instance);
+        if (!results.IsValid)
         {
-            return Equals(other);
+            throw new ValidationException(results.Errors);
         }
-        return false;
+        return instance;
     }
 
-    public static bool operator ==(Email left, Email right)
-    {
-        return left.Equals(right);
-    }
+    public static Email Null => new Email(string.Empty);
 
-    public static bool operator !=(Email left, Email right)
+    public static explicit operator Email(string? v)
     {
-        return !(left == right);
+        if (v == null)
+        {
+            throw new ArgumentNullException(nameof(v), "The input string cannot be null.");
+        }
+
+        return new Email(v);
     }
 }

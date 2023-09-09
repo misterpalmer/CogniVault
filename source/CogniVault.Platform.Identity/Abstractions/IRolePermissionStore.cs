@@ -3,14 +3,14 @@ using CogniVault.Platform.Identity.ValueObjects;
 
 namespace CogniVault.Platform.Identity.Abstractions;
 
-public interface IRolePermissionStore<T, TId> where T : IPlatformUser<TId> where TId : struct
+public interface IRolePermissionStore<PlatformUser, Guid>
 {
-    bool UserHasPermission(TId userId, PermissionName permissionName);
-    bool UserHasPermissions(TId userId, IEnumerable<PermissionName> permissionName);
-    IEnumerable<PermissionName> ListUserPermissions(TId userId);
-    IEnumerable<RoleName> ListUserRoles(TId userId);
+    bool UserHasPermission(Guid userId, PermissionName permissionName);
+    bool UserHasPermissions(Guid userId, IEnumerable<PermissionName> permissionName);
+    IEnumerable<PermissionName> ListUserPermissions(Guid userId);
+    IEnumerable<RoleName> ListUserRoles(Guid userId);
     void AssignPermissionToRole(RoleName role, PermissionName permissionName);
     void RemovePermissionFromRole(RoleName role, PermissionName permissionName);
-    void AssignRoleToUser(TId userId, RoleName role);
-    void RemoveRoleFromUser(TId userId, RoleName role);
+    void AssignRoleToUser(Guid userId, RoleName role);
+    void RemoveRoleFromUser(Guid userId, RoleName role);
 }

@@ -8,12 +8,13 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <PackageReference Include="Sodium.Core" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CogniVault.Platform.Core\CogniVault.Platform.Core.csproj" />
+    <ProjectReference Include="..\CogniVault.Platform.Core.RestApi\CogniVault.Platform.Core.RestApi.csproj" />
   </ItemGroup>
 
 </Project>

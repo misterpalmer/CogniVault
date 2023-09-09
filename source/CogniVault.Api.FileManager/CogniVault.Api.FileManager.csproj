@@ -4,6 +4,14 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <OutputType>Exe</OutputType>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>CogniVault.Api.FileManager</AssemblyName>
+    <RootNamespace>CogniVault.Api.FileManager</RootNamespace>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\CogniVault.Api.FileManager.xml</DocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +22,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CogniVault.Platform.Core\CogniVault.Platform.Core.csproj" />
+    <ProjectReference Include="..\CogniVault.Application\CogniVault.Application.csproj" />
+    <ProjectReference Include="..\CogniVault.FileSystem.Provider.Memory\CogniVault.FileSystem.Provider.Memory.csproj" />
+    <ProjectReference Include="..\CogniVault.Platform.Core.RestApi\CogniVault.Platform.Core.RestApi.csproj" />
     <ProjectReference Include="..\CogniVault.Platform.Identity\CogniVault.Platform.Identity.csproj" />
   </ItemGroup>
 

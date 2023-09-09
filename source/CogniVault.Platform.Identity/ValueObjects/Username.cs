@@ -7,50 +7,59 @@ namespace CogniVault.Platform.Identity.ValueObjects;
 
 public class Username : IValueObject<Username>
 {
-    private readonly string _value;
+    public string Value { get; private set; }
 
-    public string Value => _value;
-
-    public Username(string value)
+    private Username(string value)
     {
-        _value = value;
-        Validate();
+        Value = value;
     }
 
     public int CompareTo(Username? other)
     {
-        return _value.CompareTo(other?._value);
+        return Value.CompareTo(other?.Value);
     }
 
     public Username Copy()
     {
-        return new Username(_value);
+        return new Username(Value);
     }
 
     public bool Equals(Username? other)
     {
-        return _value == other?._value;
-    }
-
-    public void Validate()
-    {
-        var validator = new UsernameValidator();
-        ValidationResult results = validator.Validate(this);
-
-        if (!results.IsValid)
-        {
-            throw new ValidationException(results.Errors);
-        }
-    }
-
-    public override string ToString()
-    {
-        return _value;
+        return Value == other?.Value;
     }
 
     public override int GetHashCode()
     {
-        return _value.GetHashCode();
+        return Value.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+        return Value;
+    }
+
+    public static async Task<Username> CreateAsync(string value, IValidator<Username> validator)
+    {
+        var instance = new Username(value);
+        var results = await validator.ValidateAsync(instance);
+        if (!results.IsValid)
+        {
+            throw new ValidationException(results.Errors);
+        }
+        return instance;
+    }
+
+    public static Username Null => new Username(string.Empty);
+
+    public static explicit operator Username(string? v)
+    {
+        if (v == null)
+        {
+            throw new ArgumentNullException(nameof(v), "The input string cannot be null.");
+        }
+
+        return new Username(v);
     }
 
     public override bool Equals(object obj)
@@ -62,3 +71,4 @@ public class Username : IValueObject<Username>
         return false;
     }
 }
+

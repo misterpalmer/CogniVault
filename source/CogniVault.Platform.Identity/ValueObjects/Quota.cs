@@ -1,65 +1,59 @@
-using CogniVault.Application.Validators;
 using CogniVault.Platform.Core.Entities;
 using FluentValidation;
-using FluentValidation.Results;
 
-namespace CogniVault.Application.ValueObjects;
+
+namespace CogniVault.Platform.Identity.ValueObjects;
 
 public class Quota : IValueObject<Quota>
 {
-    private readonly long _value;
+    public int Value { get; private set; } // Assuming Quota is an integer
 
-    public long Value => _value;
-
-    public Quota(long value)
+    private Quota(int value)
     {
-        _value = value;
-        Validate();
+        Value = value;
     }
 
     public int CompareTo(Quota? other)
     {
-        return _value.CompareTo(other?._value);
+        return Value.CompareTo(other?.Value);
     }
 
     public Quota Copy()
     {
-        return new Quota(_value);
+        return new Quota(Value);
     }
 
     public bool Equals(Quota? other)
     {
-        return _value == other?._value;
-    }
-
-    public void Validate()
-    {
-        var validator = new QuotaValidator();
-        ValidationResult results = validator.Validate(this);
-            
-        if (!results.IsValid)
-        {
-            throw new ValidationException(results.Errors);
-        }
-    }
-
-    public override string ToString()
-    {
-        return _value.ToString();
+        return Value == other?.Value;
     }
 
     public override int GetHashCode()
     {
-        return _value.GetHashCode();
+        return Value.GetHashCode();
     }
 
-    public override bool Equals(object obj)
+    public override string ToString()
     {
-        if (obj is Quota other)
+        return Value.ToString();
+    }
+
+    public static async Task<Quota> CreateAsync(int value, IValidator<Quota> validator)
+    {
+        var instance = new Quota(value);
+        var results = await validator.ValidateAsync(instance);
+        if (!results.IsValid)
         {
-            return Equals(other);
+            throw new ValidationException(results.Errors);
         }
-        return false;
+        return instance;
+    }
+
+    public static Quota Null => new Quota(0);  // Assuming 0 means no quota
+
+    public static explicit operator Quota(int v)
+    {
+        // Note: Since int is a non-nullable value type, no need to check for null here
+        return new Quota(v);
     }
 }
-
