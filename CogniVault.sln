@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CogniVault.Api.Identity", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CogniVault.UI.WebAssembly", "source\CogniVault.UI.WebAssembly\CogniVault.UI.WebAssembly.csproj", "{48A6B35B-076C-4231-A6B9-A8D6C0C68BB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CogniVault.Api.FileManager", "source\CogniVault.Api.FileManager\CogniVault.Api.FileManager.csproj", "{1A3CAF3D-94BC-4103-867D-EDE4D5FE05FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CogniVault.Api.VirtualFileSystem", "source\CogniVault.Api.VirtualFileSystem\CogniVault.Api.VirtualFileSystem.csproj", "{1A3CAF3D-94BC-4103-867D-EDE4D5FE05FC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CogniVault.Platform.Identity.EFCoreProvider", "source\CogniVault.Platform.Identity.EFCoreProvider\CogniVault.Platform.Identity.EFCoreProvider.csproj", "{7357BDE4-58CB-4166-9FCF-208E4CD3BE3D}"
 EndProject
@@ -32,6 +32,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CogniVault.Platform.Identity.Tests", "tests\CogniVault.Platform.Identity.Tests\CogniVault.Platform.Identity.Tests.csproj", "{ED808279-431D-4095-998D-04EFD10FE347}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CogniVault.Platform.Identity.InMemoryProvider", "source\CogniVault.Platform.Identity.InMemoryProvider\CogniVault.Platform.Identity.InMemoryProvider.csproj", "{BB111059-2421-466A-9302-2EF7CEB48FF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CogniVault.Application.VirtualFileSystem", "source\CogniVault.Application.VirtualFileSystem\CogniVault.Application.VirtualFileSystem.csproj", "{EB3FF9C8-E134-45DB-B831-CC6BF7846511}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CogniVault.Application.VirtualFileSystem.Provider", "source\CogniVault.Application.VirtualFileSystem.Provider\CogniVault.Application.VirtualFileSystem.Provider.csproj", "{D1D10ABF-980B-44F4-BB71-ED848B8369EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,6 +96,14 @@ Global
 		{BB111059-2421-466A-9302-2EF7CEB48FF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB111059-2421-466A-9302-2EF7CEB48FF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB111059-2421-466A-9302-2EF7CEB48FF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB3FF9C8-E134-45DB-B831-CC6BF7846511}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB3FF9C8-E134-45DB-B831-CC6BF7846511}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB3FF9C8-E134-45DB-B831-CC6BF7846511}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB3FF9C8-E134-45DB-B831-CC6BF7846511}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1D10ABF-980B-44F4-BB71-ED848B8369EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1D10ABF-980B-44F4-BB71-ED848B8369EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1D10ABF-980B-44F4-BB71-ED848B8369EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1D10ABF-980B-44F4-BB71-ED848B8369EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5BE2BE5A-FCDA-4A2D-B25E-5228B07A6D0C} = {0CFAE81F-2932-4250-A674-F8F5275E858D}
@@ -106,5 +118,7 @@ Global
 		{EAF47A61-3DA3-4AF1-9E7F-EEF017C50FEF} = {0CFAE81F-2932-4250-A674-F8F5275E858D}
 		{ED808279-431D-4095-998D-04EFD10FE347} = {E65D1370-72B7-4F27-A7B9-72E3EF11B7C0}
 		{BB111059-2421-466A-9302-2EF7CEB48FF4} = {0CFAE81F-2932-4250-A674-F8F5275E858D}
+		{EB3FF9C8-E134-45DB-B831-CC6BF7846511} = {0CFAE81F-2932-4250-A674-F8F5275E858D}
+		{D1D10ABF-980B-44F4-BB71-ED848B8369EF} = {0CFAE81F-2932-4250-A674-F8F5275E858D}
 	EndGlobalSection
 EndGlobal

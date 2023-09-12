@@ -1,16 +1,17 @@
 using Serilog;
 using CogniVault.Platform.Core.Services;
-using CogniVault.Api.FileManager.HostedServices;
-using CogniVault.Api.FileManager.Extensions;
+using CogniVault.Api.VirtualFileSystem.HostedServices;
+using CogniVault.Api.VirtualFileSystem.Extensions;
 using Microsoft.OpenApi.Models;
 using CogniVault.Platform.Core.RestApi.Middleware;
 using CogniVault.Platform.Core.RestApi.Configuration;
 using System.Security.Authentication;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using CogniVault.Application.VirtualFileSystem.Provider;
 
 StaticLogger.EnsureInitialized();
-Log.Information("Starting CogniVault.Api.FileManager");
+Log.Information("Starting CogniVault.Api.VirtualFileSystem");
 
 try
 {
@@ -42,7 +43,7 @@ try
     builder.Services.AddSwaggerGen(swagger =>
     {
         swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "File Manager API Swagger", Version = "v1" });
-        var filePath = Path.Combine(System.AppContext.BaseDirectory, "CogniVault.Api.FileManager.xml");
+        var filePath = Path.Combine(System.AppContext.BaseDirectory, "CogniVault.Api.VirtualFileSystem.xml");
         swagger.IncludeXmlComments(filePath);
     });
 
@@ -72,8 +73,6 @@ try
         return handler;
     });
 
-    builder.Services.SeedFileSystem(builder.Configuration);
-
     builder.Services.AddHttpsRedirection(options =>
     {
         options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
@@ -89,6 +88,9 @@ try
                 .AllowAnyHeader();
         });
     });
+
+    builder.Services.AddVirtualFileSystemMemoryProvider();
+    builder.Services.SeedFileSystem(builder.Configuration);
 
     var app = builder.Build();
 
@@ -114,13 +116,13 @@ try
 catch (Exception ex) when (!ex.GetType().FullName!.Equals("HostAbortedException", StringComparison.Ordinal))
 {
     StaticLogger.EnsureInitialized();
-    Log.Fatal("CogniVault.Api.FileManager terminated unexpectedly");
+    Log.Fatal("CogniVault.Api.VirtualFileSystem terminated unexpectedly");
     throw;
 }
 finally
 {
     StaticLogger.EnsureInitialized();
-    Log.Information("Stopping CogniVault.Api.FileManager");
+    Log.Information("Stopping CogniVault.Api.VirtualFileSystem");
     Log.CloseAndFlush();
 }
 

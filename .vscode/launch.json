@@ -45,9 +45,9 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build filemanager",
-      "program": "${workspaceFolder}/source/CogniVault.Api.FileManager/bin/Debug/net7.0/CogniVault.Api.FileManager.dll",
+      "program": "${workspaceFolder}/source/CogniVault.Api.VirtualFileSystem/bin/Debug/net7.0/CogniVault.Api.VirtualFileSystem.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/source/CogniVault.Api.FileManager",
+      "cwd": "${workspaceFolder}/source/CogniVault.Api.VirtualFileSystem",
       "stopAtEntry": false,
       "serverReadyAction": {
         "action": "openExternally",

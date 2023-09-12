@@ -102,7 +102,6 @@ public class InMemoryRepositoryAsync<TEntity, TId> : IQueryRepositoryAsync<TEnti
         return await Task.FromResult(result);
     }
 
-
     public Task<TEntity> GetFirstOrDefaultAsync(ISpecification<TEntity> spec)
     {
         var entity = _store.Values.AsQueryable().FirstOrDefault(spec.Criteria);
@@ -117,7 +116,6 @@ public class InMemoryRepositoryAsync<TEntity, TId> : IQueryRepositoryAsync<TEnti
     var result = _store.Values.AsQueryable().Where(spec.Criteria).Select(spec.Selector<TResult>().Compile()).FirstOrDefault();
     return await Task.FromResult(result);
 }
-
 
     public Task<IAsyncEnumerable<TEntity>> GetPagedListAsync(ISpecification<TEntity> spec)
     {
