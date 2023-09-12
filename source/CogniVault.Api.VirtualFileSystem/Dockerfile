@@ -25,18 +25,20 @@ WORKDIR /source
 # Adjust the path to your csproj file relative to your Dockerfile's location
 COPY ["source/CogniVault.Platform.Core/CogniVault.Platform.Core.csproj", "CogniVault.Platform.Core/"]
 COPY ["source/CogniVault.Application/CogniVault.Application.csproj", "CogniVault.Application/"]
-COPY ["source/CogniVault.Api.FileManager/CogniVault.Api.FileManager.csproj", "CogniVault.Api.FileManager/"]
+COPY ["source/CogniVault.Application.VirtualFileSystem/CogniVault.Application.VirtualFileSystem.csproj", "CogniVault.Application.VirtualFileSystem/"]
+COPY ["source/CogniVault.Api.VirtualFileSystem/CogniVault.Api.VirtualFileSystem.csproj", "CogniVault.Api.VirtualFileSystem/"]
 RUN dotnet restore "CogniVault.Platform.Core/CogniVault.Platform.Core.csproj"
 RUN dotnet restore "CogniVault.Application/CogniVault.Application.csproj"
-RUN dotnet restore "CogniVault.Api.FileManager/CogniVault.Api.FileManager.csproj"
+RUN dotnet restore "CogniVault.Application.VirtualFileSystem/CogniVault.Application.VirtualFileSystem.csproj"
+RUN dotnet restore "CogniVault.Api.VirtualFileSystem/CogniVault.Api.VirtualFileSystem.csproj"
 
 COPY . .
-WORKDIR /source/source/CogniVault.Api.FileManager
-RUN dotnet build "CogniVault.Api.FileManager.csproj" -c $configuration -o /app/build
+WORKDIR /source/source/CogniVault.Api.VirtualFileSystem
+RUN dotnet build "CogniVault.Api.VirtualFileSystem.csproj" -c $configuration -o /app/build
 
 FROM build AS publish
 ARG configuration=Release
-RUN dotnet publish "CogniVault.Api.FileManager.csproj" -c $configuration -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "CogniVault.Api.VirtualFileSystem.csproj" -c $configuration -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
@@ -45,4 +47,4 @@ COPY --from=publish /app/publish .
 # Adjust the path to copy the certificate from the .certs directory relative to Dockerfile's location
 COPY ../../cognivault.pfx /https/cognivault.pfx
 
-ENTRYPOINT ["dotnet", "CogniVault.Api.FileManager.dll"]
+ENTRYPOINT ["dotnet", "CogniVault.Api.VirtualFileSystem.dll"]

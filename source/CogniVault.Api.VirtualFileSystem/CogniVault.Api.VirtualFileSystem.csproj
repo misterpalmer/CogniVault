@@ -6,15 +6,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <OutputType>Exe</OutputType>
     <LangVersion>latest</LangVersion>
-    <AssemblyName>CogniVault.Api.FileManager</AssemblyName>
-    <RootNamespace>CogniVault.Api.FileManager</RootNamespace>
+    <AssemblyName>CogniVault.Api.VirtualFileSystem</AssemblyName>
+    <RootNamespace>CogniVault.Api.VirtualFileSystem</RootNamespace>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\CogniVault.Api.FileManager.xml</DocumentationFile>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\CogniVault.Api.VirtualFileSystem.xml</DocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bogus" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Serilog.AspNetCore" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
@@ -22,10 +23,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CogniVault.Platform.Core\CogniVault.Platform.Core.csproj" />
-    <ProjectReference Include="..\CogniVault.Application\CogniVault.Application.csproj" />
-    <ProjectReference Include="..\CogniVault.FileSystem.Provider.Memory\CogniVault.FileSystem.Provider.Memory.csproj" />
     <ProjectReference Include="..\CogniVault.Platform.Core.RestApi\CogniVault.Platform.Core.RestApi.csproj" />
     <ProjectReference Include="..\CogniVault.Platform.Identity\CogniVault.Platform.Identity.csproj" />
+    <ProjectReference Include="..\CogniVault.Application.VirtualFileSystem\CogniVault.Application.VirtualFileSystem.csproj" />
+    <ProjectReference Include="..\CogniVault.Application.VirtualFileSystem.Provider\CogniVault.Application.VirtualFileSystem.Provider.csproj" />
   </ItemGroup>
 
 </Project>

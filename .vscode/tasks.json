@@ -33,7 +33,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/source/CogniVault.Api.FileManager/CogniVault.Api.FileManager.csproj"
+                "${workspaceFolder}/source/CogniVault.Api.VirtualFileSystem/CogniVault.Api.VirtualFileSystem.csproj"
             ],
             "problemMatcher": "$msCompile"
         },

@@ -1,7 +1,6 @@
 using CogniVault.Platform.Core.Abstractions.Persistence;
 using CogniVault.Platform.Core.Entities;
 using CogniVault.Platform.Identity.InMemoryProvider.Repositories;
-
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CogniVault.Platform.Identity.InMemoryProvider;
@@ -36,7 +35,9 @@ public class IdentityInMemoryUnitOfWork : IUnitOfWork
     }
 
     private readonly IServiceProvider _serviceProvider;
+
     private readonly Dictionary<RepositoryKey, object> _repositories = new Dictionary<RepositoryKey, object>();
+    
     private bool _disposed;
 
     public IdentityInMemoryUnitOfWork(IServiceProvider serviceProvider)

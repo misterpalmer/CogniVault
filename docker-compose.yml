@@ -24,7 +24,7 @@ services:
     image: filemanager
     build:
       context: .
-      dockerfile: source/CogniVault.Api.FileManager/Dockerfile
+      dockerfile: source/CogniVault.Api.VirtualFileSystem/Dockerfile
     ports:
       - 5167:5167
       - 7167:7167  # Mapping the HTTPS port from the host to the container

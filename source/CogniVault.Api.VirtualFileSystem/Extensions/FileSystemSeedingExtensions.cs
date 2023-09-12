@@ -1,7 +1,6 @@
-using CogniVault.Api.FileManager.HostedServices;
-using CogniVault.FileSystem.Provider.Memory.Repositories;
+using CogniVault.Api.VirtualFileSystem.HostedServices;
 
-namespace CogniVault.Api.FileManager.Extensions;
+namespace CogniVault.Api.VirtualFileSystem.Extensions;
 
 public static class FileSystemSeedingExtensions
 {

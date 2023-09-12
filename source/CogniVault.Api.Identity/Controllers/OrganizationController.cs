@@ -2,11 +2,8 @@ using CogniVault.Api.Identity.Dtos;
 using CogniVault.Platform.Core.Abstractions.Persistence;
 using CogniVault.Platform.Identity.Abstractions;
 using CogniVault.Platform.Identity.Entities;
-using CogniVault.Platform.Identity.Validators;
 using CogniVault.Platform.Identity.ValueObjects;
-
 using FluentValidation;
-
 using Microsoft.AspNetCore.Mvc;
 
 namespace CogniVault.Api.Identity.Controllers;

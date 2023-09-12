@@ -102,8 +102,8 @@ public class PlatformSeeder : IHostedService
 
         var queryRepository = await UnitOfWork.QueryRepository<PlatformUser, Guid>().GetAllAsync(new AllEntitiesSpecification<PlatformUser>());
         var seededUsers = await queryRepository.ToListAsync();
-        Console.WriteLine($"Seeded {seededUsers.Count} users.");
-        Console.WriteLine($"Seeded PlatformUsers: {JsonSerializer.Serialize(seededUsers)}");
+        // Console.WriteLine($"Seeded {seededUsers.Count} users.");
+        // Console.WriteLine($"Seeded PlatformUsers: {JsonSerializer.Serialize(seededUsers)}");
     }
     
     public async Task SeedPlatformAsync()
