@@ -33,7 +33,8 @@ public class FileSystemController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var fileSystems = await _fileSystemService.GetNodeAsync(_fileSystemService.Root.Id);
+        // var fileSystems = await _fileSystemService.GetNodeAsync(_fileSystemService.Root.Id);
+        var fileSystems = await _fileSystemService.GetDirectoryAsync(_fileSystemService.Root.Id);
         return Ok(fileSystems);
     }
 

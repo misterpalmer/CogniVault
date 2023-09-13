@@ -42,19 +42,26 @@ public class MemoryFileSystem : IVirtualFileSystem
 
 
     public async Task<IEnumerable<FileSystemNode>> GetDirectoryAsync(Guid parent)
-    {
-        var spec = new GetDirectoryContentsSpecification<FileSystemNode>(parent);
-        var dirs = await _dbResolver.QueryRepository<DirectoryNode>().GetAllAsync((ISpecification<DirectoryNode>)spec);
-        var files = await _dbResolver.QueryRepository<FileNode>().GetAllAsync((ISpecification<FileNode>)spec);
-        var links = await _dbResolver.QueryRepository<SymbolicLinkNode>().GetAllAsync((ISpecification<SymbolicLinkNode>)spec);
+{
+    // Create specific specifications for each type
+    var dirSpec = new GetAllFromDirectoryNodeSpecification(parent);
+    var fileSpec = new GetAllFromFileNodeSpecification(parent);
+    var linkSpec = new GetAllFromSymbolicLinkNodeSpecification(parent);
 
-        var results = new List<FileSystemNode>();
-        results.AddRange(await dirs.ToListAsync());
-        results.AddRange(await files.ToListAsync());
-        results.AddRange(await links.ToListAsync());
+    // Query repositories using these specific specifications
+    var dirs = await _dbResolver.QueryRepository<DirectoryNode>().GetAllAsync(dirSpec);
+    var files = await _dbResolver.QueryRepository<FileNode>().GetAllAsync(fileSpec);
+    var links = await _dbResolver.QueryRepository<SymbolicLinkNode>().GetAllAsync(linkSpec);
 
-        return results;
-    }
+    var results = new List<FileSystemNode>();
+
+    // Add results to the final list
+    results.AddRange(await dirs.ToListAsync());
+    results.AddRange(await files.ToListAsync());
+    results.AddRange(await links.ToListAsync());
+
+    return results;
+}
 
 
     public Task<T> ReadAsync<T>(IFileSystemNode resource)

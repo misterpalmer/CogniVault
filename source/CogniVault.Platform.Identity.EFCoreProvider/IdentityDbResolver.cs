@@ -11,9 +11,9 @@ public class IdentityDbResolver : IDbResolver
 
     public IdentityDbResolver(DbContext context) => _context = context;
 
-    public TEntity GetContext<TEntity>() where TEntity : class
+    public IRepositoryAsync<TEntity> GetContext<TEntity>() where TEntity : class
     {
-        throw new NotImplementedException();
+        return GetRepository<TEntity>();
     }
 
     public IRepositoryAsync<TEntity> GetRepository<TEntity>() where TEntity : class

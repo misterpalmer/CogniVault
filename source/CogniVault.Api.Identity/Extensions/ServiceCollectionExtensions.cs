@@ -1,14 +1,9 @@
-using System.Text.Json;
-
-using CogniVault.Platform.Core.Abstractions.Persistence;
 using CogniVault.Platform.Core.RestApi.Configuration;
 using CogniVault.Platform.Identity.Abstractions;
 using CogniVault.Platform.Identity.Entities;
 using CogniVault.Platform.Identity.InMemoryProvider.Repositories;
 using CogniVault.Platform.Identity.Provider;
 using CogniVault.Platform.Identity.Services;
-
-// using CogniVault.Platform.Identity.Repositories;
 using CogniVault.Platform.Identity.Validators;
 using CogniVault.Platform.Identity.ValueObjects;
 using FluentValidation;
