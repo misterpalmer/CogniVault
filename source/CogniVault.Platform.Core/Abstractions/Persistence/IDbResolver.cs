@@ -7,5 +7,5 @@ public interface IDbResolver
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    TEntity GetContext<TEntity>() where TEntity : class;
+    IRepositoryAsync<TEntity> GetContext<TEntity>() where TEntity : class;
 }

@@ -18,11 +18,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInMemoryRepositories(this IServiceCollection services)
     {
-        // Other registrations
-        // services.AddSingleton<IPlatformOrganizationRepository, OrganizationRepository>();
-        // services.AddSingleton<IPlatformTenantRepository, TenantRepository>();
-        // services.AddSingleton<IPlatformInterfaceRepository, InterfaceRepository>();
-
         services.AddTransient<IValidator<OrganizationName>, OrganizationNameValidator>();
         services.AddTransient<IValidator<TenantName>, TenantNameValidator>();
         services.AddTransient<IValidator<InterfaceName>, InterfaceNameValidator>();
@@ -37,7 +32,6 @@ public static class DependencyInjection
         // Registering the InMemoryRepository for specific entities.
         services.AddSingleton<IQueryRepositoryAsync<PlatformOrganization, Guid>, InMemoryRepositoryAsync<PlatformOrganization, Guid>>();
         services.AddSingleton<ICommandRepositoryAsync<PlatformOrganization, Guid>, InMemoryRepositoryAsync<PlatformOrganization, Guid>>();
-        // services.AddSingleton<InMemoryRepositoryAsync<PlatformOrganization, Guid>, OrganizationRepository>();
 
         services.AddSingleton<IQueryRepositoryAsync<PlatformTenant, Guid>, InMemoryRepositoryAsync<PlatformTenant, Guid>>();
         services.AddSingleton<ICommandRepositoryAsync<PlatformTenant, Guid>, InMemoryRepositoryAsync<PlatformTenant, Guid>>();
