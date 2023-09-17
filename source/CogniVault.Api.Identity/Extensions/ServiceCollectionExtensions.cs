@@ -40,22 +40,20 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddSomeMoreRepositories(this IServiceCollection services)
     {
-        services.AddSingleton<IPlatformUserRepository<PlatformUser>, UserRepository>();
+        // services.AddSingleton<IPlatformUserRepository<PlatformUser>, UserRepository>();
         services.AddSingleton<InMemoryRepositoryAsync<PlatformUser, Guid>>();
         services.AddSingleton<InMemoryRepositoryAsync<PlatformOrganization, Guid>>();
         services.AddSingleton<InMemoryRepositoryAsync<PlatformTenant, Guid>>();
         services.AddSingleton<InMemoryRepositoryAsync<PlatformInterface, Guid>>();
 
-        services.AddSingleton<IPasswordEncryptor, PasswordEncryptor>();
-        services.AddSingleton<IValidator<Email>, EmailValidator>();
-        services.AddSingleton<IValidator<PlainPassword>, PlainPasswordValidator>();
-        services.AddSingleton<IValidator<Quota>, QuotaValidator>();
-        services.AddSingleton<IValidator<Username>, UsernameValidator>();
+        return services;
+    }
 
+    public static IServiceCollection AddAuthorizationServices(this IServiceCollection services)
+    {
         services.AddTransient<IAuthorizationService, AuthorizationService>();
         services.AddTransient<TokenService>();
         services.AddTransient<LoginService>();
-        services.AddTransient<IPasswordEncryptor, PasswordEncryptor>();
 
         return services;
     }

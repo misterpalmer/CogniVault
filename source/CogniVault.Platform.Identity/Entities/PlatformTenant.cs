@@ -1,18 +1,15 @@
-using System.Reflection;
 using System.Text.Json.Serialization;
-
 using CogniVault.Platform.Core.Entities;
 using CogniVault.Platform.Identity.Abstractions;
 using CogniVault.Platform.Identity.Builders;
 using CogniVault.Platform.Identity.Converters;
 using CogniVault.Platform.Identity.ValueObjects;
 
-using FluentValidation;
-
 namespace CogniVault.Platform.Identity.Entities;
 
 public class PlatformTenant : DomainEntityBase, IPlatformTenant
 {
+    public Guid OrganizationId { get; private set; }
     [JsonIgnore] public PlatformOrganization Organization { get; private set; }
     [JsonConverter(typeof(TenantNameJsonConverter))] public TenantName Name { get; private set; }
     public string TenantIdentifier { get; private set; } = string.Empty;
@@ -31,8 +28,14 @@ public class PlatformTenant : DomainEntityBase, IPlatformTenant
         Id = Guid.Empty
     };
 
+    public PlatformTenant()
+    {
+        InitializeCommonProperties();
+    }
+
     public PlatformTenant(PlatformTenantBuilder builder)
     {
+        OrganizationId = builder.Organization.Id;
         Organization = builder.Organization; // Note: Property name adjusted for consistency
         Name = builder.Name; // Note: Property name adjusted for consistency
         Interfaces = builder.Interfaces; // Note: Property name adjusted for consistency
@@ -42,6 +45,7 @@ public class PlatformTenant : DomainEntityBase, IPlatformTenant
 
     protected PlatformTenant(in PlatformOrganization organization, in TenantName name)
     {
+        OrganizationId = organization.Id;
         Organization = organization;
         Name = name.Copy();
 
@@ -135,7 +139,4 @@ public class PlatformTenant : DomainEntityBase, IPlatformTenant
     }
 
 }
-
-
-
 

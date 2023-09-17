@@ -17,11 +17,9 @@ public class OrganizationController : ControllerBase
     private readonly IValidator<OrganizationName> _organizationNameValidator;
 
     public OrganizationController(IPlatformOrganizationService organizationService,
-        IQueryRepositoryAsync<PlatformOrganization, Guid> organizationRepository,
         IValidator<OrganizationName> organizationNameValidator)
     {
         _organizationService = organizationService ?? throw new ArgumentNullException(nameof(organizationService));
-        // _organizationRepository = organizationRepository ?? throw new ArgumentNullException(nameof(organizationRepository));
         _organizationNameValidator = organizationNameValidator ?? throw new ArgumentNullException(nameof(organizationNameValidator));
     }
 

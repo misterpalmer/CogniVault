@@ -1,44 +1,66 @@
 using CogniVault.Platform.Identity.Entities;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 
 namespace CogniVault.Platform.Identity.EFCore.Configurations;
-
 public class PlatformUserConfiguration : IEntityTypeConfiguration<PlatformUser>
 {
     public void Configure(EntityTypeBuilder<PlatformUser> builder)
     {
-        // Primary Key
-        builder.HasKey(u => u.Id);
+        // Configure Id as a primary key
+        builder.HasKey(e => e.Id);
 
-        // Properties
-        builder.Property(u => u.Id).ValueGeneratedOnAdd();
-        builder.Property(u => u.Username)
-            .IsRequired()
-            .HasMaxLength(255); // Assuming a max length for username, adjust accordingly
+        // Configurations for owned types
+        builder.OwnsOne(o => o.Username, username =>
+        {
+            username.Property(u => u.Value)
+                    .HasColumnName("Username")
+                    .IsRequired()
+                    .HasMaxLength(255);
+        });
 
-        builder.Property(u => u.Password)
-            .IsRequired()
-            .HasMaxLength(512); // Assuming this is a hashed password, adjust accordingly
+        builder.OwnsOne(o => o.Password, password =>
+        {
+            password.Property(p => p.Value)
+                    .HasColumnName("Password")
+                    .IsRequired()
+                    .HasMaxLength(255);
+        });
 
-        builder.Property(u => u.Email)
-            .HasMaxLength(255); // Assuming a max length for email
+        builder.OwnsOne(o => o.Email, email =>
+        {
+            email.Property(e => e.Value)
+                 .HasColumnName("Email")
+                 .IsRequired()
+                 .HasMaxLength(255);
+        });
 
-        builder.Property(u => u.Quota)
-            .IsRequired(); // Assuming Quota is a required field. Also, if it's a complex type, you'd need to specify how to handle it (Owned type or another entity).
+        builder.OwnsOne(o => o.Quota, quota =>
+        {
+            quota.Property(q => q.Value)
+                 .HasColumnName("Quota")
+                 .IsRequired();
+        });
 
-        builder.Property(u => u.TimeZone)
-            .IsRequired()
-            .HasConversion(tz => tz.Id, id => TimeZoneInfo.FindSystemTimeZoneById(id)); // Convert TimeZoneInfo to string and vice versa
+        
+        builder.Property(e => e.TimeZone)
+               .HasConversion(v => v.Id, v => TimeZoneInfo.FindSystemTimeZoneById(v))
+               .IsRequired();
+        
+        builder.Property(e => e.CreatedAt)
+               .IsRequired();
 
-        builder.Property(u => u.LastLoginAt).IsRequired();
-        builder.Property(u => u.UpdatedAt).IsRequired();
-        builder.Property(u => u.CreatedAt).IsRequired();
+        builder.Property(e => e.UpdatedAt)
+               .IsRequired();
 
-        // Indexes
-        builder.HasIndex(u => u.Username).IsUnique(); // Assuming usernames are unique
-        builder.HasIndex(u => u.Email); // Index for emails, but not necessarily unique if you allow multiple accounts with the same email
+        builder.Property(e => e.LastLoginAt)
+               .IsRequired();
+
+        // Exclude JSON-ignored properties from the database model
+        builder.Ignore(e => e.IsNullObject);
+
+        // Exclude other non-mapped properties
+        builder.Ignore(e => e.IsAuthenticated);
     }
 }

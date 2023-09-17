@@ -9,6 +9,7 @@ namespace CogniVault.Platform.Identity.Entities;
 
 public class PlatformInterface : DomainEntityBase
 {
+    public Guid TenantId { get; private set; }
     [JsonIgnore] public PlatformTenant Tenant { get; private set; } = PlatformTenant.Null;
     [JsonConverter(typeof(InterfaceNameJsonConverter))] public InterfaceName Name { get; private set; }
     public string InterfaceIdentifier { get; private set; } = string.Empty;
@@ -25,6 +26,10 @@ public class PlatformInterface : DomainEntityBase
         Id = Guid.Empty
     };
 
+    public PlatformInterface()
+    {
+        InitializeCommonProperties();
+    }
     protected PlatformInterface(InterfaceName name)
     {
         Name = name.Copy();
@@ -32,13 +37,23 @@ public class PlatformInterface : DomainEntityBase
 
     protected PlatformInterface(PlatformTenant tenant, InterfaceName name)
     {
+        TenantId = tenant.Id;
         Tenant = tenant;
         Name = name.Copy();
         InitializeCommonProperties();
     }
 
-    protected PlatformInterface(PlatformTenant tenant, InterfaceName name, string identifier, string connectionString, string adminEmail, Uri? logoUri, bool isEnabled, bool isDefault, DateTimeOffset? disabledOnUtc)
+    protected PlatformInterface(PlatformTenant tenant,
+        InterfaceName name,
+        string identifier,
+        string connectionString,
+        string adminEmail,
+        Uri? logoUri,
+        bool isEnabled,
+        bool isDefault,
+        DateTimeOffset? disabledOnUtc)
     {
+        TenantId = tenant.Id;
         Tenant = tenant;
         Name = name.Copy();
         InterfaceIdentifier = identifier;

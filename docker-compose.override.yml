@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  cognivaultapiidentity:
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERT_PASSWORD}
+  cognivaultapifilemanager:
+    environment:
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERT_PASSWORD}

@@ -1,31 +1,31 @@
 using Bogus;
 using CogniVault.Platform.Core.Abstractions.Persistence;
-using CogniVault.Platform.Core.Extensions;
+using CogniVault.Platform.Core.Abstractions.Persistence.EFCore;
 using CogniVault.Platform.Identity.Abstractions;
 using CogniVault.Platform.Identity.Builders;
+using CogniVault.Platform.Identity.EFCoreProvider;
 using CogniVault.Platform.Identity.Entities;
-using CogniVault.Platform.Identity.InMemoryProvider.Specifications;
 using CogniVault.Platform.Identity.ValueObjects;
 using FluentValidation;
 using System.Security.Cryptography;
-using System.Text.Json;
 
 
 namespace CogniVault.Api.Identity.HostedServices;
-public class PlatformSeeder : IHostedService
-{
+public class PlatformSeederEFCore : IHostedService
+{   
     private readonly IServiceProvider _serviceProvider;
-    public IUnitOfWork UnitOfWork { get; private set; }
+    private IDbResolver _identityDbResolver;
+    private IdentityContext _identityDbContext;
     public IValidator<Username> UsernameValidator { get; private set; }
     public IValidator<PlainPassword> PlainPasswordValidator { get; private set; }
     public IPasswordEncryptor PasswordEncryptor { get; private set; }
     public IValidator<Email> EmailValidator { get; private set; }
     public IValidator<Quota> QuotaValidator { get; private set; }
-    public IValidator<OrganizationName> OrganizationNameValidator { get; private set; }
-    public IValidator<TenantName> TenantNameValidator { get; private set; }
-    public IValidator<InterfaceName> InterfaceNameValidator { get; private set; }
+    public IValidator<OrganizationName> OrganizationValidator { get; private set; }
+    public IValidator<TenantName> TenantValidator { get; private set; }
+    public IValidator<InterfaceName> InterfaceValidator { get; private set; }
 
-    public PlatformSeeder(IServiceProvider serviceProvider)
+    public PlatformSeederEFCore(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }
@@ -34,22 +34,22 @@ public class PlatformSeeder : IHostedService
     {
         using var scope = _serviceProvider.CreateScope();
         // Initialize services and assign them to properties
-        UnitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-        
+        _identityDbResolver = scope.ServiceProvider.GetRequiredService<IDbResolver>();
+        _identityDbContext = scope.ServiceProvider.GetRequiredService<IdentityContext>();
         UsernameValidator = scope.ServiceProvider.GetRequiredService<IValidator<Username>>();
         PlainPasswordValidator = scope.ServiceProvider.GetRequiredService<IValidator<PlainPassword>>();
         PasswordEncryptor = scope.ServiceProvider.GetRequiredService<IPasswordEncryptor>();
         EmailValidator = scope.ServiceProvider.GetRequiredService<IValidator<Email>>();
         QuotaValidator = scope.ServiceProvider.GetRequiredService<IValidator<Quota>>();
 
-        OrganizationNameValidator = scope.ServiceProvider.GetRequiredService<IValidator<OrganizationName>>();
-        TenantNameValidator = scope.ServiceProvider.GetRequiredService<IValidator<TenantName>>();
-        InterfaceNameValidator = scope.ServiceProvider.GetRequiredService<IValidator<InterfaceName>>();
+        OrganizationValidator = scope.ServiceProvider.GetRequiredService<IValidator<OrganizationName>>();
+        TenantValidator = scope.ServiceProvider.GetRequiredService<IValidator<TenantName>>();
+        InterfaceValidator = scope.ServiceProvider.GetRequiredService<IValidator<InterfaceName>>();
 
-        await SeedAdminUserAsync();
-        await SeedUsersAsync();
-        // await SeedOrganizationsAsync();
-        await SeedPlatformAsync();
+        // await SeedAdminUserAsync();
+        // await SeedUsersAsync();
+        await SeedOrganizationsAsync();
+        // await SeedPlatformAsync();
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -68,8 +68,13 @@ public class PlatformSeeder : IHostedService
         var currentDateTime = DateTimeOffset.UtcNow;
 
         var user = new PlatformUser(username, encryptedPassword, email, quota, timeZone, currentDateTime);
-        await UnitOfWork.CommandRepository<PlatformUser, Guid>().InsertAsync(user);
-        await UnitOfWork.CompleteAsync();
+        var users = new List<PlatformUser> { user };
+        await _identityDbResolver.GetContext<PlatformUser>().InsertAsync(users);
+        // await UnitOfWork.CommandRepository<PlatformUser, Guid>().InsertAsync(user);
+        // await UnitOfWork.CompleteAsync();
+
+        // await IdentityDbResolver.GetContext<PlatformUser>().InsertAsync(user);
+        // await IdentityDbResolver.
     }
 
     private async Task SeedUsersAsync()
@@ -96,11 +101,12 @@ public class PlatformSeeder : IHostedService
             DateTimeOffset.UtcNow)
         ).ToList();
 
-        await UnitOfWork.CommandRepository<PlatformUser, Guid>().InsertAsync(testUsers);
-        await UnitOfWork.CompleteAsync();
+        await _identityDbResolver.GetContext<PlatformUser>().InsertAsync(testUsers);
+        // await UnitOfWork.CommandRepository<PlatformUser, Guid>().InsertAsync(testUsers);
+        // await UnitOfWork.CompleteAsync();
 
-        var queryRepository = await UnitOfWork.QueryRepository<PlatformUser, Guid>().GetAllAsync(new AllEntitiesSpecification<PlatformUser>());
-        var seededUsers = await queryRepository.ToListAsync();
+        // var queryRepository = await UnitOfWork.QueryRepository<PlatformUser, Guid>().GetAllAsync(new AllEntitiesSpecification<PlatformUser>());
+        // var seededUsers = await queryRepository.ToListAsync();
         // Console.WriteLine($"Seeded {seededUsers.Count} users.");
         // Console.WriteLine($"Seeded PlatformUsers: {JsonSerializer.Serialize(seededUsers)}");
     }
@@ -108,12 +114,12 @@ public class PlatformSeeder : IHostedService
     public async Task SeedPlatformAsync()
     {
         int orgCount = 10;
-        InterfaceName productionInterfaceName = await InterfaceName.CreateAsync("Production", InterfaceNameValidator) ?? InterfaceName.Null;
-        InterfaceName developmentInterfaceName = await InterfaceName.CreateAsync("Development", InterfaceNameValidator) ?? InterfaceName.Null;
+        InterfaceName productionInterfaceName = await InterfaceName.CreateAsync("Production", InterfaceValidator) ?? InterfaceName.Null;
+        InterfaceName developmentInterfaceName = await InterfaceName.CreateAsync("Development", InterfaceValidator) ?? InterfaceName.Null;
 
         var organizationNames = await GenerateAsync(orgCount, async faker => {
             string orgName = GenerateValidOrgNames(faker);
-            return await OrganizationName.CreateAsync(orgName, OrganizationNameValidator) ?? OrganizationName.Null;
+            return await OrganizationName.CreateAsync(orgName, OrganizationValidator) ?? OrganizationName.Null;
         });
 
         // Force synchronous evaluation
@@ -127,7 +133,7 @@ public class PlatformSeeder : IHostedService
 
             var tenantNames = await GenerateAsync(tenantCount, async faker => {
                 string tenantName = GenerateValidTenantNames(faker);
-                return await TenantName.CreateAsync(tenantName, TenantNameValidator) ?? TenantName.Null;
+                return await TenantName.CreateAsync(tenantName, TenantValidator) ?? TenantName.Null;
             });
 
             foreach (var tenantName in tenantNames)
@@ -155,11 +161,7 @@ public class PlatformSeeder : IHostedService
             }
         }
 
-        await UnitOfWork.CommandRepository<PlatformOrganization, Guid>().InsertAsync(evaluatedOrganizations);
-        await UnitOfWork.CompleteAsync();
-
-        var queryRepository = await UnitOfWork.QueryRepository<PlatformOrganization, Guid>().GetAllAsync(new AllEntitiesSpecification<PlatformOrganization>());
-        var seededOrgs = await queryRepository.ToListAsync();
+        await _identityDbResolver.GetContext<PlatformOrganization>().InsertAsync(evaluatedOrganizations);
     }
 
     public async Task SeedOrganizationsAsync()
@@ -168,7 +170,7 @@ public class PlatformSeeder : IHostedService
 
         var organizationNames = await GenerateAsync(orgCount, async faker => {
             string orgName = GenerateValidOrgNames(faker);
-            return await OrganizationName.CreateAsync(orgName, OrganizationNameValidator) ?? OrganizationName.Null;
+            return await OrganizationName.CreateAsync(orgName, OrganizationValidator) ?? OrganizationName.Null;
         });
 
         // Force synchronous evaluation
@@ -177,8 +179,8 @@ public class PlatformSeeder : IHostedService
         // Wait for all to complete and get actual PlatformOrganization entities
         var evaluatedOrganizations = organizations.Select(orgTask => orgTask.Result).ToList();
 
-        await UnitOfWork.CommandRepository<PlatformOrganization, Guid>().InsertAsync(evaluatedOrganizations);
-        await UnitOfWork.CompleteAsync();
+        await _identityDbResolver.GetContext<PlatformOrganization>().InsertAsync(evaluatedOrganizations);
+        await _identityDbContext.SaveChangesAsync();
     }
 
     private async Task<List<T>> GenerateAsync<T>(int count, Func<Faker, Task<T>> generatorFunc)

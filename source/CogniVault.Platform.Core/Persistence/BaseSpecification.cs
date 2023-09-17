@@ -9,12 +9,16 @@ public abstract class BaseSpecification<TEntity> : ISpecification<TEntity>
     public Expression<Func<TEntity, bool>> Criteria { get; private set; }
     public List<Expression<Func<TEntity, object>>> Includes { get; } = new List<Expression<Func<TEntity, object>>>();
     public List<string> IncludeStrings { get; } = new List<string>();
-    public int Take { get; private set; }
-    public int Skip { get; private set; }
-    public bool IsPagingEnabled { get; private set; } = false;
+
     public List<OrderingExpression<TEntity>> OrderBys { get; } = new List<OrderingExpression<TEntity>>();
     public Expression<Func<TEntity, object>> AggregateSelector { get; private set; }
     public Expression<Func<TEntity, object>> Projection { get; private set; }
+
+    public bool DisableTracking { get; private set; } = true;
+    public bool IgnoreQueryFilters { get; private set; } = false;
+    public int Take { get; private set; }
+    public int Skip { get; private set; }
+    public bool IsPagingEnabled { get; private set; } = false;
 
     protected void AddInclude(Expression<Func<TEntity, object>> includeExpression)
     {
@@ -57,4 +61,20 @@ public abstract class BaseSpecification<TEntity> : ISpecification<TEntity>
     {
         throw new NotImplementedException();
     }
+
+    protected void ApplySelector(Expression<Func<TEntity, object>> selector)
+    {
+        Projection = selector;
+    }
+
+    protected void ApplyDisableTracking(bool disableTracking)
+    {
+        DisableTracking = disableTracking;
+    }
+
+    protected void ApplyIgnoreQueryFilters(bool ignoreQueryFilters)
+    {
+        IgnoreQueryFilters = ignoreQueryFilters;
+    }
+
 }

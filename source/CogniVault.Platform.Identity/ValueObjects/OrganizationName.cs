@@ -6,9 +6,9 @@ namespace CogniVault.Platform.Identity.ValueObjects;
 
 public class OrganizationName : IValueObject<OrganizationName>
 {
-    public string Value { get; private set; }
+    public string Value { get; set; }
 
-    private OrganizationName(string value)
+    public OrganizationName(string value)
     {
         Value = value;
     }

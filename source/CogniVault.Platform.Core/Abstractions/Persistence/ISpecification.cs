@@ -17,4 +17,6 @@ public interface ISpecification<TEntity>
     List<OrderingExpression<TEntity>> OrderBys { get; }
     Expression<Func<TEntity, object>>? AggregateSelector { get; }
     Expression<Func<TEntity, object>>? Projection { get; }
+    bool DisableTracking { get; }
+    bool IgnoreQueryFilters { get; }
 }

@@ -8,6 +8,18 @@ public class EncryptedPassword : IValueObject<EncryptedPassword>
     public string Value { get; private set; }
     private readonly IPasswordEncryptor _encryptor;
 
+    public static EncryptedPassword Null => new EncryptedPassword(string.Empty, null);
+
+    public EncryptedPassword()
+    {
+        
+    }
+    public static async Task<EncryptedPassword> CreateAsync(PlainPassword plainPassword, IPasswordEncryptor encryptor)
+    {
+        var encryptedValue = encryptor.Encrypt(plainPassword);
+        return new EncryptedPassword(encryptedValue, encryptor);
+    }
+
     private EncryptedPassword(string encryptedValue, IPasswordEncryptor encryptor)
     {
         Value = encryptedValue;
@@ -43,12 +55,4 @@ public class EncryptedPassword : IValueObject<EncryptedPassword>
     {
         return _encryptor.Verify(this, passwordToVerify);
     }
-
-    public static async Task<EncryptedPassword> CreateAsync(PlainPassword plainPassword, IPasswordEncryptor encryptor)
-    {
-        var encryptedValue = encryptor.Encrypt(plainPassword);
-        return new EncryptedPassword(encryptedValue, encryptor);
-    }
-
-    public static EncryptedPassword Null => new EncryptedPassword(string.Empty, null);
 }
