@@ -43,7 +43,7 @@ The user can be assigned to multiple tenants.
 The user can be assigned to multiple interfaces.
 The user can be assigned to multiple roles. The user can be assigned to multiple permissions.
 
-[Swagger API](./assets/identity-api.jpg)
+![Swagger API](./assets/identity-api.jpg)
 
 
 The API is currently using 2 data providers. The Organization/Tenant/Interface structure is backed by a SQlite instance. The User Token store is backed by an In-Memory Repository. The In-Memory Repository is used to store the user's token. The token is used to validate the user's identity. The token is used to validate the user's permissions.
@@ -51,7 +51,7 @@ The API is currently using 2 data providers. The Organization/Tenant/Interface s
 ## Virtual File Manager API
 The application is designed to provide a secure file system to organizations that support various use cases. An organization can be divided into different tenants. This could be for billing or security related purposes. AN organization must have a globally unique name. A tenant must have a gloablly unique name. However, interfacing naming is unique to the tenant only.
 
-[Swagger API](./assets/file-manager-api.jpg)
+![Swagger API](./assets/file-manager-api.jpg)
 
 ### Docker-Compose
 ```bash
@@ -333,7 +333,7 @@ public static class DependencyInjection
 
 ## Data Repository
 
-[Sqlite Data](./assets/sqlite-tenant.jpg)
+![Sqlite Data](./assets/sqlite-tenant.jpg)
 
 ```csharp
 public class RepositoryAsync<TEntity> : IRepositoryAsync<TEntity> where TEntity : class
