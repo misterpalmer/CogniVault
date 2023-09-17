@@ -76,5 +76,4 @@ public abstract class BaseSpecification<TEntity> : ISpecification<TEntity>
     {
         IgnoreQueryFilters = ignoreQueryFilters;
     }
-
 }

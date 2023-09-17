@@ -11,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CogniVault.Platform.Identity.EFCoreProvider;
-
 public static class DependencyInjection
 {
     public static IServiceCollection AddIdentityEFCoreProvider(this IServiceCollection services, IConfiguration configuration)
@@ -42,11 +41,6 @@ public static class DependencyInjection
     public static IServiceCollection AddEFCoreRepositories(this IServiceCollection services)
     {
         services.AddScoped<IPlatformOrganizationService, OrganizationService>();
-
-        // // ... Repeat for other entities as necessary
-        // services.AddSingleton<IUnitOfWork, IdentityInMemoryUnitOfWork>();
-        // services.AddSingleton<IPlatformUserService, UserService>();
-        // services.AddSingleton<IPlatformOrganizationService, OrganizationService>();
 
         return services;
     }

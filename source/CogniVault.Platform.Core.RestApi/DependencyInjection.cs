@@ -6,7 +6,6 @@ using Microsoft.OpenApi.Models;
 
 
 namespace CogniVault.Platform.Core.RestApi;
-
 public static class DependencyInjection
 {
     public static IServiceCollection AddRestApi(this IServiceCollection services)

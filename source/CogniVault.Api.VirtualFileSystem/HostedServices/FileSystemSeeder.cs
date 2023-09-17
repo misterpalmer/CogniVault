@@ -11,14 +11,10 @@ namespace CogniVault.Api.VirtualFileSystem.HostedServices;
 public class FileSystemSeeder : IHostedService
 {
     private readonly IServiceProvider _serviceProvider;
-
     private readonly IDbResolver _fileSystemContext;
     private readonly ILogger<FileSystemSeeder> _logger;
     private IVirtualFileSystem _fileSystem;
     private readonly IValidator<DirectoryName> _directoryNameValidator;
-
-
-
 
     private static readonly Action<ILogger, string, Exception> _startHostedServiceLog;
     private static readonly Action<ILogger, string, Exception> _stopHostedServiceLog;

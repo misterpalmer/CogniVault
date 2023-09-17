@@ -226,8 +226,6 @@ public class PlatformSeeder : IHostedService
     }
 }
 
-
-// Console.WriteLine($"Seeded {seededOrgs.Count} orgs.");
 //  Console.WriteLine($"Seeded PlatformOrganizationss: {JsonSerializer.Serialize(seededOrgs)}");
 
 // // Force synchronous evaluation

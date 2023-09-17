@@ -157,10 +157,7 @@ public class PlatformSeederEFCore : IHostedService
                 await builtTenant.AddInterfaceAsync(await developmentInterfaceBuilder.BuildAsync());
                 
                 await org.AddTenantAsync(builtTenant);
-                // await UnitOfWork.CommandRepository<PlatformTenant, Guid>().InsertAsync(tenant);
-                // await _identityDbResolver.GetContext<PlatformInterface>().InsertAsync(builtTenant.InterfacesReadOnly);
             }
-            // await _identityDbResolver.GetContext<PlatformTenant>().InsertAsync(org.TenantsReadOnly);
         }
 
         await _identityDbResolver.GetContext<PlatformOrganization>().InsertAsync(evaluatedOrganizations);
@@ -231,8 +228,6 @@ public class PlatformSeederEFCore : IHostedService
     }
 }
 
-
-// Console.WriteLine($"Seeded {seededOrgs.Count} orgs.");
 //  Console.WriteLine($"Seeded PlatformOrganizationss: {JsonSerializer.Serialize(seededOrgs)}");
 
 // // Force synchronous evaluation

@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace CogniVault.Platform.Identity.EFCoreProvider;
-
 public class RepositoryAsync<TEntity> : IRepositoryAsync<TEntity> where TEntity : class
 {
     protected readonly DbContext Context;

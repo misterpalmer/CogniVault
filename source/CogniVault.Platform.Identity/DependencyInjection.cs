@@ -12,17 +12,13 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddIdentityValidators(this IServiceCollection services)
     {
-        // services.AddTransient<IValidator<OrganizationName>, OrganizationNameValidator>();
         services.AddTransient<IValidator<OrganizationName>, OrganizationValidator>();
-        // services.AddTransient<IValidator<TenantName>, TenantNameValidator>();
         services.AddTransient<IValidator<TenantName>, TenantValidator>();
-        // services.AddTransient<IValidator<InterfaceName>, InterfaceNameValidator>();
         services.AddTransient<IValidator<InterfaceName>, InterfaceValidator>();
         services.AddTransient<IValidator<Username>, UsernameValidator>();
         services.AddTransient<IValidator<Email>, EmailValidator>();
         services.AddTransient<IValidator<Quota>, QuotaValidator>();
         services.AddTransient<IValidator<PlainPassword>, PlainPasswordValidator>();
-
         services.AddSingleton<IPasswordEncryptor, PasswordEncryptor>();
 
         return services;
