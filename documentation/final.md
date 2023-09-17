@@ -8,6 +8,54 @@ The project consists of 2 APIs: 1) Identity, 2) Virtual File Manager.
 - Identity https://localhost:7166/swagger/index.html
 - File Manager https://localhost:7167/swagger/index.html
 
+![docker-compose](./assets/docker.jpg)
+
+
+```yaml
+version: '3.8'
+
+services:
+  cognivaultapiidentity:
+    image: identity
+    build:
+      context: .
+      dockerfile: source/CogniVault.Api.Identity/Dockerfile
+    ports:
+      - 7166:443  # Mapping the HTTPS port from the host to the container
+    environment:
+      - ASPNETCORE_URLS=https://+:443;
+      - ASPNETCORE_HTTPS_PORT=443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password="CogniVaultWebUI"
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/LocalhostCogniVaultWebUI.pfx
+    volumes:
+      - ./.certs/LocalhostCogniVaultWebUI.pfx:/https/LocalhostCogniVaultWebUI.pfx:ro  # Mounting the certificate from the host to the container
+    networks:
+      - default
+  cognivaultapifilemanager:
+    image: filemanager
+    build:
+      context: .
+      dockerfile: source/CogniVault.Api.VirtualFileSystem/Dockerfile
+    ports:
+      - 7167:443  # Mapping the HTTPS port from the host to the container
+    environment:
+      - ASPNETCORE_URLS=https://+:443;
+      - ASPNETCORE_HTTPS_PORT=443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password="CogniVaultWebUI"
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/LocalhostCogniVaultWebUI.pfx
+      - IDENTITY_API_URL=http://cognivaultapiidentity:443
+    volumes:
+      - ./.certs/LocalhostCogniVaultWebUI.pfx:/https/LocalhostCogniVaultWebUI.pfx:ro  # Mounting the certificate from the host to the container
+    depends_on:
+      - cognivaultapiidentity
+    networks:
+      - default
+networks:
+  default:
+      name: cognivault
+      external: false
+```
+
 The identity service is a standalone service designed to authenticate a user to the platform. Applications on the platform could validate the user's ability to access the platform.
 
 To support these services, the platform and applications are abstracted into multiple projects. The projects central to the platform are:
