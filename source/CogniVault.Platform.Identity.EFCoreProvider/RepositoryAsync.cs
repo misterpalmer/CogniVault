@@ -63,7 +63,8 @@ public class RepositoryAsync<TEntity> : IRepositoryAsync<TEntity> where TEntity 
 
         // Assumes TEntity is compatible with TResult.
         // You should add checks to ensure that this cast is valid.
-        return await query.Cast<TResult>().ToListAsync(cancellationToken);
+        var results = await query.Cast<TResult>().ToListAsync(cancellationToken);
+        return results;
     }
     public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>>? selector = null)
     {

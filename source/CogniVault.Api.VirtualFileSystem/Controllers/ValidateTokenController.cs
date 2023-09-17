@@ -20,7 +20,6 @@ public class ValidateTokenController : ControllerBase
     }
 
     [HttpGet, Route("organizations")]
-
     public async Task<IActionResult> GetOrganizations()
     {
         var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7166/api/organization"); // rename organization to organizations

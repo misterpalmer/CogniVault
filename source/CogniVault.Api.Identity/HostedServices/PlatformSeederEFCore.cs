@@ -48,8 +48,8 @@ public class PlatformSeederEFCore : IHostedService
 
         // await SeedAdminUserAsync();
         // await SeedUsersAsync();
-        await SeedOrganizationsAsync();
-        // await SeedPlatformAsync();
+        // await SeedOrganizationsAsync();
+        await SeedPlatformAsync();
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -69,7 +69,7 @@ public class PlatformSeederEFCore : IHostedService
 
         var user = new PlatformUser(username, encryptedPassword, email, quota, timeZone, currentDateTime);
         var users = new List<PlatformUser> { user };
-        await _identityDbResolver.GetContext<PlatformUser>().InsertAsync(users);
+        // await _identityDbResolver.GetContext<PlatformUser>().InsertAsync(users);
         // await UnitOfWork.CommandRepository<PlatformUser, Guid>().InsertAsync(user);
         // await UnitOfWork.CompleteAsync();
 
@@ -158,10 +158,13 @@ public class PlatformSeederEFCore : IHostedService
                 
                 await org.AddTenantAsync(builtTenant);
                 // await UnitOfWork.CommandRepository<PlatformTenant, Guid>().InsertAsync(tenant);
+                // await _identityDbResolver.GetContext<PlatformInterface>().InsertAsync(builtTenant.InterfacesReadOnly);
             }
+            // await _identityDbResolver.GetContext<PlatformTenant>().InsertAsync(org.TenantsReadOnly);
         }
 
         await _identityDbResolver.GetContext<PlatformOrganization>().InsertAsync(evaluatedOrganizations);
+        await _identityDbContext.SaveChangesAsync();
     }
 
     public async Task SeedOrganizationsAsync()
@@ -180,7 +183,7 @@ public class PlatformSeederEFCore : IHostedService
         var evaluatedOrganizations = organizations.Select(orgTask => orgTask.Result).ToList();
 
         await _identityDbResolver.GetContext<PlatformOrganization>().InsertAsync(evaluatedOrganizations);
-        await _identityDbContext.SaveChangesAsync();
+        // await _identityDbContext.SaveChangesAsync();
     }
 
     private async Task<List<T>> GenerateAsync<T>(int count, Func<Faker, Task<T>> generatorFunc)

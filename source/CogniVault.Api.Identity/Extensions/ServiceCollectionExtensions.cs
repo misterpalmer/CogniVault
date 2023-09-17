@@ -51,6 +51,8 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddAuthorizationServices(this IServiceCollection services)
     {
+        services.AddSingleton<IPlatformUserRepository<PlatformUser>, UserRepository>();
+        services.AddSingleton<InMemoryRepositoryAsync<PlatformUser, Guid>>();
         services.AddTransient<IAuthorizationService, AuthorizationService>();
         services.AddTransient<TokenService>();
         services.AddTransient<LoginService>();

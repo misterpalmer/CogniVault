@@ -38,13 +38,13 @@ public class Program
             builder.Services.AddHostedService<PlatformSeederEFCore>();
             // builder.Services.AddInMemoryRepositories();
             // builder.Services.AddSomeMoreRepositories();
-            // builder.Services.AddHostedService<PlatformSeeder>();
+            builder.Services.AddHostedService<PlatformSeeder>();
 
             var app = builder.Build();
 
             app.UseMiddleware<ExceptionMiddleware>();
 
-            // app.Services.MigrateIdentityEFCoreProvider<IdentityContext>();
+            app.Services.MigrateIdentityEFCoreProvider<IdentityContext>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

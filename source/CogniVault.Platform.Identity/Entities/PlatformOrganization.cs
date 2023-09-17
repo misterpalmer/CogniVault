@@ -1,13 +1,10 @@
-using System.Reflection;
 using System.Text.Json.Serialization;
-
 using CogniVault.Platform.Core.Abstractions;
 using CogniVault.Platform.Core.Entities;
 using CogniVault.Platform.Identity.Abstractions;
 using CogniVault.Platform.Identity.Converters;
-using CogniVault.Platform.Identity.Validators;
 using CogniVault.Platform.Identity.ValueObjects;
-using FluentValidation;
+
 
 namespace CogniVault.Platform.Identity.Entities;
 public class PlatformOrganization : DomainEntityBase, IPlatformOrganization, IAggregateRoot
@@ -22,7 +19,7 @@ public class PlatformOrganization : DomainEntityBase, IPlatformOrganization, IAg
 
     public PlatformOrganization()
     {
-        InitializeCommonProperties();
+        // InitializeCommonProperties();
     }
     protected PlatformOrganization(OrganizationName name)
     {

@@ -56,6 +56,7 @@ public class OrganizationService : IPlatformOrganizationService
             CancellationToken = cancellationToken
         };
 
+        var organizations = (PlatformOrganization)await _dbResolver.GetContext<PlatformOrganization>().QueryAsync(spec, queryOptions, cancellationToken);
         return (PlatformOrganization)await _dbResolver.GetContext<PlatformOrganization>().QueryAsync(spec, queryOptions, cancellationToken);
     }
 

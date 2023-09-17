@@ -49,7 +49,7 @@ public class PlatformSeeder : IHostedService
         await SeedAdminUserAsync();
         await SeedUsersAsync();
         // await SeedOrganizationsAsync();
-        await SeedPlatformAsync();
+        // await SeedPlatformAsync();
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
