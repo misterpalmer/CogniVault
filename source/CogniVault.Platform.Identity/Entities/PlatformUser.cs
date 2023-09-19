@@ -17,6 +17,28 @@ public class PlatformUser : DomainEntityBase
     public DateTimeOffset UpdatedAt { get; private set; }
     public DateTimeOffset CreatedAt { get; private set; }
 
+    public bool IsNullObject => this.Id == Guid.Empty;
+
+    // Null Object Pattern implementation:
+    public static PlatformUser Null => new PlatformUser(Username.Null)
+    {
+        Id = Guid.Empty
+    };
+
+    public PlatformUser()
+    {
+        InitializeCommonProperties();
+    }
+
+    // public static PlatformUser Create(Username username, 
+    //                                   EncryptedPassword password, 
+    //                                   Email email, 
+    //                                   Quota quota, 
+    //                                   TimeZoneInfo timeZone)
+    // {
+    //     return new PlatformUser(username, password, email, quota, timeZone, DateTimeOffset.UtcNow);
+    // }
+
     public PlatformUser(Username username, 
                         EncryptedPassword password, 
                         Email email, 
@@ -30,9 +52,8 @@ public class PlatformUser : DomainEntityBase
         SetEmail(email);
         SetQuota(quota);
         SetTimeZone(timeZone);
-        CreatedAt = createdAt;
-        UpdatedAt = createdAt; // initial creation time
-        LastLoginAt = DateTimeOffset.MinValue; // Or another default value if preferable
+        
+        InitializeCommonProperties();
     }
 
     private PlatformUser(Username username)
@@ -42,50 +63,49 @@ public class PlatformUser : DomainEntityBase
         SetEmail(Email.Null);
         SetQuota(Quota.Null);
         SetTimeZone(TimeZoneInfo.Utc);
-        CreatedAt = DateTimeOffset.MinValue;
-        UpdatedAt = DateTimeOffset.MinValue;
-        LastLoginAt = DateTimeOffset.MinValue;
+        
+        InitializeCommonProperties();
     }
 
     public PlatformUser UpdateUsername(Username newUsername)
     {
         SetUsername(newUsername);
-        MarkUpdated();
+        UpdateCommonProperties();
         return this;
     }
 
     public PlatformUser UpdatePassword(EncryptedPassword newPassword)
     {
         SetPassword(newPassword);
-        MarkUpdated();
+        UpdateCommonProperties();
         return this;
     }
 
     public PlatformUser UpdateEmail(Email newEmail)
     {
         SetEmail(newEmail);
-        MarkUpdated();
+        UpdateCommonProperties();
         return this;
     }
 
     public PlatformUser UpdateQuota(Quota newQuota)
     {
         SetQuota(newQuota);
-        MarkUpdated();
+        UpdateCommonProperties();
         return this;
     }
 
     public PlatformUser UpdateTimeZone(TimeZoneInfo newTimeZone)
     {
         SetTimeZone(newTimeZone);
-        MarkUpdated();
+        UpdateCommonProperties();
         return this;
     }
 
     public PlatformUser UpdateLastLogin(DateTimeOffset loginTime)
     {
         LastLoginAt = loginTime;
-        MarkUpdated();
+        UpdateCommonProperties();
         return this;
     }
 
@@ -114,17 +134,26 @@ public class PlatformUser : DomainEntityBase
         TimeZone = timeZone ?? throw new ArgumentNullException(nameof(timeZone));
     }
 
-    private void MarkUpdated()
-    {
-        UpdatedAt = DateTimeOffset.UtcNow;
-    }
-
     public bool IsAuthenticated => true;
 
-    // Null Object Pattern implementation:
-    public static PlatformUser Null => new PlatformUser(Username.Null)
+    private void InitializeCommonProperties()
     {
-        Id = Guid.Empty
-    };
+        Id = Guid.NewGuid();
+
+        DateTimeOffset currentTimestamp = DateTimeOffset.UtcNow;
+        string assemblyName = typeof(PlatformTenant).FullName ?? "System";
+        
+        ModifiedOnUtc = CreatedOnUtc = currentTimestamp;
+        ModifiedBy = CreatedBy = assemblyName;
+    }
+    
+    private void UpdateCommonProperties()
+    {
+        DateTimeOffset currentTimestamp = DateTimeOffset.UtcNow;
+        string typeName = typeof(PlatformTenant).FullName ?? "System";
+
+        ModifiedOnUtc = currentTimestamp;
+        ModifiedBy = typeName;
+    }
 }
 

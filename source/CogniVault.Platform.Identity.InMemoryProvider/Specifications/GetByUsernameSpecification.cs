@@ -42,6 +42,10 @@ public class GetByUsernameSpecification<TEntity, TId> : ISpecification<PlatformU
     // No projection for GetByUsername as we want the full entity
     public Expression<Func<PlatformUser, object>>? Projection => null;
 
+    public bool DisableTracking => true;
+
+    public bool IgnoreQueryFilters => false;
+
     // GetByUsername doesn't provide a selector for a specific type by default
     public Expression<Func<PlatformUser, TResult>>? Selector<TResult>() where TResult : class
     {

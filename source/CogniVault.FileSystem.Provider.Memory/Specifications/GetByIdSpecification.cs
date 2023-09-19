@@ -42,6 +42,10 @@ public class GetByIdSpecification<TEntity, TId> : ISpecification<TEntity>
     // No projection for GetById as we want the full entity
     public Expression<Func<TEntity, object>>? Projection => null;
 
+    public bool DisableTracking => true;
+
+    public bool IgnoreQueryFilters => false;
+
     // GetById doesn't provide a selector for a specific type by default
     public Expression<Func<TEntity, TResult>>? Selector<TResult>() where TResult : class
     {

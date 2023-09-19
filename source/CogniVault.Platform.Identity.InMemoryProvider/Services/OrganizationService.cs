@@ -19,6 +19,7 @@ public class OrganizationService : IPlatformOrganizationService
 
     private IQueryRepositoryAsync<PlatformOrganization, Guid> OrganizationQueryRepository =>
         _unitOfWork.QueryRepository<PlatformOrganization, Guid>();
+    
     private ICommandRepositoryAsync<PlatformOrganization, Guid> OrganizationCommandRepository =>
         _unitOfWork.CommandRepository<PlatformOrganization, Guid>();
 

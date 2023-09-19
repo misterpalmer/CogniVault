@@ -6,10 +6,10 @@ namespace CogniVault.Platform.Identity.EFCoreProvider;
 
 public class IdentityDbResolver : IDbResolver
 {
-    private readonly DbContext _context;
+    private readonly IdentityContext _context;
     private readonly Dictionary<Type, object> _repositories = new();
 
-    public IdentityDbResolver(DbContext context) => _context = context;
+    public IdentityDbResolver(IdentityContext context) => _context = context;
 
     public IRepositoryAsync<TEntity> GetContext<TEntity>() where TEntity : class
     {

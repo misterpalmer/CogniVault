@@ -6,6 +6,10 @@ using CogniVault.Platform.Core.RestApi.Middleware;
 using CogniVault.Api.Identity.Extensions;
 using CogniVault.Api.Identity.HostedServices;
 using CogniVault.Platform.Identity.EFCoreProvider;
+using Microsoft.EntityFrameworkCore.Design;
+using CogniVault.Platform.Identity;
+
+
 
 
 namespace CogniVault.Api.Identity;
@@ -26,19 +30,21 @@ public class Program
                 .AddLogging()
                 .AddRestApi();
             builder.Services.AddJwt(builder.Configuration);
-            // builder.Services.AddIdentityEFCoreProvider(builder.Configuration);
-            builder.Services.AddInMemoryRepositories();
-            builder.Services.AddSomeMoreRepositories();
-            
-
-            // Registering the required services for LoginController            
+            builder.Services.AddIdentityValidators();
+            builder.Services.AddInMemoryTokenStores();
+            builder.Services.AddAuthorizationServices();
+            builder.Services.AddIdentityEFCoreProvider(builder.Configuration);
+            builder.Services.AddEFCoreRepositories();
+            builder.Services.AddHostedService<PlatformSeederEFCore>();
+            // builder.Services.AddInMemoryRepositories();
+            // builder.Services.AddSomeMoreRepositories();
             builder.Services.AddHostedService<PlatformSeeder>();
 
             var app = builder.Build();
 
-            // app.Services.MigrateIdentityEFCoreProvider<IdentityDbContext>();
-
             app.UseMiddleware<ExceptionMiddleware>();
+
+            app.Services.MigrateIdentityEFCoreProvider<IdentityContext>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

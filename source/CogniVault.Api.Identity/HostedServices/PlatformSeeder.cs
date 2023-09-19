@@ -12,7 +12,6 @@ using System.Text.Json;
 
 
 namespace CogniVault.Api.Identity.HostedServices;
-
 public class PlatformSeeder : IHostedService
 {
     private readonly IServiceProvider _serviceProvider;
@@ -50,7 +49,7 @@ public class PlatformSeeder : IHostedService
         await SeedAdminUserAsync();
         await SeedUsersAsync();
         // await SeedOrganizationsAsync();
-        await SeedPlatformAsync();
+        // await SeedPlatformAsync();
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -227,8 +226,6 @@ public class PlatformSeeder : IHostedService
     }
 }
 
-
-// Console.WriteLine($"Seeded {seededOrgs.Count} orgs.");
 //  Console.WriteLine($"Seeded PlatformOrganizationss: {JsonSerializer.Serialize(seededOrgs)}");
 
 // // Force synchronous evaluation

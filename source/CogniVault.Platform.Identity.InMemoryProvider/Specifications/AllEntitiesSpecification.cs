@@ -33,6 +33,10 @@ public class AllEntitiesSpecification<T> : ISpecification<T> where T : class
     // No default projection.
     public Expression<Func<T, object>>? Projection => null;
 
+    public bool DisableTracking => true;
+
+    public bool IgnoreQueryFilters => false;
+
     // This method provides a way to project the result into another shape. 
     // By default, we're not doing any special projection.
     public Expression<Func<T, TResult>>? Selector<TResult>() where TResult : class

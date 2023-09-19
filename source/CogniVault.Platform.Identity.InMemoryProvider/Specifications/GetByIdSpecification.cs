@@ -5,8 +5,7 @@ using CogniVault.Platform.Core.Persistence;
 
 namespace CogniVault.Platform.Identity.InMemoryProvider.Specifications;
 
-public class GetByIdSpecification<TEntity, TId> : ISpecification<TEntity>
-    where TEntity : DomainEntityBase
+public class GetByIdSpecification<TEntity, TId> : ISpecification<TEntity> where TEntity : DomainEntityBase
 {
     public TId Id { get; }
 
@@ -40,6 +39,10 @@ public class GetByIdSpecification<TEntity, TId> : ISpecification<TEntity>
 
     // No projection for GetById as we want the full entity
     public Expression<Func<TEntity, object>>? Projection => null;
+
+    public bool DisableTracking => throw new NotImplementedException();
+
+    public bool IgnoreQueryFilters => throw new NotImplementedException();
 
     // GetById doesn't provide a selector for a specific type by default
     public Expression<Func<TEntity, TResult>>? Selector<TResult>() where TResult : class

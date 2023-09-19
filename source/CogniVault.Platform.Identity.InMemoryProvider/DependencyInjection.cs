@@ -7,7 +7,6 @@ using CogniVault.Platform.Identity.Provider;
 using CogniVault.Platform.Identity.Stores;
 using CogniVault.Platform.Identity.Validators;
 using CogniVault.Platform.Identity.ValueObjects;
-
 using FluentValidation;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -18,17 +17,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInMemoryRepositories(this IServiceCollection services)
     {
-        services.AddTransient<IValidator<OrganizationName>, OrganizationNameValidator>();
-        services.AddTransient<IValidator<TenantName>, TenantNameValidator>();
-        services.AddTransient<IValidator<InterfaceName>, InterfaceNameValidator>();
-        services.AddTransient<IValidator<Username>, UsernameValidator>();
-        services.AddTransient<IValidator<PlainPassword>, PlainPasswordValidator>();
-
-        services.AddSingleton<IUserTokenStore<Guid>, UserTokenInMemoryStore<Guid>>();
-        services.AddSingleton<IRolePermissionStore<PlatformUser, Guid>, RolePermissionInMemoryStore<PlatformUser, Guid>>();
-        services.AddSingleton<IJwtProvider, JwtProvider>();
-        
-
         // Registering the InMemoryRepository for specific entities.
         services.AddSingleton<IQueryRepositoryAsync<PlatformOrganization, Guid>, InMemoryRepositoryAsync<PlatformOrganization, Guid>>();
         services.AddSingleton<ICommandRepositoryAsync<PlatformOrganization, Guid>, InMemoryRepositoryAsync<PlatformOrganization, Guid>>();
@@ -40,9 +28,18 @@ public static class DependencyInjection
         services.AddSingleton<ICommandRepositoryAsync<PlatformInterface, Guid>, InMemoryRepositoryAsync<PlatformInterface, Guid>>();
 
         // ... Repeat for other entities as necessary
+        services.AddSingleton<IPlatformOrganizationService, OrganizationService>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddInMemoryTokenStores(this IServiceCollection services)
+    {
         services.AddSingleton<IUnitOfWork, IdentityInMemoryUnitOfWork>();
         services.AddSingleton<IPlatformUserService, UserService>();
-        services.AddSingleton<IPlatformOrganizationService, OrganizationService>();
+        services.AddSingleton<IUserTokenStore<Guid>, UserTokenInMemoryStore<Guid>>();
+        services.AddSingleton<IRolePermissionStore<PlatformUser, Guid>, RolePermissionInMemoryStore<PlatformUser, Guid>>();
+        services.AddSingleton<IJwtProvider, JwtProvider>();
 
         return services;
     }

@@ -8,7 +8,7 @@ public class InterfaceName : IValueObject<InterfaceName>
 {
     public string Value { get; }
 
-    private InterfaceName(string value)
+    public InterfaceName(string value)
     {
         Value = value;
     }

@@ -4,6 +4,8 @@ using CogniVault.Platform.Identity.Abstractions;
 using CogniVault.Platform.Identity.Entities;
 using CogniVault.Platform.Identity.ValueObjects;
 using FluentValidation;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CogniVault.Api.Identity.Controllers;
@@ -17,11 +19,9 @@ public class OrganizationController : ControllerBase
     private readonly IValidator<OrganizationName> _organizationNameValidator;
 
     public OrganizationController(IPlatformOrganizationService organizationService,
-        IQueryRepositoryAsync<PlatformOrganization, Guid> organizationRepository,
         IValidator<OrganizationName> organizationNameValidator)
     {
         _organizationService = organizationService ?? throw new ArgumentNullException(nameof(organizationService));
-        // _organizationRepository = organizationRepository ?? throw new ArgumentNullException(nameof(organizationRepository));
         _organizationNameValidator = organizationNameValidator ?? throw new ArgumentNullException(nameof(organizationNameValidator));
     }
 
@@ -37,6 +37,7 @@ public class OrganizationController : ControllerBase
         return CreatedAtAction(nameof(Get), new { id = organization.Id }, organization);
     }
 
+    [Authorize(Policy = "ApiScope")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> Get(Guid id)
     {

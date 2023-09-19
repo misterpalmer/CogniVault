@@ -1,28 +1,26 @@
-using System.Reflection;
 using System.Text.Json.Serialization;
-
 using CogniVault.Platform.Core.Abstractions;
 using CogniVault.Platform.Core.Entities;
 using CogniVault.Platform.Identity.Abstractions;
 using CogniVault.Platform.Identity.Converters;
-using CogniVault.Platform.Identity.Validators;
 using CogniVault.Platform.Identity.ValueObjects;
-using FluentValidation;
+
 
 namespace CogniVault.Platform.Identity.Entities;
-
 public class PlatformOrganization : DomainEntityBase, IPlatformOrganization, IAggregateRoot
 {
-    [JsonConverter(typeof(OrganizationNameJsonConverter))]
-    public OrganizationName Name { get; private set; }
+    [JsonConverter(typeof(OrganizationNameJsonConverter))] public OrganizationName Name { get; private set; }
     public Uri? LogoUri { get; private set; }
     public bool IsEnabled { get; private set; } = true;
     [JsonIgnore] public IList<PlatformTenant> Tenants { get; private set; } = new List<PlatformTenant>();
     [JsonPropertyName("Tenants")] public IEnumerable<PlatformTenant> TenantsReadOnly => Tenants.AsReadOnly();
-    // public IEnumerable<PlatformInterface> Interfaces => Tenants.SelectMany(t => t.Interfaces).ToList().AsReadOnly();
 
     [JsonIgnore] public bool IsNullObject => this.Id == Guid.Empty;
 
+    public PlatformOrganization()
+    {
+        // InitializeCommonProperties();
+    }
     protected PlatformOrganization(OrganizationName name)
     {
         Name = name.Copy();

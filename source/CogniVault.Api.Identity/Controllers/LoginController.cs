@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace CogniVault.Api.Identity.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class LoginController : ControllerBase
 {
     private readonly IAuthorizationService _authorizationService;

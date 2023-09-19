@@ -397,6 +397,17 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-.cert/
+.certs/
+*.pfx
+*.snk
+*.cer
+*.key
+*.crt
+*.pem
+*.pub
+*.p12
+*.p7b
+*.p7c
+**/*.sqlite*
 CogniVault.FileSystem.Provider.Abstractions/
 CogniVault.FileSystem.Provider.Blob/
