@@ -6,3 +6,5 @@ services:
   cognivaultapifilemanager:
     environment:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERT_PASSWORD}
+
+
