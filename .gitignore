@@ -398,7 +398,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 .certs/
-.env
 *.pfx
 *.snk
 *.cer
