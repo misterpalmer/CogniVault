@@ -1,7 +1,6 @@
+using System.Net.Http.Headers;
 using System.Text.Json;
-
 using CogniVault.Platform.Core.RestApi.Configuration;
-
 using Microsoft.AspNetCore.Mvc;
 
 namespace CogniVault.Api.VirtualFileSystem.Controllers;
@@ -22,8 +21,9 @@ public class ValidateTokenController : ControllerBase
     [HttpGet, Route("organizations")]
     public async Task<IActionResult> GetOrganizations()
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7166/api/organization"); // rename organization to organizations
-        // request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", "token");
+        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiUGxhdGZvcm1BZG1pbmlzdHJhdG9yIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiYWRtaW4iLCJleHAiOjE2OTUwMTY3MzYsImlzcyI6Iklzc3VlcjEiLCJhdWQiOiJBdWRpZW5jZTEifQ.RmZibZynacbPJNx2HYUB4wHUrxhEEnoyvPUfdfs2CMo";
+        var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7166/api/org"); // rename organization to organizations
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         var response = await _httpClient.SendAsync(request);
         if (!response.IsSuccessStatusCode)
         {
