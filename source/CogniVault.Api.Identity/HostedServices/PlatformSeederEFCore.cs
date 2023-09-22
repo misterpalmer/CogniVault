@@ -46,8 +46,8 @@ public class PlatformSeederEFCore : IHostedService
         TenantValidator = scope.ServiceProvider.GetRequiredService<IValidator<TenantName>>();
         InterfaceValidator = scope.ServiceProvider.GetRequiredService<IValidator<InterfaceName>>();
 
-        // await SeedAdminUserAsync();
-        // await SeedUsersAsync();
+        await SeedAdminUserAsync();
+        await SeedUsersAsync();
         // await SeedOrganizationsAsync();
         await SeedPlatformAsync();
     }

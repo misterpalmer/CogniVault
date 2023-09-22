@@ -1,6 +1,10 @@
+using CogniVault.Application.VirtualFileSystem.ValueObjects;
+
 namespace CogniVault.Application.VirtualFileSystem.Contracts;
 
 public interface IFileNode
 {
-    public IFileSystemResource File { get; set;}
+    public IFileSystemNode Parent { get; set; }
+    
+    public FileName Name { get; }
 }

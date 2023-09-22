@@ -4,7 +4,9 @@ using CogniVault.Application.VirtualFileSystem.Entities;
 using CogniVault.Application.VirtualFileSystem.Provider.Specifications;
 using CogniVault.Application.VirtualFileSystem.ValueObjects;
 using CogniVault.Platform.Core.Extensions;
+
 using FluentValidation;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CogniVault.Application.VirtualFileSystem.Provider.Memory;
@@ -13,7 +15,7 @@ public class MemoryFileSystem : IVirtualFileSystem
 {
     public RootNode Root { get; }
     private readonly IDbResolver _dbResolver;
-    
+
     // protected readonly IUnitOfWork _dbResolver;
 
     public MemoryFileSystem(IDbResolver dbResolver)
@@ -31,7 +33,7 @@ public class MemoryFileSystem : IVirtualFileSystem
     {
         // var spec = new GetDirectoryContentsSpecification(parent);
         // var parentDirectory = await _dbResolver.QueryRepository<DirectoryNode>().GetFirstOrDefaultAsync((ISpecification<DirectoryNode>)spec);
-        
+
         var directoryNode = new DirectoryNode(name, Root);
         await _dbResolver.CommandRepository<DirectoryNode>().InsertAsync(directoryNode);
 
@@ -40,28 +42,54 @@ public class MemoryFileSystem : IVirtualFileSystem
         return directoryNode;
     }
 
+    public async Task<FileNode> CreateFileAsync(Guid parent, FileName name)
+    {
+        var spec = new GetAllFromDirectoryNodeSpecification(parent);
+        var parentDirectory = await _dbResolver.QueryRepository<DirectoryNode>().GetFirstOrDefaultAsync((ISpecification<DirectoryNode>)spec);
 
-    public async Task<IEnumerable<FileSystemNode>> GetDirectoryAsync(Guid parent)
-{
-    // Create specific specifications for each type
-    var dirSpec = new GetAllFromDirectoryNodeSpecification(parent);
-    var fileSpec = new GetAllFromFileNodeSpecification(parent);
-    var linkSpec = new GetAllFromSymbolicLinkNodeSpecification(parent);
+        var fileNode = new FileNode(name, Root);
+        fileNode = new FileNode(name, parentDirectory);
+        await _dbResolver.CommandRepository<FileNode>().InsertAsync(fileNode);
 
-    // Query repositories using these specific specifications
-    var dirs = await _dbResolver.QueryRepository<DirectoryNode>().GetAllAsync(dirSpec);
-    var files = await _dbResolver.QueryRepository<FileNode>().GetAllAsync(fileSpec);
-    var links = await _dbResolver.QueryRepository<SymbolicLinkNode>().GetAllAsync(linkSpec);
+        // await _dbResolver.CompleteAsync();
 
-    var results = new List<FileSystemNode>();
+        return fileNode;
+    }
 
-    // Add results to the final list
-    results.AddRange(await dirs.ToListAsync());
-    results.AddRange(await files.ToListAsync());
-    results.AddRange(await links.ToListAsync());
 
-    return results;
-}
+    public async Task<IEnumerable<DirectoryNode>> GetDirectoryAsync(Guid parent)
+    {
+        // Create specific specifications for each type
+        var dirSpec = new GetAllFromDirectoryNodeSpecification(parent);
+
+        // Query repositories using these specific specifications
+        var dirs = await _dbResolver.QueryRepository<DirectoryNode>().GetAllAsync(dirSpec);
+
+        var results = new List<DirectoryNode>();
+
+        // Add results to the final list
+        results.AddRange(await dirs.ToListAsync());
+
+        return results;
+    }
+
+    public async Task<IEnumerable<FileNode>> GetFileAsync(Guid parent)
+    {
+        // Create specific specifications for each type
+        var spec = new GetAllFromDirectoryNodeSpecification(parent);
+        var parentDirectory = await _dbResolver.QueryRepository<DirectoryNode>().GetFirstOrDefaultAsync((ISpecification<DirectoryNode>)spec);
+
+        var fileSpec = new GetAllFromFileNodeSpecification(parentDirectory.Id);
+        // Query repositories using these specific specifications
+        var files = await _dbResolver.QueryRepository<FileNode>().GetAllAsync(fileSpec);
+
+        var results = new List<FileNode>();
+
+        // Add results to the final list
+        results.AddRange(await files.ToListAsync());
+
+        return results;
+    }
 
 
     public Task<T> ReadAsync<T>(IFileSystemNode resource)
@@ -73,7 +101,7 @@ public class MemoryFileSystem : IVirtualFileSystem
     {
         throw new NotImplementedException();
     }
-    
+
     public async Task<FileSystemNode> GetNodeAsync(Guid id)
     {
         if (id == Guid.Empty)
@@ -92,7 +120,7 @@ public class MemoryFileSystem : IVirtualFileSystem
         return results.First();
 
     }
-    
+
     public Task DeleteNodeAsync(Guid id)
     {
         throw new NotImplementedException();

@@ -15,6 +15,7 @@ public class FileSystemSeeder : IHostedService
     private readonly ILogger<FileSystemSeeder> _logger;
     private IVirtualFileSystem _fileSystem;
     private readonly IValidator<DirectoryName> _directoryNameValidator;
+    private readonly IValidator<FileName> _fileNameValidator;
 
     private static readonly Action<ILogger, string, Exception> _startHostedServiceLog;
     private static readonly Action<ILogger, string, Exception> _stopHostedServiceLog;
@@ -34,11 +35,11 @@ public class FileSystemSeeder : IHostedService
     public FileSystemSeeder(IServiceProvider serviceProvider, ILogger<FileSystemSeeder> logger)
     {
         _serviceProvider = serviceProvider;
-        _fileSystemContext = _serviceProvider.GetRequiredService<IDbResolver>();
         _logger = logger;
-
+        _fileSystemContext = _serviceProvider.GetRequiredService<IDbResolver>();
         _fileSystem = _serviceProvider.GetRequiredService<IVirtualFileSystem>();
         _directoryNameValidator = _serviceProvider.GetRequiredService<IValidator<DirectoryName>>();
+        _fileNameValidator = _serviceProvider.GetRequiredService<IValidator<FileName>>();
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -46,6 +47,7 @@ public class FileSystemSeeder : IHostedService
         _startHostedServiceLog(_logger, nameof(FileSystemSeeder), null);
 
         await SeedDirectories();
+        await SeedFiles();
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -58,19 +60,38 @@ public class FileSystemSeeder : IHostedService
     {
         int rootDirectoryCount = 5;
 
-        var rootDirectories = await GenerateAsync(rootDirectoryCount, async faker =>
+        var seededDirectories = await GenerateAsync(rootDirectoryCount, async faker =>
         {
-            string directoryName = GenerateValidDirectoryNames(faker);
+            string directoryName = GenerateValidDirectoryFileNames(faker);
             return await DirectoryName.CreateAsync(directoryName, _directoryNameValidator) ?? DirectoryName.Null;
         });
 
         var created = await Task.WhenAll(Enumerable.Range(0, rootDirectoryCount).Select(async i =>
         {
-            var directory = await _fileSystem.CreateDirectoryAsync(_fileSystem.Root.Id, rootDirectories[i]);
+            var directory = await _fileSystem.CreateDirectoryAsync(_fileSystem.Root.Id, seededDirectories[i]);
             return directory;
         }));
 
         await _fileSystemContext.CommandRepository<DirectoryNode>().InsertAsync(created);
+    }
+
+    public async Task SeedFiles()
+    {
+        int fileCount = 30;
+
+        var seededFiles = await GenerateAsync(fileCount, async faker =>
+        {
+            string fileName = GenerateValidDirectoryFileNames(faker);
+            return await FileName.CreateAsync(fileName, _fileNameValidator) ?? FileName.Null;
+        });
+
+        var created = await Task.WhenAll(Enumerable.Range(0, fileCount).Select(async i =>
+        {
+            var directory = await _fileSystem.CreateFileAsync(_fileSystem.Root.Id, seededFiles[i]);
+            return directory;
+        }));
+
+        await _fileSystemContext.CommandRepository<FileNode>().InsertAsync(created);
     }
 
     private async Task<List<T>> GenerateAsync<T>(int count, Func<Faker, Task<T>> generatorFunc)
@@ -82,7 +103,7 @@ public class FileSystemSeeder : IHostedService
         return await Task.WhenAll(tasks).ContinueWith(t => t.Result.ToList());
     }
 
-    private string GenerateValidDirectoryNames(Faker faker)
+    private string GenerateValidDirectoryFileNames(Faker faker)
     {
         // Generate a random length between 3 and 255. 
         // 3 is the minimum length to ensure the string starts and ends with a letter or number

@@ -15,6 +15,7 @@ public static class FileSystemRepositoryDependencyInjection
     public static IServiceCollection AddVirtualFileSystemMemoryProvider(this IServiceCollection services)
     {
         services.AddTransient<IValidator<DirectoryName>, DirectoryNameValidator>();
+        services.AddTransient<IValidator<FileName>, FileNameValidator>();
 
         // Registering the InMemoryRepository for specific entities.
         services.AddSingleton<IQueryRepositoryAsync<DirectoryNode>, MemoryRepositoryAsync<DirectoryNode>>();
@@ -37,6 +38,7 @@ public static class FileSystemRepositoryDependencyInjection
     public static IServiceCollection AddVirtualFileSystemEFCoreProvider(this IServiceCollection services)
     {
         services.AddTransient<IValidator<DirectoryName>, DirectoryNameValidator>();
+        services.AddTransient<IValidator<FileName>, FileNameValidator>();
 
         // Registering the InMemoryRepository for specific entities.
         services.AddSingleton<IQueryRepositoryAsync<DirectoryNode>, DbContextRepositoryAsync<DirectoryNode>>();

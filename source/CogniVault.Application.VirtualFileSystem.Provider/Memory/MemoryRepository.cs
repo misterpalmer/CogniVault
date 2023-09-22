@@ -1,5 +1,7 @@
 using System.Collections.Concurrent;
 using System.Linq.Expressions;
+using System.Runtime.Serialization;
+
 using CogniVault.Application.VirtualFileSystem.Abstractions;
 using CogniVault.Application.VirtualFileSystem.Contracts;
 using CogniVault.Platform.Core.Extensions;
@@ -52,9 +54,14 @@ public class MemoryRepositoryAsync<T> : IQueryRepositoryAsync<T>, ICommandReposi
         throw new NotImplementedException();
     }
 
-    public Task<T> GetFirstOrDefaultAsync(ISpecification<T> spec)
+    public async Task<T> GetFirstOrDefaultAsync(ISpecification<T> spec)
     {
-        throw new NotImplementedException();
+        var entity = _store.Values.AsQueryable().FirstOrDefault(spec.Criteria);
+        if (entity == null)
+        {
+            throw new EntityNotFoundException($"Entity of type {typeof(T)} not found.");
+        }
+        return await Task.FromResult(entity);
     }
 
     public Task<TResult> GetFirstOrDefaultAsync<TResult>(ISpecification<T> spec) where TResult : class
@@ -94,5 +101,25 @@ public class MemoryRepositoryAsync<T> : IQueryRepositoryAsync<T>, ICommandReposi
     public Task UpdateAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
+    }
+}
+
+[Serializable]
+internal class EntityNotFoundException : Exception
+{
+    public EntityNotFoundException()
+    {
+    }
+
+    public EntityNotFoundException(string? message) : base(message)
+    {
+    }
+
+    public EntityNotFoundException(string? message, Exception? innerException) : base(message, innerException)
+    {
+    }
+
+    protected EntityNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
     }
 }

@@ -12,8 +12,10 @@ public interface IVirtualFileSystem
     // IFileSystemNodeFactory FileSystemNodeFactory { get; }
 
     Task<RootNode> GetRootNodeAsync();
-    Task<IEnumerable<FileSystemNode>> GetDirectoryAsync(Guid parent);
+    Task<IEnumerable<DirectoryNode>> GetDirectoryAsync(Guid parent);
+    Task<IEnumerable<FileNode>> GetFileAsync(Guid parent);
     Task<DirectoryNode> CreateDirectoryAsync(Guid parent, DirectoryName name);
+    Task<FileNode> CreateFileAsync(Guid parent, FileName name);
     Task<FileSystemNode> GetNodeAsync(Guid id);
     Task DeleteNodeAsync(Guid id);
     Task MoveNodeAsync(Guid id, IFileSystemNode newParent);

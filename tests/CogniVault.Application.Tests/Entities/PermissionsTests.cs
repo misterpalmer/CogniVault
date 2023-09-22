@@ -10,6 +10,4 @@ namespace CogniVault.Application.Tests.Entities;
         
 //         Assert.Equal(PermissionType.Read, permission.Type);
 //     }
-
-//     // ... other tests for Permission ...
 // }

@@ -30,11 +30,18 @@ public class FileSystemController : ControllerBase
         return Ok(fileSystem);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
+    [HttpGet, Route("directories")]
+    public async Task<IActionResult> GetDirectories()
+    {
+        var fileSystems = await _fileSystemService.GetDirectoryAsync(_fileSystemService.Root.Id);
+        return Ok(fileSystems);
+    }
+
+    [HttpGet, Route("files")]
+    public async Task<IActionResult> GetFiles()
     {
         // var fileSystems = await _fileSystemService.GetNodeAsync(_fileSystemService.Root.Id);
-        var fileSystems = await _fileSystemService.GetDirectoryAsync(_fileSystemService.Root.Id);
+        var fileSystems = await _fileSystemService.GetFileAsync(_fileSystemService.Root.Id);
         return Ok(fileSystems);
     }
 
